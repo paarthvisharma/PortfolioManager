@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<user userId="4">
+    <firstName>Paarthvi</firstName>
+    <lastName>Sharma</lastName>
+    <portfolios>
+        <portfolio portfolioId="1" type="rigid">
+            <portfolioName>EducationLoan</portfolioName>
+            <stocks>
+                <stock ticker="csco">
+                    <stockName>Cisco Systems Inc</stockName>
+                    <stockQuantity>100</stockQuantity>
+                </stock>
+                <stock ticker="aapl">
+                    <stockName>O'Reilly Automotive Inc</stockName>
+                    <stockQuantity>300</stockQuantity>
+                </stock>
+            </stocks>
+        </portfolio>
+    </portfolios>
+</user>

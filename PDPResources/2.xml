@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<user userId="2">
+	<firstName>sdv</firstName>
+	<lastName>saf</lastName>
+	<commission>1.0</commission>
+	<rigidPortfolios>
+		<rigidPortfolio portfolioId="1">
+			<portfolioName>Rigid Test 1</portfolioName>
+			<stocks>
+				<stock ticker="goog">
+					<stockName>Alphabet Inc - Class C</stockName>
+					<stockQuantity>100</stockQuantity>
+				</stock>
+			</stocks>
+		</rigidPortfolio>
+	</rigidPortfolios>
+	<flexiblePortfolios>
+		<flexiblePortfolio portfolioId="1">
+			<portfolioName>Flexible Test 1</portfolioName>
+			<stocks>
+				<stock ticker="goog">
+					<stockName>Alphabet Inc - Class C</stockName>
+					<stockQuantity>40</stockQuantity>
+					<date>2016-01-01</date>
+				</stock>
+				<stock ticker="amzn">
+					<stockName>Amazon.com Inc</stockName>
+					<stockQuantity>60</stockQuantity>
+					<date>2016-06-06</date>
+				</stock>
+			</stocks>
+		</flexiblePortfolio>
+	</flexiblePortfolios>
+</user>

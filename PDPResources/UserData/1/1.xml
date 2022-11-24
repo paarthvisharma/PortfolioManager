@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<user userId="1">
+	<firstName>p</firstName>
+	<lastName>s</lastName>
+	<commission>1.0</commission>
+	<rigidPortfolios>
+	</rigidPortfolios>
+	<flexiblePortfolios>
+		<flexiblePortfolio portfolioId="1">
+			<portfolioName>education</portfolioName>
+			<stocks>
+				<stock ticker="goog">
+					<stockName>Alphabet Inc - Class C</stockName>
+					<stockQuantity>10.0</stockQuantity>
+					<date>2020-01-01</date>
+				</stock>
+				<stock ticker="amzn">
+					<stockName>Amazon.com Inc</stockName>
+					<stockQuantity>20.0</stockQuantity>
+					<date>2022-02-02</date>
+				</stock>
+				<stock ticker="csco">
+					<stockName>Cisco Systems Inc</stockName>
+					<stockQuantity>30.0</stockQuantity>
+					<date>2022-02-05</date>
+				</stock>
+				<stock ticker="adi">
+					<stockName>Analog Devices Inc</stockName>
+					<stockQuantity>5.0</stockQuantity>
+					<date>2021-02-05</date>
+				</stock>
+			</stocks>
+		</flexiblePortfolio>
+	</flexiblePortfolios>
+</user>

@@ -1,0 +1,534 @@
+package controller;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+import model.utils.StatusObject;
+import model.Portfolio;
+import model.Stock;
+import model.User;
+import model.Model;
+import view.View;
+
+/**
+ * This class is an implementation of the Controller Interface.
+ * The methods associated with the class help perform operations of
+ * the controller which is to delegate responsibilities.
+ */
+public class ControllerImpl implements Controller {
+
+  private Scanner in;
+  private View view;
+  private Model model;
+  private boolean quit = false;
+
+  /**
+   * This is the constructor for ControllerImpl. An Instance of ControllerImpl is created with
+   * the help of this constructor.
+   * It creates a ControllerImpl by taking the following parameters.
+   *
+   * @param model an object of type model.
+   * @param in    InputStream.
+   * @param view  an object of type View.
+   */
+
+  public ControllerImpl(Model model, InputStream in, View view) {
+    this.model = model;
+    this.view = view;
+    this.in = new Scanner(in);
+  }
+
+  private String takeLineInput() throws InterruptedException {
+    String input = this.in.nextLine();
+    if (input.trim().equals("*")) {
+      throw new InterruptedException("Terminating program because of Interrupt");
+    }
+    return input;
+  }
+
+  @Override
+  public void mainMenuLoop() throws InterruptedException {
+    this.view.displayClear();
+    this.view.displayMainMenu();
+    String mainMenuOption = takeLineInput();
+    switch (mainMenuOption) {
+      case "1":
+        this.createUserLoop();
+        break;
+      case "2":
+        this.createPortfolioLoop();
+        break;
+      case "3":
+        this.viewPortfolioLoop();
+        break;
+      case "4":
+        this.valuePortfolioLoop();
+        break;
+      case "5":
+        this.loadUserFromXmlLoop();
+        break;
+      case "6":
+        this.quit = true;
+        break;
+      default:
+    }
+  }
+
+  @Override
+  public void createUserLoop() throws InterruptedException {
+    String exitClause = "1";
+    String createUserInput;
+    while (exitClause.equals("1")) {
+      startCreateLoop:
+      try {
+        this.view.displayClear();
+        this.view.displayCreateUserMenu();
+        createUserInput = this.takeLineInput().trim();
+        String firstName = createUserInput.trim().split("\\s", 2)[0];
+        String lastName = createUserInput.trim().split("\\s", 2)[1];
+        StatusObject<User> response = model.createUser(firstName, lastName);
+        if (response.statusCode > 0) {
+          model.updateUserFile(response.returnedObject);
+          this.view.displaySuccessMessage(response.statusMessage);
+          this.view.askPromptToContinue();
+          this.takeLineInput();
+        } else {
+          this.view.displayFailureMessage(response.statusMessage);
+          this.view.askPromptToContinue();
+          this.takeLineInput();
+          continue;
+        }
+        this.view.displayClear();
+        this.view.displayPromptForMoreSimilarInput("Create User");
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              break startCreateLoop;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayFailureMessage("The entered input is invalid");
+              this.view.displayPromptForMoreSimilarInput("Create User");
+          }
+        }
+      } catch (IndexOutOfBoundsException e) {
+        this.view.displayFailureMessage("Please enter the First name and Last name "
+                + "seperated by space.");
+        this.takeLineInput();
+      } catch (IOException e) {
+        this.view.displayFailureMessage(e.getMessage());
+        this.takeLineInput();
+      }
+    }
+  }
+
+  @Override
+  public void createPortfolioLoop() throws InterruptedException {
+    String exitClause = "1";
+    while (exitClause.equals("1")) {
+      startCreatePortfolio:
+      try {
+        StatusObject<User> selectedUser = null;
+        while (true) {
+          this.view.displayClear();
+          this.view.displayCreatePortfolioUserIdPrompt();
+          String userId = this.takeLineInput().trim();
+          selectedUser = this.model.getUser(userId);
+          if (selectedUser.statusCode > 0) {
+            break;
+          } else {
+            this.view.displayFailureMessage(selectedUser.statusMessage);
+            this.view.askPromptToContinue();
+            this.takeLineInput();
+          }
+        }
+        this.view.displayClear();
+        this.view.promptPortfolioName();
+        String portfolioName = this.takeLineInput().trim();
+        if (selectedUser.statusCode > 0) {
+          StatusObject<Portfolio> createdPortfolio = model.createRigidPortfolio(
+                  selectedUser.returnedObject, portfolioName,
+                  this.createPortfolioInnerLoop(portfolioName));
+          if (createdPortfolio.statusCode > 0) {
+            model.updateUserFile(selectedUser.returnedObject);
+            this.view.displaySuccessMessage("Portfolio " + portfolioName
+                    + " created successfully.");
+          } else {
+            this.view.displayFailureMessage(createdPortfolio.statusMessage);
+            this.takeLineInput();
+            continue;
+          }
+        } else {
+          this.view.displayFailureMessage(selectedUser.statusMessage);
+          this.takeLineInput();
+          continue;
+        }
+        this.view.displayClear();
+        this.view.displayPromptForMoreSimilarInput("Create Portfolio");
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              break startCreatePortfolio;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayFailureMessage("The entered input is invalid\n");
+              this.view.askPromptToContinue();
+              this.view.displayPromptForMoreSimilarInput("Create Portfolio");
+          }
+        }
+      } catch (IndexOutOfBoundsException e) {
+        this.view.displayFailureMessage("Please Enter the UserId and Portfolio name"
+                + " in the following format.\n"
+                + "{UserId} {Portfolio Name}");
+        this.takeLineInput();
+      } catch (InterruptedException e) {
+        throw new InterruptedException("Terminating program because of Interrupt");
+      } catch (Exception e) {
+        this.view.displayFailureMessage(e.getMessage());
+        this.takeLineInput();
+      }
+    }
+  }
+
+  private List<Stock> createPortfolioInnerLoop(String portfolioName) throws InterruptedException {
+    String exitClause = "1";
+    List<Stock> listOfStocks = new ArrayList<Stock>();
+    while (exitClause.equals("1")) {
+      startCreatePortfolioInnerLoop:
+      try {
+        this.view.displayClear();
+        this.view.promptForStockTicker();
+        String stockTicker = this.takeLineInput().trim();
+        this.view.displayClear();
+        this.view.promptForStockQuantity();
+        int stockQuantity = Integer.parseInt(this.takeLineInput().trim());
+        if (stockQuantity < 1) {
+          throw new IllegalArgumentException("Quantity of stock cannot be less than 1. " +
+                  "Only positive integers accepted");
+        }
+        this.view.displayClear();
+        this.view.promptForStockPurchaseDate();
+        String purchaseDate = this.takeLineInput().trim();
+        listOfStocks.add(model.createStock(stockTicker, stockQuantity, purchaseDate));
+        this.view.displaySuccessMessage(stockQuantity + " of " + stockTicker
+                + " has been added to the portfolio.\n");
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+        this.view.displayClear();
+        this.view.displayPromptForMoreSimilarInput("Add stock to current portfolio");
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              break startCreatePortfolioInnerLoop;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayFailureMessage("The entered input is invalid\n");
+              this.view.displayPromptForMoreSimilarInput("Add stock to "
+                      + "current portfolio");
+          }
+        }
+      } catch (IndexOutOfBoundsException e) {
+        this.view.displayFailureMessage("Please enter the stock details by "
+                + "following the shown instructions only");
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+      } catch (NumberFormatException e) {
+        this.view.displayFailureMessage("Quantity of a stock should be a positive integer");
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+      } catch (IllegalArgumentException e) {
+        this.view.displayFailureMessage(e.getMessage());
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+      }
+    }
+    return listOfStocks;
+  }
+
+  @Override
+  public void viewPortfolioLoop() throws InterruptedException {
+    String exitClause = "1";
+    while (exitClause.equals("1")) {
+      startViewPortfolio:
+      try {
+        StatusObject<User> selectedUser = null;
+        while (true) {
+          this.view.displayClear();
+          this.view.displayPortfolioUserIdPrompt();
+          String userId = this.takeLineInput().trim();
+          selectedUser = this.model.getUser(userId);
+          if (selectedUser.statusCode > 0) {
+            break;
+          } else {
+            this.view.displayFailureMessage(selectedUser.statusMessage);
+            this.view.askPromptToContinue();
+            this.takeLineInput();
+          }
+        }
+        this.viewPortfolioInnerLoop(selectedUser.returnedObject);
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              break startViewPortfolio;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayFailureMessage("The entered input is invalid\n");
+              this.view.displayPromptForMoreSimilarInput("View Portfolio");
+          }
+        }
+      } catch (InterruptedException e) {
+        throw new InterruptedException("Terminating program because of Interrupt");
+      } catch (Exception e) {
+        this.view.displayFailureMessage(e.getMessage());
+        this.takeLineInput();
+      }
+    }
+  }
+
+  private void viewPortfolioInnerLoop(User selectedUser) throws InterruptedException {
+    String exitClause = "1";
+    String getUserInput;
+    this.view.displayClear();
+    this.view.displayPortfolioFromPortfolioIdPrompt();
+    for (Portfolio portfolio : model.getPortfoliosForUser(selectedUser)) {
+      this.view.displayMessage(model.getPortfolioId(portfolio) + " " +
+              model.getPortfolioName(portfolio));
+    }
+    while (exitClause.equals("1")) {
+      startViewPortfolioInnerLoop:
+      try {
+        getUserInput = this.takeLineInput().trim();
+        int portfolioId = Integer.parseInt(getUserInput);
+        StatusObject<Portfolio> particularPortfolio =
+                model.getParticularPortfolio(selectedUser, portfolioId);
+        if (particularPortfolio.statusCode < 1) {
+          this.view.displayFailureMessage(particularPortfolio.statusMessage);
+          this.takeLineInput();
+          break;
+        }
+        this.view.displayMessage(particularPortfolio.returnedObject.toString());
+        this.view.displayMessage("The portfolio " + getUserInput + " is printed.\n");
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+        this.view.displayClear();
+        this.view.displayPromptForMoreSimilarInput("Select Portfolio to display");
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              this.view.displayClear();
+              for (Portfolio portfolio : model.getPortfoliosForUser(selectedUser)) {
+                this.view.displayMessage(model.getPortfolioId(portfolio) + " "
+                        + model.getPortfolioName(portfolio));
+              }
+              this.view.displayPortfolioFromPortfolioIdPrompt();
+              break startViewPortfolioInnerLoop;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayFailureMessage("The entered input is invalid\n");
+              this.view.displayPromptForMoreSimilarInput("Select Portfolio " +
+                      "to display");
+          }
+        }
+      } catch (InterruptedException e) {
+        throw new InterruptedException("Terminating program because of Interrupt");
+      } catch (Exception e) {
+        this.view.displayFailureMessage(e.getMessage());
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+      }
+    }
+  }
+
+  @Override
+  public void valuePortfolioLoop() throws InterruptedException {
+    String exitClause = "1";
+    while (exitClause.equals("1")) {
+      startValuePortfolio:
+      try {
+        this.view.displayClear();
+        this.view.displayValueOfUserIdPrompt();
+        String userId = this.takeLineInput().trim();
+        StatusObject<User> selectedUser = this.model.getUser(userId);
+        if (selectedUser.statusCode < 0) {
+          this.view.displayFailureMessage(selectedUser.statusMessage);
+          this.view.displayMessage("Enter any key to continue.");
+          this.takeLineInput();
+          continue;
+        }
+        this.valuePortfolioInnerLoop(selectedUser.returnedObject);
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              break startValuePortfolio;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayFailureMessage("The entered input is invalid\n");
+              this.view.displayPromptForMoreSimilarInput("View Portfolio");
+          }
+        }
+      } catch (InterruptedException e) {
+        throw new InterruptedException("Terminating program because of Interrupt");
+      } catch (Exception e) {
+        this.view.displayFailureMessage(e.getMessage());
+        this.takeLineInput();
+      }
+    }
+  }
+
+
+  private void valuePortfolioInnerLoop(User selectedUser) throws InterruptedException {
+    String exitClause = "1";
+    String[] getUserInput;
+    while (exitClause.equals("1")) {
+      startValuePortfolioInnerLoop:
+      try {
+        this.view.displayClear();
+        this.view.promptPortfolioIdForValuation();
+        for (Portfolio portfolio : model.getPortfoliosForUser(selectedUser)) {
+          this.view.displayMessage(portfolio.getPortfolioId() + " " +
+                  portfolio.getPortfolioName());
+        }
+        int portfolioId = Integer.parseInt(this.takeLineInput().trim());
+        this.view.displayClear();
+        this.view.promptForDateForValuation();
+        String date = this.takeLineInput().trim();
+        this.view.displayMessage("The value of " +
+                selectedUser.getPortfolio(portfolioId).getPortfolioName() + " is $" +
+                model.getValueOfPortfolioForDate(selectedUser, portfolioId, date) + "\n");
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+        this.view.displayClear();
+        this.view.displayPromptForMoreSimilarInput("Select Portfolio to valuate");
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              this.view.displayValueOfPortfolioPrompt();
+              break startValuePortfolioInnerLoop;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayFailureMessage("The entered input is invalid\n");
+              this.view.displayPromptForMoreSimilarInput("Select Portfolio "
+                      + "to display");
+          }
+        }
+      } catch (IndexOutOfBoundsException e) {
+        this.view.displayFailureMessage("Please enter the details in the "
+                + "following format only:\n"
+                + "{Portfolio ID} {YYYY-MM-DD}");
+        this.takeLineInput();
+      } catch (IllegalArgumentException e) {
+        this.view.displayFailureMessage("Error: " + e.getMessage());
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+      } catch (InterruptedException e) {
+        throw new InterruptedException("Terminating program because of Interrupt");
+      } catch (Exception e) {
+        this.view.displayFailureMessage("Unknown error: " + e.getMessage());
+        this.view.askPromptToContinue();
+        this.takeLineInput();
+      }
+    }
+  }
+
+  @Override
+  public void loadUserFromXmlLoop() throws InterruptedException {
+    String exitClause = "1";
+    String getUserInput;
+    while (exitClause.equals("1")) {
+      startLoadUser:
+      try {
+        this.view.displayClear();
+        this.view.promptForXmlFilePath();
+        getUserInput = this.takeLineInput().trim();
+        String xmlPath = getUserInput.trim();
+        StatusObject<User> createdUser = model.createUserFromXML(xmlPath);
+        this.view.displayMessage("Successfully loaded the User:\n"
+                + ((createdUser.returnedObject)).getFirstName() + " "
+                + ((createdUser.returnedObject)).getLastName());
+        model.updateUserFile((createdUser.returnedObject));
+        this.takeLineInput();
+        this.view.displayClear();
+        this.view.displayPromptForMoreSimilarInput("Load user from XML file");
+        while (exitClause.equals("1")) {
+          exitClause = this.takeLineInput().trim();
+          switch (exitClause) {
+            case "1":
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.promptForXmlFilePath();
+              break startLoadUser;
+            case "2":
+              exitClause = "2";
+              break;
+            default:
+              exitClause = "1";
+              this.view.displayClear();
+              this.view.displayMessage("The entered input is invalid\n");
+              this.view.displayPromptForMoreSimilarInput("Load user from XML file");
+          }
+        }
+      } catch (InterruptedException e) {
+        throw new InterruptedException("Terminating program because of Interrupt");
+      } catch (Exception e) {
+        this.view.displayFailureMessage(e.getMessage());
+        this.takeLineInput();
+      }
+    }
+  }
+
+  @Override
+  public void runLoop() {
+    while (!quit) {
+      try {
+        this.mainMenuLoop();
+      } catch (InterruptedException e) {
+        this.view.displayFailureMessage(e.getMessage());
+        quit = true;
+      }
+    }
+  }
+}

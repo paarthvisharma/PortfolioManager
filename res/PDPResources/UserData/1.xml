@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<user userId="1">
+	<firstName>Test</firstName>
+	<lastName>User</lastName>
+	<portfolios>
+		<portfolio portfolioId="1">
+			<portfolioName>Test Portfolio</portfolioName>
+			<stocks>
+				<stock ticker="amzn">
+					<stockName>Amazon.com Inc</stockName>
+					<stockQuantity>100</stockQuantity>
+					<date>2020-01-01</date>
+				</stock>
+				<stock ticker="goog">
+					<stockName>Alphabet Inc - Class C</stockName>
+					<stockQuantity>60</stockQuantity>
+					<date>2022-01-01</date>
+				</stock>
+			</stocks>
+		</portfolio>
+	</portfolios>
+</user>

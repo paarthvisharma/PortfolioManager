@@ -1,0 +1,354 @@
+package model;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+import model.utils.StatusObject;
+import model.utils.Transaction;
+import model.utils.XmlFormat;
+
+import static model.utils.Utils.getValueOnDateForStock;
+import static model.utils.Utils.portfolioToString;
+import static utils.Utils.getConfigAndProgramState;
+
+/**
+ * Flexible interface extends portfolio. This portfolio support buying or
+ * selling stocks once it's created.
+ */
+
+public class FlexiblePortfolioImpl implements FlexiblePortfolio {
+
+  private final String portfolioName;
+
+  private final Map<String, String> config = getConfigAndProgramState();
+
+  private final String type = "flexible";
+  private final int portfolioId;
+  private List<Stock> listOfStocks;
+  private final String portfolioPath;
+  private double commission;
+
+  /**
+   * This is the constructor for FlexiblePortfolioImpl. An Instance of flexible portfolio
+   * is created with the help of this constructor.
+   * It creates a flexible portfolio by taking the following parameters.
+   *
+   * @param portfolioName name of the portfolio.
+   * @param portfolioId   ID of the portfolio.
+   * @param listOfStocks  stock list.
+   * @param commission    value.
+   * @param portfolioPath file path.
+   */
+  public FlexiblePortfolioImpl(String portfolioName, int portfolioId,
+                               List<Stock> listOfStocks, double commission, String portfolioPath) {
+    this.portfolioName = portfolioName;
+    this.portfolioId = portfolioId;
+    this.listOfStocks = listOfStocks;
+    this.portfolioPath = portfolioPath;
+    File portfolioFile = new File(portfolioPath);
+    this.commission = commission;
+    //    this.enterInitialStocksIntoTransactions();
+  }
+
+  //  private void enterInitialStocksIntoTransactions() {
+  //    StringBuilder transactionLog = new StringBuilder();
+  //    for (Stock stock : this.listOfStocks) {
+  //      transactionLog.append(stock.getTicker()).append(", ").append(stock.getStockQuantity())
+  //              .append(", ").append("BUY").append(", ").append(stock.getDate()).append(", ")
+  //              .append(this.commission).append(", true\n");
+  //    }
+  //    try {
+  //      FileWriter writer = new FileWriter(this.portfolioPath);
+  //      BufferedWriter buffer = new BufferedWriter(writer);
+  //      buffer.write(transactionLog.toString());
+  //      buffer.close();
+  //    } catch (IOException e) {
+  //      throw new RuntimeException(e);
+  //    }
+  //
+  //  }
+
+  @Override
+  public void setCommission(double commission) {
+    this.commission = commission;
+  }
+
+  @Override
+  public double getCommission(double commission) {
+    return this.commission;
+  }
+
+  @Override
+  public PriorityQueue<Transaction> getPreviousTransactions() throws FileNotFoundException {
+    PriorityQueue<Transaction> transactions = new PriorityQueue<>();
+    Scanner reader = new Scanner(new File(this.portfolioPath));
+    while (reader.hasNext()) {
+      transactions.add(new Transaction(reader.nextLine().split(","), true));
+    }
+    return transactions;
+  }
+
+  @Override
+  public String getPathToPortfolioTransactions() {
+    return this.portfolioPath;
+  }
+
+  @Override
+  public StatusObject<PriorityQueue<Transaction>> getValidatedTransactions(
+          PriorityQueue<Transaction> transactions) {
+    PriorityQueue<Transaction> validTransactions = new PriorityQueue<>();
+    boolean valid = true;
+    Map<String, Double> stockTrack = new HashMap<>();
+    while (!transactions.isEmpty()) {
+      Transaction t = transactions.poll();
+      if (stockTrack.containsKey(t.ticker)) {
+        if (t.type.equalsIgnoreCase("BUY")) {
+          stockTrack.put(t.ticker, t.quantity + stockTrack.get(t.ticker));
+        } else if (t.type.equalsIgnoreCase("SELL")) {
+          if (stockTrack.get(t.ticker) - t.quantity >= 0) {
+            stockTrack.put(t.ticker, stockTrack.get(t.ticker) - t.quantity);
+          } else {
+            valid = false;
+            break;
+          }
+        }
+      } else {
+        if (t.type.equalsIgnoreCase("BUY")) {
+          stockTrack.put(t.ticker, t.quantity);
+        } else {
+          valid = false;
+          break;
+        }
+      }
+      if (!t.completed) {
+        validTransactions.add(t);
+      }
+    }
+    if (!valid) {
+      StringBuilder failedTransactions = new StringBuilder();
+      while (!transactions.isEmpty()) {
+        failedTransactions.append(transactions.poll().toString()).append("\n");
+      }
+      String returnMessage = "The following orders cannot be executed as they "
+              + "make the portfolio unstable\n" + failedTransactions;
+      return new StatusObject<PriorityQueue<Transaction>>(returnMessage, -1,
+              validTransactions);
+    }
+    return new StatusObject<PriorityQueue<Transaction>>("All transactions "
+            + "can be executed", 1, validTransactions);
+  }
+
+  @Override
+  public String getPortfolioName() {
+    return this.portfolioName;
+  }
+
+  @Override
+  public String getType() {
+    return this.type;
+  }
+
+  @Override
+  public int getPortfolioId() {
+    return this.portfolioId;
+  }
+
+  @Override
+  public List<Stock> getListOfStock() {
+    return this.listOfStocks;
+  }
+
+  @Override
+  public double getValueForDate(String dateOnInfo) throws FileNotFoundException, ParseException {
+    double value = 0;
+    Map<String, Double> totalStocks = new HashMap<>();
+    List<Stock> currentStocks = this.getCompositionOfFlexiblePortfolio(dateOnInfo);
+    for (Stock stock : currentStocks) {
+      totalStocks.put(stock.getTicker(), totalStocks.getOrDefault(stock.getTicker(),
+              0.0) + stock.getStockQuantity());
+    }
+    for (String ticker : totalStocks.keySet()) {
+      value += (getValueOnDateForStock(ticker, dateOnInfo) * totalStocks.get(ticker));
+    }
+    return value;
+  }
+
+  @Override
+  public XmlFormat xml(int tabs) {
+    int lTabs = tabs;
+    StringBuilder toReturn = new StringBuilder();
+    toReturn.append("\t".repeat(lTabs)).append("<flexiblePortfolio portfolioId=\"")
+            .append(this.getPortfolioId()).append("\">\n");
+    lTabs += 1;
+    toReturn.append("\t".repeat(lTabs)).append("<portfolioName>")
+            .append(this.getPortfolioName()).append("</portfolioName>\n");
+    toReturn.append("\t".repeat(lTabs)).append("<stocks>\n");
+    lTabs += 1;
+    for (Stock stock : this.getListOfStock()) {
+      XmlFormat stockXml = stock.xml(lTabs, true, true, true);
+      toReturn.append(stockXml.xml);
+      lTabs = stockXml.tabs;
+    }
+    lTabs -= 1;
+    toReturn.append("\t".repeat(lTabs)).append("</stocks>\n");
+    lTabs -= 1;
+    toReturn.append("\t".repeat(lTabs)).append("</flexiblePortfolio>\n");
+    return new XmlFormat(toReturn.toString(), lTabs);
+  }
+
+  @Override
+  public String toString() {
+    return portfolioToString(this, true, true, true, true);
+  }
+
+  @Override
+  public void buyStock(String ticker, String date, double quantity) throws IOException {
+    boolean stockExists = false;
+    for (Stock stock : this.listOfStocks) {
+      if (stock.getTicker().equalsIgnoreCase(ticker)
+              & stock.getDate().equalsIgnoreCase(date)) {
+        double newQuantity = stock.getStockQuantity() + quantity;
+        stock.setStockQuantity(newQuantity);
+        stockExists = true;
+      }
+    }
+    if (!stockExists) {
+      listOfStocks.add(new StockImpl(ticker, quantity, date, config, true));
+    }
+    FileWriter fw = new FileWriter(this.portfolioPath, true);
+    BufferedWriter bw = new BufferedWriter(fw);
+    bw.write(ticker + ", " + quantity + ", BUY, " + date + ", " + commission + ", true");
+    bw.newLine();
+    bw.close();
+  }
+
+  @Override
+  public void sellStock(String ticker, String date, double quantity)
+          throws ParseException, IOException {
+    double existingQuantity = 0;
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    for (Stock stock : this.listOfStocks) {
+      if (ticker.equalsIgnoreCase(stock.getTicker())
+              & dateParser.parse(stock.getDate()).compareTo(dateParser.parse(date)) <= 0) {
+        existingQuantity += stock.getStockQuantity();
+      }
+    }
+    if (existingQuantity < quantity) {
+      throw new IllegalArgumentException("You cant sell more shares than what you hold.");
+    }
+    double quantityToSell = quantity;
+    for (Stock stock : this.listOfStocks) {
+      if (ticker.equalsIgnoreCase(stock.getTicker())
+              & dateParser.parse(stock.getDate()).compareTo(dateParser.parse(date)) <= 0) {
+        if (quantityToSell > stock.getStockQuantity()) {
+          quantityToSell -= stock.getStockQuantity();
+          stock.setStockQuantity(0);
+        } else {
+          stock.setStockQuantity(stock.getStockQuantity() - quantityToSell);
+          break;
+        }
+      }
+    }
+    this.listOfStocks.removeIf(s -> (s.getStockQuantity() == 0));
+    FileWriter fw = new FileWriter(this.portfolioPath, true);
+    BufferedWriter bw = new BufferedWriter(fw);
+    bw.write(ticker + ", " + quantity + ", SELL, " + date + ", " + commission + ", true");
+    bw.newLine();
+    bw.close();
+  }
+
+  @Override
+  public PriorityQueue<Transaction> loadPastTransactions(User user) throws FileNotFoundException {
+    PriorityQueue<Transaction> transactions = new PriorityQueue<>();
+    Scanner logFile = new Scanner(new File(config.get("userData") + "/"
+            + user.getUserId() + "/" + this.portfolioId + ".csv"));
+    while (logFile.hasNext()) {
+      String line = logFile.nextLine();
+      if (line.length() > 1) {
+        transactions.add(new Transaction(line.split(","), true));
+      }
+    }
+    return transactions;
+  }
+
+  @Override
+  public List<Stock> getCompositionOfFlexiblePortfolio(String date)
+          throws ParseException, FileNotFoundException {
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    List<String[]> csvData = getCSVUptoDate(date);
+    Map<String, List<Stock>> stockTracker = new HashMap<>();
+    for (String[] line : csvData) {
+      if (stockTracker.containsKey(line[0].toLowerCase())) {
+        if (line[2].equalsIgnoreCase("buy")) {
+          boolean added = false;
+          for (Stock stock : stockTracker.get(line[0].toLowerCase())) {
+            if (dateParser.parse(line[3]).compareTo(dateParser.parse(stock.getDate())) == 0) {
+              stock.setStockQuantity(stock.getStockQuantity() + Double.parseDouble(line[1]));
+              added = true;
+            }
+          }
+          if (!added) {
+            stockTracker.get(line[0].toLowerCase()).add(new StockImpl(line[0],
+                    Double.parseDouble(line[1]), line[3], config, false));
+          }
+        } else if (line[2].equalsIgnoreCase("sell")) {
+          double toSubtract = Double.parseDouble(line[1]);
+          for (Stock stock : stockTracker.get(line[0].toLowerCase())) {
+            if (stock.getStockQuantity() >= toSubtract) {
+              stock.setStockQuantity(stock.getStockQuantity() - toSubtract);
+              break;
+            } else {
+              toSubtract = toSubtract - stock.getStockQuantity();
+              stock.setStockQuantity(0);
+            }
+          }
+        }
+      } else {
+        Stock createdStock =
+                new StockImpl(line[0], Double.parseDouble(line[1]), line[3], config, false);
+        List<Stock> listOfStocks = new ArrayList<>();
+        listOfStocks.add(createdStock);
+        stockTracker.put(line[0].toLowerCase(), listOfStocks);
+      }
+    }
+    List<Stock> toReturn = new ArrayList<>();
+    for (String ticker : stockTracker.keySet()) {
+      for (Stock stock : stockTracker.get(ticker)) {
+        if (stock.getStockQuantity() != 0) {
+          toReturn.add(stock);
+        }
+      }
+    }
+    return toReturn;
+  }
+
+  @Override
+  public List<String[]> getCSVUptoDate(String date) throws FileNotFoundException, ParseException {
+    //  Scanner readFile = new Scanner(new File(config.get("userData")
+    //  + "/" + user.getUserId() + "/" + this.portfolioId + ".csv"));
+    Scanner readFile = new Scanner(new File(this.portfolioPath));
+    List<String[]> csvData = new ArrayList<>();
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    while (readFile.hasNext()) {
+      String[] csvLine = readFile.nextLine().split(", *");
+      if (dateParser.parse(csvLine[3]).compareTo(dateParser.parse(date)) <= 0) {
+        csvData.add(csvLine);
+      } else {
+        break;
+      }
+    }
+    return csvData;
+  }
+
+}

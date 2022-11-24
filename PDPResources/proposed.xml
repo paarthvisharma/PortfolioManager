@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<user userId="4">
+    <firstName>Paarthvi</firstName>
+    <lastName>Sharma</lastName>
+    <comission>1</comission>
+    <rigidPortfolios>
+        <rigidPortfolio portfolioId="1">
+            <portfolioName>EducationLoan</portfolioName>
+            <stocks>
+                <stock ticker="csco">
+                    <stockName>Cisco Systems Inc</stockName>
+                    <stockQuantity>100</stockQuantity>
+                </stock>
+                <stock ticker="aapl">
+                    <stockName>Apple Inc</stockName>
+                    <stockQuantity>300</stockQuantity>
+                </stock>
+            </stocks>
+        </rigidPortfolio>
+    </rigidPortfolios>
+    <flixiblePortfolios>
+        <flexiblePortfolio portfolioId="1">
+            <portfolioName>EducationLoan</portfolioName>
+            <stocks>
+                <stock ticker="csco">
+                    <stockName>Cisco Systems Inc</stockName>
+                    <stockQuantity>100</stockQuantity>
+                    <date>2022-01-01</date>
+                </stock>
+                <stock ticker="aapl">
+                    <stockName>Apple Inc</stockName>
+                    <stockQuantity>300</stockQuantity>
+                    <date>2022-01-01</date>
+                </stock>
+            </stocks>
+        </flexiblePortfolio>
+    </flixiblePortfolios>
+</user>
+

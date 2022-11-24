@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<user userId="2">
+	<firstName>p</firstName>
+	<lastName>s</lastName>
+	<commission>1.0</commission>
+	<rigidPortfolios>
+	</rigidPortfolios>
+	<flexiblePortfolios>
+	</flexiblePortfolios>
+</user>
