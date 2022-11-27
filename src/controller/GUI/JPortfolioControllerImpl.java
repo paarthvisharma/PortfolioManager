@@ -2,6 +2,8 @@ package controller.GUI;
 
 import model.Model;
 import model.User;
+import view.GUI.JCalculateCostBasisView;
+import view.GUI.JCalculateCostBasisViewImpl;
 import view.GUI.JCalculateValueView;
 import view.GUI.JCreatePortfolioView;
 import view.GUI.JCreateUserView;
@@ -18,14 +20,18 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JPortfolioMenuView portfolioMenuView;
   private JCreatePortfolioView createPortfolioView;
   private JCalculateValueView calculateValueView;
+  private JCalculateCostBasisView calculateCostBasisView;
   private JCreatePortfolioController createPortfolioController;
   private JCalculateValueController calculateValueController;
+  private JCalculateCostBasisController calculateCostBasisController;
   private User user;
 
   public JPortfolioControllerImpl(Model model) {
     this.model = model;
     createPortfolioController = new JCreatePortfolioControllerImpl(model);
     calculateValueController = new JCalculateValueControllerImpl(model);
+    calculateCostBasisController = new JCalculateCostBasisControllerImpl(model);
+
   }
 
   @Override
@@ -51,6 +57,10 @@ public class JPortfolioControllerImpl implements JPortfolioController {
 
   @Override
   public void costBasisPortfolio() {
+    calculateCostBasisController.setUser(user);
+    this.calculateCostBasisView.displayRadioButtonsForPortfolio(listFlexiblePortfolios(user, model));
+    this.portfolioMenuView.isVisible(false);
+    this.calculateCostBasisView.isVisible(true);
 
   }
 
@@ -86,9 +96,11 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     this.portfolioMenuView = this.view.getPortfolioMenuView();
     this.createPortfolioView = this.view.getCreatePortfolioView();
     this.calculateValueView = this.view.getCalculateValueView();
+    this.calculateCostBasisView = this.view.getCalculateCostBasisView();
     this.portfolioMenuView.addFeatures(this);
     this.createPortfolioController.setView(view);
     this.calculateValueController.setView(view);
+    this.calculateCostBasisController.setView(view);
   }
 
 }

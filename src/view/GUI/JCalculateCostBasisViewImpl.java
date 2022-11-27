@@ -6,24 +6,22 @@ import java.util.Arrays;
 
 import javax.swing.*;
 
-import controller.GUI.JCalculateValueController;
+import controller.GUI.JCalculateCostBasisController;
 
-public class JCalculateValueViewImpl extends JFrame implements JCalculateValueView {
-
+public class JCalculateCostBasisViewImpl extends JFrame implements JCalculateCostBasisView{
+  private JButton backButton;
   private JPanel mainPanel;
   private JPanel displayPortfoliosPanel;
   private JRadioButton[] radioButtons;
-
-  private JTextField dateOfValuation;
   private JLabel outputLabel;
-  private JButton backButton;
-  private JButton valuatePortfolioButton;
+  private JButton calculateCostBasisPortfolioButton;
 
-  public JCalculateValueViewImpl() {
+  private JTextField dateOfCostBasis;
+
+  public JCalculateCostBasisViewImpl(){
     super();
-    setTitle("Valuate Portfolio");
+    setTitle("Cost Basis");
     setSize(400, 400);
-
     mainPanel = new JPanel();
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
     this.setTopMostPanel();
@@ -64,24 +62,25 @@ public class JCalculateValueViewImpl extends JFrame implements JCalculateValueVi
     displayPortfoliosPanel.add(scrollableRadioPanel);
   }
 
-  private void placeDateAndButtonPanel() {
+  private void placeDateAndButtonPanel(){
+
     JPanel dateAndButtonPanel = new JPanel();
     dateAndButtonPanel.setLayout(new GridLayout(1, 2, 2, 2));
     JPanel datePanel = new JPanel();
-    dateOfValuation = new JTextField(10);
-    dateOfValuation.setText("YYYY-MM-DD");
-    dateOfValuation.setBorder(BorderFactory.createTitledBorder("Date"));
-    datePanel.add(dateOfValuation);
+    dateOfCostBasis = new JTextField(10);
+    dateOfCostBasis.setText("YYYY-MM-DD");
+    dateOfCostBasis.setBorder(BorderFactory.createTitledBorder("Date"));
+    datePanel.add(dateOfCostBasis);
     dateAndButtonPanel.add(datePanel);
-    JPanel valueButtonPanel = new JPanel();
-    valuatePortfolioButton = new JButton();
-    valuatePortfolioButton.setText("Calculate value");
-    valueButtonPanel.add(valuatePortfolioButton);
-    dateAndButtonPanel.add(valueButtonPanel);
+    JPanel costBasisButtonPanel = new JPanel();
+    calculateCostBasisPortfolioButton = new JButton();
+    calculateCostBasisPortfolioButton.setText("Calculate Cost Basis");
+    costBasisButtonPanel.add(calculateCostBasisPortfolioButton);
+    dateAndButtonPanel.add(costBasisButtonPanel);
     mainPanel.add(dateAndButtonPanel);
   }
 
-  private void placeLogOutput() {
+  private void placeLogOutput(){
     JPanel outputPanel = new JPanel();
     outputPanel.setBorder(BorderFactory.createTitledBorder("Output of operation performed"));
     outputLabel = new JLabel();
@@ -91,11 +90,11 @@ public class JCalculateValueViewImpl extends JFrame implements JCalculateValueVi
   }
 
   @Override
-  public void addFeatures(JCalculateValueController jCalculateValueController) {
-    this.backButton.addActionListener(evt -> jCalculateValueController.back());
-    this.valuatePortfolioButton.addActionListener(evt ->
-            jCalculateValueController.calculatePortfolioValue(dateOfValuation.getText(),
-              this.getSelectedButton()));
+  public void addFeatures(JCalculateCostBasisController jCalculateCostBasisController) {
+    this.backButton.addActionListener(evt -> jCalculateCostBasisController.back());
+    this.calculateCostBasisPortfolioButton.addActionListener(evt ->
+            jCalculateCostBasisController.calculatePortfolioCostBasis(dateOfCostBasis.getText(),
+                    this.getSelectedButton()));
   }
 
   private String getSelectedButton() {
@@ -107,27 +106,33 @@ public class JCalculateValueViewImpl extends JFrame implements JCalculateValueVi
     return null;
   }
 
+
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
+
   }
 
   @Override
   public void setLogOutput(String message) {
     this.outputLabel.setForeground(Color.BLACK);
     this.outputLabel.setText(message);
+
+
   }
 
   @Override
   public void setSuccessOutput(String message) {
     this.outputLabel.setForeground(new Color(0, 102, 0));
     this.outputLabel.setText(message);
+
   }
 
   @Override
   public void setFailureOutput(String message) {
     this.outputLabel.setForeground(Color.RED);
     this.outputLabel.setText(message);
+
   }
 
   @Override

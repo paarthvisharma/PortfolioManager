@@ -8,4 +8,5 @@ public interface JView {
   JCreatePortfolioView getCreatePortfolioView();
 
   JCalculateValueViewImpl getCalculateValueView();
+  JCalculateCostBasisViewImpl getCalculateCostBasisView();
 }

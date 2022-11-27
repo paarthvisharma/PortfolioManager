@@ -6,6 +6,7 @@ public class JViewImpl implements JView {
   private JPortfolioMenuView portfolioMenuView;
   private JCreatePortfolioView createPortfolioView;
   private JCalculateValueViewImpl calculateValueView;
+  private JCalculateCostBasisViewImpl calculateCostBasisView;
 
 
   public JViewImpl() {
@@ -13,6 +14,7 @@ public class JViewImpl implements JView {
     portfolioMenuView = new JPortfolioMenuViewImpl();
     createPortfolioView = new JCreatePortfolioViewImpl();
     calculateValueView = new JCalculateValueViewImpl();
+    calculateCostBasisView = new JCalculateCostBasisViewImpl();
   }
 
   @Override
@@ -33,5 +35,10 @@ public class JViewImpl implements JView {
   @Override
   public JCalculateValueViewImpl getCalculateValueView() {
     return calculateValueView;
+  }
+
+  @Override
+  public JCalculateCostBasisViewImpl getCalculateCostBasisView() {
+    return calculateCostBasisView ;
   }
 }
