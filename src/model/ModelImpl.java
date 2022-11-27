@@ -440,6 +440,27 @@ public class ModelImpl implements Model {
   }
 
   @Override
+  public StatusObject<List<List<String>>> getCompositionOfFlexiblePortfolioAsList(
+          User user, FlexiblePortfolio portfolio, String date) {
+    try {
+      validateForLegalDate(date);
+      List<List<String>> toReturn = new ArrayList<>();
+      List<Stock> listOfStocks = portfolio.getCompositionOfFlexiblePortfolio(date);
+      for (Stock stock : listOfStocks) {
+        ArrayList<String> stockDetails = new ArrayList<>();
+        stockDetails.add(stock.getTicker());
+        stockDetails.add(stock.getStockName());
+        stockDetails.add(String.valueOf(stock.getStockQuantity()));
+        stockDetails.add(stock.getDate());
+        toReturn.add(stockDetails);
+      }
+      return new StatusObject<>("Fetched portfolio details", 1, toReturn);
+    } catch (ParseException | FileNotFoundException | IllegalArgumentException e) {
+      return new StatusObject<>(e.getMessage(), -1, null);
+    }
+  }
+
+  @Override
   public StatusObject<Double> getCostBasisOfFlexiblePortfolioForDate(
           User user, FlexiblePortfolio portfolio, String date) {
     try {

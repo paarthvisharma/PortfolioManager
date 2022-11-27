@@ -253,6 +253,9 @@ public interface Model {
   StatusObject<String> viewCompositionOfFlexiblePortfolio(User user,
                                                           FlexiblePortfolio portfolio, String date);
 
+  StatusObject<List<List<String>>> getCompositionOfFlexiblePortfolioAsList(
+          User user, FlexiblePortfolio portfolio, String date);
+
   /**
    * Method to calculate cost basis.
    *

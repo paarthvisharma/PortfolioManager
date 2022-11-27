@@ -53,8 +53,8 @@ public class JCalculateValueControllerImpl implements JCalculateValueController 
         this.jCalculateValueView.setSuccessOutput("The value of the portfolio is $"
                 + value.returnedObject + "\n");
       }
-    } catch (NumberFormatException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      this.jCalculateValueView.setFailureOutput(e.getMessage());
     }
   }
 

@@ -3,12 +3,12 @@ package controller.GUI;
 import model.Model;
 import model.User;
 import view.GUI.JCalculateCostBasisView;
-import view.GUI.JCalculateCostBasisViewImpl;
 import view.GUI.JCalculateValueView;
 import view.GUI.JCreatePortfolioView;
 import view.GUI.JCreateUserView;
 import view.GUI.JPortfolioMenuView;
 import view.GUI.JView;
+import view.GUI.JViewPortfolioView;
 
 import static controller.Utils.listFlexiblePortfolios;
 
@@ -21,9 +21,11 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JCreatePortfolioView createPortfolioView;
   private JCalculateValueView calculateValueView;
   private JCalculateCostBasisView calculateCostBasisView;
+  private JViewPortfolioView viewPortfolioView;
   private JCreatePortfolioController createPortfolioController;
   private JCalculateValueController calculateValueController;
   private JCalculateCostBasisController calculateCostBasisController;
+  private JViewPortfolioController viewPortfolioController;
   private User user;
 
   public JPortfolioControllerImpl(Model model) {
@@ -31,6 +33,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     createPortfolioController = new JCreatePortfolioControllerImpl(model);
     calculateValueController = new JCalculateValueControllerImpl(model);
     calculateCostBasisController = new JCalculateCostBasisControllerImpl(model);
+    viewPortfolioController = new JViewPortfolioControllerImpl(model);
 
   }
 
@@ -73,7 +76,11 @@ public class JPortfolioControllerImpl implements JPortfolioController {
 
   @Override
   public void viewPortfolio() {
-
+    viewPortfolioController.setUser(user);
+    this.viewPortfolioView.displayRadioButtonsForPortfolio(listFlexiblePortfolios(user, model));
+    this.portfolioMenuView.isVisible(false);
+    this.viewPortfolioView.clearUserInputs();
+    this.viewPortfolioView.isVisible(true);
   }
 
   @Override
@@ -99,10 +106,12 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     this.createPortfolioView = this.view.getCreatePortfolioView();
     this.calculateValueView = this.view.getCalculateValueView();
     this.calculateCostBasisView = this.view.getCalculateCostBasisView();
+    this.viewPortfolioView = this.view.getViewPortfolioView();
     this.portfolioMenuView.addFeatures(this);
     this.createPortfolioController.setView(view);
     this.calculateValueController.setView(view);
     this.calculateCostBasisController.setView(view);
+    this.viewPortfolioController.setView(view);
   }
 
 }

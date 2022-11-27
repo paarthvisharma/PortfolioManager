@@ -1,8 +1,6 @@
 package controller.GUI;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import model.User;
 import view.GUI.JView;
