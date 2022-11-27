@@ -13,4 +13,10 @@ public interface JCreatePortfolioView {
   void dollarCostAveragingEnabled(boolean state);
 
   void clearUserInputs();
+
+  void setLogOutput(String message);
+
+  void setSuccessOutput(String message);
+
+  void setFailureOutput(String message);
 }

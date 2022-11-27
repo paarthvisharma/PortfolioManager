@@ -43,6 +43,8 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   @Override
   public void createPortfolio() {
     createPortfolioController.setUser(user);
+    createPortfolioController.resetStockList();
+    this.createPortfolioView.clearUserInputs();
     this.portfolioMenuView.isVisible(false);
     this.createPortfolioView.isVisible(true);
   }

@@ -1,8 +1,8 @@
 package view.GUI;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -20,6 +20,7 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
   private JTextField startDate;
   private JTextField endDate;
   private JTextField interval;
+  private JTextField portfolioName;
   private JTextField dollarAmount;
   private JButton backButton;
   private JButton addStock;
@@ -43,11 +44,20 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
     this.placeTopPanel();
+    this.placePortfolioNamePanel();
     this.placeStockSelectionPanel();
     this.placeDollarCostAveragingPanel();
     this.placeLogsPanel();
     add(mainPanel);
 //    pack();
+  }
+
+  private void placePortfolioNamePanel() {
+    JPanel portfolioNamePanel = new JPanel();
+    portfolioName = new JTextField(20);
+    portfolioName.setBorder(BorderFactory.createTitledBorder("Name of portfolio"));
+    portfolioNamePanel.add(portfolioName);
+    mainPanel.add(portfolioNamePanel);
   }
 
   private void placeTopPanel() {
@@ -73,6 +83,7 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     stockQuantity.setBorder(BorderFactory.createTitledBorder("Quantity"));
 
     purchaseDate = new JTextField(10);
+    purchaseDate.setText("YYYY-MM-DD");
     purchaseDate.setBorder(BorderFactory.createTitledBorder("Date"));
 
     addStock = new JButton();
@@ -151,9 +162,9 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
 
   @Override
   public void addFeatures(JCreatePortfolioController jCreatePortfolioController) {
-    addStock.addActionListener(evt -> jCreatePortfolioController.addStock());
+    addStock.addActionListener(evt -> jCreatePortfolioController.addStock(stockTicker.getText(), stockQuantity.getText(), purchaseDate.getText()));
     backButton.addActionListener(evt -> jCreatePortfolioController.back());
-    createPortfolio.addActionListener(evt -> jCreatePortfolioController.createPortfolio());
+    createPortfolio.addActionListener(evt -> jCreatePortfolioController.createPortfolio(portfolioName.getText()));
     portfolioTableModel.addTableModelListener(new TableModelListener() {
       @Override
       public void tableChanged(TableModelEvent e) {
@@ -165,6 +176,17 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
       }
     });
   }
+
+//  private String[][] getTableData() {
+//    String[][] toReturn = new String[portfolioTableModel.getRowCount()][4];
+//    for (int i=0; i < portfolioTableModel.getRowCount(); i++) {
+//      toReturn[i][0] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(0);
+//      toReturn[i][1] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(1);
+//      toReturn[i][2] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(2);
+//      toReturn[i][3] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(3);
+//    }
+//    return toReturn;
+//  }
 
   @Override
   public void isVisible(boolean state) {
@@ -193,6 +215,29 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     endDate.setText("");
     interval.setText("");
     dollarAmount.setText("");
+    portfolioName.setText("");
+    logs.setText("");
+    for (int i = 0; i < portfolioTableModel.getRowCount(); i++) {
+      portfolioTableModel.removeRow(0);
+    }
+  }
+
+  @Override
+  public void setLogOutput(String message) {
+    this.logs.setForeground(Color.BLACK);
+    this.logs.setText(message);
+  }
+
+  @Override
+  public void setSuccessOutput(String message) {
+    this.logs.setForeground(new Color(0, 102, 0));
+    this.logs.setText(message);
+  }
+
+  @Override
+  public void setFailureOutput(String message) {
+    this.logs.setForeground(Color.RED);
+    this.logs.setText(message);
   }
 
 }
