@@ -1,5 +1,7 @@
 package controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 import model.FlexiblePortfolio;
@@ -109,6 +111,12 @@ public class Utils {
       view.askPromptToContinue();
       takeLineInput(in);
     }
+  }
+
+  public static String getPresentDate() {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDateTime now = LocalDateTime.now();
+    return dtf.format(now);
   }
 
 }

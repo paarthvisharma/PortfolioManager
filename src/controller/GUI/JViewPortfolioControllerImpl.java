@@ -68,7 +68,7 @@ public class JViewPortfolioControllerImpl implements JViewPortfolioController {
       StatusObject<List<List<String>>> portfolioDetails =
               model.getCompositionOfFlexiblePortfolioAsList(user, particularPortfolio.returnedObject, date);
       if (portfolioDetails.statusCode < 0) {
-        this.jViewPortfolioView.setFailureOutput(particularPortfolio.statusMessage);
+        this.jViewPortfolioView.setFailureOutput(portfolioDetails.statusMessage);
         return;
       }
       for (List<String> stock: portfolioDetails.returnedObject) {

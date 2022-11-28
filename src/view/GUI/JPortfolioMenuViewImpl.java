@@ -24,6 +24,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
   private JPanel transactInPortfolioButtonPanel;
   private JPanel valuatePortfolioPanel;
   private JPanel valuatePortfolioButtonPanel;
+  private JPanel setCommissionPanel;
+  private JPanel setCommissionButtonPanel;
   private JLabel topMostLabel;
   private JLabel performancePortfolioLabel;
   private JLabel viewPortfolioLabel;
@@ -32,6 +34,7 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
   private JLabel createPortfolioLabel;
   private JLabel transactInPortfolioLabel;
   private JLabel valuatePortfolioLabel;
+  private JLabel setCommissionLabel;
   private JButton backButton;
   private JButton viewPortfolioButton;
   private JButton performancePortfolioButton;
@@ -40,6 +43,7 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
   private JButton createPortfolioButton;
   private JButton transactInPortfolioButton;
   private JButton valuatePortfolioButton;
+  private JButton setCommissionButton;
 
 
   public JPortfolioMenuViewImpl() {
@@ -62,6 +66,7 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     mainPanel.add(topMostPanel);
     add(mainPanel);
 
+    this.setCommissionPanel();
     this.createPortfolioPanel();
     this.transactPortfolioPanel();
     this.valuatePortfolioPanel();
@@ -71,6 +76,21 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     this.performancePanel();
 
     this.isVisible(false);
+  }
+
+  private void setCommissionPanel() {
+    setCommissionPanel = new JPanel();
+    setCommissionPanel.setLayout(new GridLayout(1, 2, 2, 2));
+    setCommissionLabel = new JLabel();
+    setCommissionLabel.setText("Set commission for user");
+    setCommissionButtonPanel = new JPanel();
+    setCommissionButtonPanel.setLayout(new BoxLayout(setCommissionButtonPanel, BoxLayout.LINE_AXIS));
+    setCommissionButton = new JButton();
+    setCommissionButton.setText("Set commission");
+    setCommissionButtonPanel.add(setCommissionButton);
+    setCommissionPanel.add(setCommissionLabel);
+    setCommissionPanel.add(setCommissionButtonPanel);
+    mainPanel.add(setCommissionPanel);
   }
 
   private void performancePanel() {

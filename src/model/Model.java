@@ -29,6 +29,8 @@ public interface Model {
    */
   StatusObject<User> createUserFromXML(String xmlPath);
 
+  StatusObject<Portfolio> createPortfolioFromXML(User user, String xmlPath);
+
   /**
    * Updates the XML file for the passed user.
    *

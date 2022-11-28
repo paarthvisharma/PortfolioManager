@@ -24,6 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import model.handler.PortfolioHandler;
 import model.handler.UserHandler;
 import model.utils.StatusObject;
 import model.utils.Transaction;
@@ -149,6 +150,52 @@ public class ModelImpl implements Model {
     }
   }
 
+  @Override
+  public StatusObject<Portfolio> createPortfolioFromXML(User user, String xmlPath) {
+    try {
+      File userFile = new File(xmlPath);
+      SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+      SAXParser saxParser = saxParserFactory.newSAXParser();
+      PortfolioHandler handler = new PortfolioHandler(true, user.getUserId());
+      saxParser.parse(userFile, handler);
+      Map<String, Portfolio> loadedPortfolio = handler.getPortfolio();
+      if (loadedPortfolio.get("rigidPortfolio") != null) {
+        RigidPortfolio loadedRigidPortfolio = (RigidPortfolio) loadedPortfolio.get("rigidPortfolio");
+        user.addToListOfRigidPortfolios((RigidPortfolio) loadedPortfolio.get("rigidPortfolio"));
+        this.updateUserFile(user);
+        return new StatusObject<>("Successfully loaded the"
+                + " Portfolio with Portfolio ID "
+                + loadedRigidPortfolio.getPortfolioId(), 1, loadedRigidPortfolio);
+      } else if (loadedPortfolio.get("flexiblePortfolio") != null) {
+        FlexiblePortfolio loadedFlexiblePortfolio = (FlexiblePortfolio) loadedPortfolio.get("flexiblePortfolio");
+        loadedFlexiblePortfolio.setCommission(user.getCommission());
+        if (!verifyAndLoadTransactionsForSingleFlexiblePortfolio(user, loadedFlexiblePortfolio, xmlPath)) {
+          throw new ExceptionInInitializerError("The transaction files are not present "
+                  + "or have discrepancies with the portfolio (XML file)");
+        }
+        user.addToListOfFlexiblePortfolios(loadedFlexiblePortfolio);
+        this.updateUserFile(user);
+        return new StatusObject<>("Successfully loaded the"
+                + " Portfolio with Portfolio ID "
+                + loadedFlexiblePortfolio.getPortfolioId(), 1, loadedFlexiblePortfolio);
+      }
+      throw new RuntimeException("The XML file does not contain Rigid or Flexible portfolio");
+    } catch (RuntimeException | ExceptionInInitializerError e) {
+      return new StatusObject<>(e.getMessage(), -1, null);
+    } catch (ParserConfigurationException e) {
+      return new StatusObject<>("Parser configuration failed,"
+              + " please configure XML parser properly",
+              -1, null);
+    } catch (SAXException e) {
+      return new StatusObject<>("XML file seems to be "
+              + "corrupted.", -1, null);
+    } catch (IOException e) {
+      return new StatusObject<>("File directory does not "
+              + "exist or there might be problems with "
+              + "the config file", -1, null);
+    }
+  }
+
   private boolean verifyAndLoadTransactionsForFlexiblePortfolios(User user, String xmlPath) {
     String parentPath = getParentDirPath(xmlPath);
     try {
@@ -157,17 +204,34 @@ public class ModelImpl implements Model {
                 + portfolio.getPortfolioId() + ".csv";
         String userDirPath = getParentDirPath(portfolio.getPathToPortfolioTransactions());
         Files.createDirectories(Paths.get(userDirPath));
-        (new File(portfolio.getPathToPortfolioTransactions())).createNewFile();
-        StatusObject<PriorityQueue<Transaction>> validatedTransactions =
-                portfolio.getValidatedTransactions(
-                        readCSVIntoQueue(pathToTransactions, false));
-        if (validatedTransactions.statusCode < 0) {
+        if (readAndLoadTransactionsCSV(portfolio, pathToTransactions)) {
           return false;
         }
-        writeToCSV(validatedTransactions.returnedObject,
-                portfolio.getPathToPortfolioTransactions());
       }
       return true;
+    } catch (IOException e) {
+      return false;
+    }
+  }
+
+  private boolean readAndLoadTransactionsCSV(FlexiblePortfolio portfolio, String pathToTransactions) throws IOException {
+    (new File(portfolio.getPathToPortfolioTransactions())).createNewFile();
+    StatusObject<PriorityQueue<Transaction>> validatedTransactions =
+            portfolio.getValidatedTransactions(
+                    readCSVIntoQueue(pathToTransactions, false));
+    if (validatedTransactions.statusCode < 0) {
+      return true;
+    }
+    writeToCSV(validatedTransactions.returnedObject,
+            portfolio.getPathToPortfolioTransactions());
+    return false;
+  }
+
+  private boolean verifyAndLoadTransactionsForSingleFlexiblePortfolio(User user, FlexiblePortfolio portfolio, String xmlPath) {
+    String parentPath = getParentDirPath(xmlPath);
+    try {
+      String pathToTransactions = xmlPath.replace(".xml", ".csv");
+      return !readAndLoadTransactionsCSV(portfolio, pathToTransactions);
     } catch (IOException e) {
       return false;
     }

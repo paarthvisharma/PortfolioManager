@@ -1,6 +1,5 @@
 package view.GUI;
 
-import controller.GUI.JCalculateValueController;
 import controller.GUI.JViewPortfolioController;
 
 public interface JViewPortfolioView {

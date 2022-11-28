@@ -6,6 +6,9 @@ import view.GUI.JView;
 public interface JPortfolioController {
 
   void back();
+
+  void setCommission();
+
   void createPortfolio();
   void valueOfPortfolio();
   void costBasisPortfolio();

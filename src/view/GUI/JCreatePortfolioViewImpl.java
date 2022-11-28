@@ -21,6 +21,7 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
   private JTextField interval;
   private JTextField portfolioName;
   private JTextField dollarAmount;
+  private JTextField commissionAmount;
   private JButton backButton;
   private JButton addStock;
   private JButton createPortfolio;
@@ -140,6 +141,13 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     dollarCostAveraging.add(dollarAmount, c);
     dollarAmount.setEnabled(false);
 
+    commissionAmount = new JTextField(10);
+    commissionAmount.setBorder(BorderFactory.createTitledBorder("Commission"));
+    c.gridx = 1;
+    c.gridy = 1;
+    dollarCostAveraging.add(commissionAmount, c);
+    commissionAmount.setEnabled(false);
+
     createPortfolio = new JButton();
     createPortfolio.setText("Create Portfolio");
     c.gridx = 2;
@@ -176,17 +184,6 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     });
   }
 
-//  private String[][] getTableData() {
-//    String[][] toReturn = new String[portfolioTableModel.getRowCount()][4];
-//    for (int i=0; i < portfolioTableModel.getRowCount(); i++) {
-//      toReturn[i][0] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(0);
-//      toReturn[i][1] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(1);
-//      toReturn[i][2] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(2);
-//      toReturn[i][3] = (String) portfolioTableModel.getDataVector().elementAt(i).elementAt(3);
-//    }
-//    return toReturn;
-//  }
-
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
@@ -202,6 +199,7 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     startDate.setEnabled(state);
     endDate.setEnabled(state);
     dollarAmount.setEnabled(state);
+    commissionAmount.setEnabled(state);
     interval.setEnabled(state);
   }
 

@@ -11,4 +11,8 @@ public interface JView {
   JCalculateCostBasisView getCalculateCostBasisView();
 
   JViewPortfolioView getViewPortfolioView();
+
+  JLoadPortfolioView getLoadPortfolioView();
+
+  JTransactionView getTransactionView();
 }

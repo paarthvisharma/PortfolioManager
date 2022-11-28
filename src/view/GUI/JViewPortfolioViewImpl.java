@@ -38,9 +38,11 @@ public class JViewPortfolioViewImpl extends JFrame implements  JViewPortfolioVie
     displayPortfoliosPanel = new JPanel();
     mainPanel.add(displayPortfoliosPanel);
     this.placeDateAndButtonPanel();
+
     portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker", "Stock Name", "Quantity", "Date of purchase"});
     JTable portfolioTable = new JTable();
     portfolioTable.setModel(portfolioTableModel);
+
     mainPanel.add(new JScrollPane(portfolioTable));
     this.placeLogOutput();
   }

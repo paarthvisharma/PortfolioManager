@@ -6,7 +6,9 @@ import view.GUI.JCalculateCostBasisView;
 import view.GUI.JCalculateValueView;
 import view.GUI.JCreatePortfolioView;
 import view.GUI.JCreateUserView;
+import view.GUI.JLoadPortfolioView;
 import view.GUI.JPortfolioMenuView;
+import view.GUI.JTransactionView;
 import view.GUI.JView;
 import view.GUI.JViewPortfolioView;
 
@@ -22,10 +24,14 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JCalculateValueView calculateValueView;
   private JCalculateCostBasisView calculateCostBasisView;
   private JViewPortfolioView viewPortfolioView;
+  private JLoadPortfolioView loadPortfolioView;
+  private JTransactionView transactionView;
   private JCreatePortfolioController createPortfolioController;
   private JCalculateValueController calculateValueController;
   private JCalculateCostBasisController calculateCostBasisController;
   private JViewPortfolioController viewPortfolioController;
+  private JLoadPortfolioController loadPortfolioController;
+  private JTransactionController transactionController;
   private User user;
 
   public JPortfolioControllerImpl(Model model) {
@@ -34,6 +40,8 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     calculateValueController = new JCalculateValueControllerImpl(model);
     calculateCostBasisController = new JCalculateCostBasisControllerImpl(model);
     viewPortfolioController = new JViewPortfolioControllerImpl(model);
+    loadPortfolioController = new JLoadPortfolioControllerImpl(model);
+    transactionController = new JTransactionControllerImpl(model);
 
   }
 
@@ -41,6 +49,11 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   public void back() {
     this.portfolioMenuView.isVisible(false);
     this.createUserView.isVisible(true);
+  }
+
+  @Override
+  public void setCommission() {
+
   }
 
   @Override
@@ -71,7 +84,9 @@ public class JPortfolioControllerImpl implements JPortfolioController {
 
   @Override
   public void loadPortfolio() {
-
+    loadPortfolioController.setUser(user);
+    this.portfolioMenuView.isVisible(false);
+    this.loadPortfolioView.isVisible(true);
   }
 
   @Override
@@ -90,7 +105,10 @@ public class JPortfolioControllerImpl implements JPortfolioController {
 
   @Override
   public void transactInPortfolio() {
-
+    transactionController.setUser(user);
+    this.transactionView.displayRadioButtonsForPortfolio(listFlexiblePortfolios(user, model));
+    this.portfolioMenuView.isVisible(false);
+    this.transactionView.isVisible(true);
   }
 
   @Override
@@ -106,12 +124,16 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     this.createPortfolioView = this.view.getCreatePortfolioView();
     this.calculateValueView = this.view.getCalculateValueView();
     this.calculateCostBasisView = this.view.getCalculateCostBasisView();
+    this.loadPortfolioView = this.view.getLoadPortfolioView();
     this.viewPortfolioView = this.view.getViewPortfolioView();
+    this.transactionView = this.view.getTransactionView();
     this.portfolioMenuView.addFeatures(this);
     this.createPortfolioController.setView(view);
     this.calculateValueController.setView(view);
     this.calculateCostBasisController.setView(view);
     this.viewPortfolioController.setView(view);
+    this.loadPortfolioController.setView(view);
+    this.transactionController.setView(view);
   }
 
 }
