@@ -14,6 +14,7 @@ import model.utils.XmlFormat;
 
 import static model.utils.Utils.getValueOnDateForStock;
 import static model.utils.Utils.validateForNonZeroInteger;
+import static model.utils.Utils.validateForPositiveDouble;
 
 /**
  * This class is an implementation of the Stock Interface.
@@ -60,7 +61,7 @@ public class StockImpl implements Stock {
         throw new IllegalArgumentException("Please enter date in valid format YYYY-MM-DD that is "
                 + "later than the listing date");
       }
-      validateForNonZeroInteger(stockQuantity);
+      validateForPositiveDouble(stockQuantity);
     }
     this.ticker = ticker;
     this.date = date;

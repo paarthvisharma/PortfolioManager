@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import controller.GUI.JTransactionController;
@@ -35,10 +37,12 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
   private JTextField commissionAmount;
   private JTextField interval;
   private JTextField dollarAmount;
+  private JTextField tickerFieldForDCA;
   private JButton buyButton;
   private JButton sellButton;
-  private JButton createPlan;
+  private JButton addPlan;
   private JButton loadPortfolio;
+  private JButton addToDCA;
 
   public JTransactionViewImpl() {
     super("Transact in Portfolio");
@@ -96,7 +100,7 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
     dollarCostAveragingPanel.setBorder(BorderFactory.createTitledBorder("Dollar Cost Averaging"));
     dollarCostAveragingPanel.setLayout(new BoxLayout(dollarCostAveragingPanel, BoxLayout.PAGE_AXIS));
 
-    portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker", "Quantity", "Date of purchase", "Weight %"});
+    portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker", "Stock Name", "Quantity", "Weight %"});
     JTable portfolioTable = new JTable();
     portfolioTable.setModel(portfolioTableModel);
     dollarCostAveragingPanel.add(new JScrollPane(portfolioTable));
@@ -105,44 +109,62 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
     dollarCostAveragingButtonPanel.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
 
+    tickerFieldForDCA = new JTextField(10);
+    tickerFieldForDCA.setBorder(BorderFactory.createTitledBorder("Ticker for DCA"));
+    c.gridx = 0;
+    c.gridy = 0;
+    dollarCostAveragingButtonPanel.add(tickerFieldForDCA, c);
+
+    addToDCA = new JButton();
+    addToDCA.setText("Add to DCA");
+    c.gridx = 2;
+    c.gridy = 0;
+    dollarCostAveragingButtonPanel.add(addToDCA, c);
+
     startDate = new JTextField(10);
     startDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
     c.gridx = 0;
-    c.gridy = 0;
+    c.gridy = 1;
     dollarCostAveragingButtonPanel.add(startDate, c);
 
     endDate = new JTextField(10);
     endDate.setBorder(BorderFactory.createTitledBorder("End Date"));
     c.gridx = 1;
-    c.gridy = 0;
+    c.gridy = 1;
     dollarCostAveragingButtonPanel.add(endDate, c);
 
     interval = new JTextField(10);
     interval.setBorder(BorderFactory.createTitledBorder("Interval (days)"));
     c.gridx = 2;
-    c.gridy = 0;
+    c.gridy = 1;
     dollarCostAveragingButtonPanel.add(interval, c);
 
     dollarAmount = new JTextField(10);
     dollarAmount.setBorder(BorderFactory.createTitledBorder("Dollar amount"));
     c.gridx = 0;
-    c.gridy = 1;
+    c.gridy = 2;
     dollarCostAveragingButtonPanel.add(dollarAmount, c);
 
     commissionAmount = new JTextField(10);
     commissionAmount.setBorder(BorderFactory.createTitledBorder("Commission"));
     c.gridx = 1;
-    c.gridy = 1;
+    c.gridy = 2;
     dollarCostAveragingButtonPanel.add(commissionAmount, c);
 
-    createPlan = new JButton();
-    createPlan.setText("Add Plan");
+    addPlan = new JButton();
+    addPlan.setText("Add Plan");
     c.gridx = 2;
-    c.gridy = 1;
-    dollarCostAveragingButtonPanel.add(createPlan, c);
+    c.gridy = 2;
+    dollarCostAveragingButtonPanel.add(addPlan, c);
+    addPlan.setEnabled(false);
     dollarCostAveragingPanel.add(dollarCostAveragingButtonPanel);
     dollarCostAveragingPanel.setVisible(false);
     mainPanel.add(dollarCostAveragingPanel);
+  }
+
+  @Override
+  public void enableAddPlanDCA(boolean state) {
+    addPlan.setEnabled(state);
   }
 
   private void placeBuySellPanel() {
@@ -206,13 +228,24 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
   public void addFeatures(JTransactionController jTransactionController) {
     buyButton.addActionListener(evt -> jTransactionController.buyStock(tickerField.getText(), quantityField.getText(), dateField.getText()));
     sellButton.addActionListener(evt -> jTransactionController.sellStock(tickerField.getText(), quantityField.getText(), dateField.getText()));
-    createPlan.addActionListener(evt -> jTransactionController.createDCAPlan(startDate.getText(),
+    addPlan.addActionListener(evt -> jTransactionController.createDCAPlan(startDate.getText(),
             endDate.getText(), interval.getText(), dollarAmount.getText(),
             commissionAmount.getText()));
     selectBuySell.addActionListener(evt -> jTransactionController.displayBuySellView());
     selectDollarCostSaving.addActionListener((evt -> jTransactionController.displayDCAView()));
     backButton.addActionListener(evt -> jTransactionController.back());
     loadPortfolio.addActionListener(evt -> jTransactionController.selectPortfolioTransaction(getSelectedButton()));
+    addToDCA.addActionListener((evt -> jTransactionController.addNewStockToDCATable(tickerFieldForDCA.getText())));
+    portfolioTableModel.addTableModelListener(new TableModelListener() {
+      @Override
+      public void tableChanged(TableModelEvent e) {
+        ArrayList<String> weightsColumn = new ArrayList<>();
+        for (int i=0; i < portfolioTableModel.getRowCount(); i++) {
+          weightsColumn.add(String.valueOf(portfolioTableModel.getValueAt(i, 3)));
+        }
+        jTransactionController.monitorTable(weightsColumn);
+      }
+    });
 //    for (JRadioButton r : radioButtons) {
 //      r.addActionListener(evt -> jTransactionController.selectPortfolioTransaction(r.getName()));
 //    }
@@ -243,10 +276,8 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
 
   @Override
   public void isVisible(boolean state) {
-    if (state) {
-      this.pack();
-    }
     this.setVisible(state);
+    this.pack();
   }
 
   @Override

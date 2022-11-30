@@ -2,6 +2,9 @@ package view.GUI;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -22,9 +25,11 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
   private JTextField portfolioName;
   private JTextField dollarAmount;
   private JTextField commissionAmount;
+  private JTextField tickerFieldForDCA;
   private JButton backButton;
   private JButton addStock;
   private JButton createPortfolio;
+  private JButton addToDCA;
   private JTable portfolioTable;
   private JLabel logs;
 
@@ -113,45 +118,57 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     dollarCostAveraging.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
 
+    tickerFieldForDCA = new JTextField(10);
+    tickerFieldForDCA.setBorder(BorderFactory.createTitledBorder("Ticker for DCA"));
+    c.gridx = 0;
+    c.gridy = 0;
+    dollarCostAveraging.add(tickerFieldForDCA, c);
+
+    addToDCA = new JButton();
+    addToDCA.setText("Add to DCA");
+    c.gridx = 2;
+    c.gridy = 0;
+    dollarCostAveraging.add(addToDCA, c);
+
     startDate = new JTextField(10);
     startDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
     c.gridx = 0;
-    c.gridy = 0;
+    c.gridy = 1;
     dollarCostAveraging.add(startDate, c);
     startDate.setEnabled(false);
 
     endDate = new JTextField(10);
     endDate.setBorder(BorderFactory.createTitledBorder("End Date"));
     c.gridx = 1;
-    c.gridy = 0;
+    c.gridy = 1;
     dollarCostAveraging.add(endDate, c);
     endDate.setEnabled(false);
 
     interval = new JTextField(10);
     interval.setBorder(BorderFactory.createTitledBorder("Interval (days)"));
     c.gridx = 2;
-    c.gridy = 0;
+    c.gridy = 1;
     dollarCostAveraging.add(interval, c);
     interval.setEnabled(false);
 
     dollarAmount = new JTextField(10);
     dollarAmount.setBorder(BorderFactory.createTitledBorder("Dollar amount"));
     c.gridx = 0;
-    c.gridy = 1;
+    c.gridy = 2;
     dollarCostAveraging.add(dollarAmount, c);
     dollarAmount.setEnabled(false);
 
     commissionAmount = new JTextField(10);
     commissionAmount.setBorder(BorderFactory.createTitledBorder("Commission"));
     c.gridx = 1;
-    c.gridy = 1;
+    c.gridy = 2;
     dollarCostAveraging.add(commissionAmount, c);
     commissionAmount.setEnabled(false);
 
     createPortfolio = new JButton();
     createPortfolio.setText("Create Portfolio");
     c.gridx = 2;
-    c.gridy = 1;
+    c.gridy = 2;
     dollarCostAveraging.add(createPortfolio, c);
     mainPanel.add(dollarCostAveraging);
   }
@@ -171,7 +188,8 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
   public void addFeatures(JCreatePortfolioController jCreatePortfolioController) {
     addStock.addActionListener(evt -> jCreatePortfolioController.addStock(stockTicker.getText(), stockQuantity.getText(), purchaseDate.getText()));
     backButton.addActionListener(evt -> jCreatePortfolioController.back());
-    createPortfolio.addActionListener(evt -> jCreatePortfolioController.createPortfolio(portfolioName.getText()));
+    createPortfolio.addActionListener(evt -> jCreatePortfolioController.createPortfolio(portfolioName.getText(), this.getDCASettings(), getTableData()));
+    addToDCA.addActionListener(evt -> jCreatePortfolioController.addStockForDCA(tickerFieldForDCA.getText()));
     portfolioTableModel.addTableModelListener(new TableModelListener() {
       @Override
       public void tableChanged(TableModelEvent e) {
@@ -184,9 +202,32 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     });
   }
 
+  private List<List<String>> getTableData() {
+    List<List<String>> tableData = new ArrayList<>();
+    for (int i=0; i < portfolioTableModel.getRowCount(); i++) {
+      List<String> row = new ArrayList<>();
+      for (int j=0; j < portfolioTableModel.getColumnCount(); j++) {
+        row.add(String.valueOf(portfolioTableModel.getValueAt(i, j)));
+      }
+      tableData.add(row);
+    }
+    return tableData;
+  }
+
+  private Map<String, String> getDCASettings() {
+    HashMap<String, String> dcaSettings = new HashMap<>();
+    dcaSettings.put("startDate", startDate.getText());
+    dcaSettings.put("endDate", endDate.getText());
+    dcaSettings.put("interval", interval.getText());
+    dcaSettings.put("dollarAmount", dollarAmount.getText());
+    dcaSettings.put("commission", commissionAmount.getText());
+    return dcaSettings;
+  }
+
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
+    this.pack();
   }
 
   @Override
@@ -204,6 +245,11 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
   }
 
   @Override
+  public void enableCreatePortfolioButton(boolean state) {
+    createPortfolio.setEnabled(state);
+  }
+
+  @Override
   public void clearUserInputs() {
     stockTicker.setText("");
     stockQuantity.setText("");
@@ -213,10 +259,9 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     interval.setText("");
     dollarAmount.setText("");
     portfolioName.setText("");
+    commissionAmount.setText("");
     logs.setText("");
-    for (int i = 0; i < portfolioTableModel.getRowCount(); i++) {
-      portfolioTableModel.removeRow(0);
-    }
+    portfolioTableModel.setRowCount(0);
   }
 
   @Override

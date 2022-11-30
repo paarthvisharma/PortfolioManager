@@ -26,8 +26,10 @@ import javax.xml.parsers.SAXParserFactory;
 
 import model.handler.PortfolioHandler;
 import model.handler.UserHandler;
+import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
+import model.utils.Utils;
 
 import static model.utils.Utils.getListingDateForTicker;
 import static model.utils.Utils.getParentDirPath;
@@ -37,7 +39,6 @@ import static model.utils.Utils.readCSVIntoQueue;
 import static model.utils.Utils.validateForDateAfterListing;
 import static model.utils.Utils.validateForLegalDate;
 import static model.utils.Utils.validateForNonZeroInteger;
-import static model.utils.Utils.validateTicker;
 import static model.utils.Utils.writeToCSV;
 import static utils.Utils.getConfigAndProgramState;
 
@@ -62,6 +63,16 @@ public class ModelImpl implements Model {
     this.config = getConfigAndProgramState();
     int userId = Integer.parseInt(config.get("userId"));
     this.portfolioManager = new PortfolioManager(userId);
+  }
+
+  @Override
+  public boolean validateTicker(String ticker) {
+    try {
+      Utils.validateTicker(ticker);
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
   @Override
@@ -298,6 +309,9 @@ public class ModelImpl implements Model {
       for (FlexiblePortfolio portfolio : user.getListOfFlexiblePortfolios()) {
         if (portfolio.getPortfolioId() == portfolioId) {
           toReturn = portfolio;
+          for (DollarCostAveraging dca: portfolio.getDCAPlans()) {
+            portfolio.executeDCAPlan(dca);
+          }
           break;
         }
       }
@@ -308,6 +322,30 @@ public class ModelImpl implements Model {
         throw new IllegalArgumentException("Portfolio with ID "
                 + portfolioId + " not found");
       }
+    } catch (Exception e) {
+      return new StatusObject<>(e.getMessage(), -1, null);
+    }
+  }
+
+  @Override
+  public StatusObject<String> createDCAPlan(
+          FlexiblePortfolio portfolio, String startDate, String endDate, String interval,
+          String dollarAmount, String commission, List<List<String>> dcaData) {
+    try {
+      validateForLegalDate(startDate);
+      validateForLegalDate(endDate);
+      if (Integer.parseInt(interval) < 1) {
+        return new StatusObject<>("Interval should be at least 1 day", -1, null);
+      }
+      if (Double.parseDouble(dollarAmount) < 0) {
+        return new StatusObject<>("Investment amount cannot be negative", -1, null);
+      }
+      if (Double.parseDouble(commission) < 0) {
+        return new StatusObject<>("Commission amount cannot be negative", -1, null);
+      }
+      DollarCostAveraging toReturn = new DollarCostAveraging(startDate, endDate, interval, dollarAmount, commission, dcaData, "");
+      portfolio.addDCAPlan(toReturn);
+      return new StatusObject<>("Successfully created DCA", 1, null);
     } catch (Exception e) {
       return new StatusObject<>(e.getMessage(), -1, null);
     }

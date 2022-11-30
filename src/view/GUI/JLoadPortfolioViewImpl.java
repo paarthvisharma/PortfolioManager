@@ -104,6 +104,7 @@ public class JLoadPortfolioViewImpl extends JFrame implements JLoadPortfolioView
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
+    this.pack();
   }
 
   @Override

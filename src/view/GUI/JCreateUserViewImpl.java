@@ -188,5 +188,6 @@ public class JCreateUserViewImpl extends JFrame implements JCreateUserView, Acti
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
+    this.pack();
   }
 }

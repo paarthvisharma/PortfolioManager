@@ -1,5 +1,7 @@
 package controller.GUI;
 
+import java.util.List;
+
 import model.User;
 import view.GUI.JView;
 
@@ -17,6 +19,10 @@ public interface JTransactionController {
   void setUser(User user);
 
   void selectPortfolioTransaction(String portfolioIdAndName);
+
+  void monitorTable(List<String> weightsColumn);
+
+  void addNewStockToDCATable(String ticker);
 
   void back();
 }

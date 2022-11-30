@@ -128,6 +128,7 @@ public class JViewPortfolioViewImpl extends JFrame implements  JViewPortfolioVie
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
+    this.pack();
   }
 
   @Override

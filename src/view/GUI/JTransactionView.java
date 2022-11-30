@@ -4,6 +4,8 @@ import controller.GUI.JTransactionController;
 
 public interface JTransactionView {
 
+  void enableAddPlanDCA(boolean state);
+
   void addFeatures(JTransactionController jTransactionController);
 
   void clearUserInputs();

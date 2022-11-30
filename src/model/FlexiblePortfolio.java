@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 
@@ -14,6 +15,12 @@ import model.utils.Transaction;
  * supports buying or selling stocks once it's created.
  */
 public interface FlexiblePortfolio extends Portfolio {
+  void addDCAPlan(DollarCostAveraging dca);
+
+  List<DollarCostAveraging> getDCAPlans();
+
+  void executeDCAPlan(DollarCostAveraging dca);
+
   void setCommission(double commission);
 
   double getCommission(double commission);

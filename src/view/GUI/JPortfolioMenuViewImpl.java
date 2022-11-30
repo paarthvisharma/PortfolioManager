@@ -213,6 +213,7 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
+    this.pack();
   }
 
 }

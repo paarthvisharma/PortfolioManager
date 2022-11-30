@@ -3,6 +3,7 @@ package controller.GUI;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import model.FlexiblePortfolio;
 import model.Model;
@@ -34,12 +35,12 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
   }
 
   @Override
-  public void createPortfolio(String portfolioName) {
+  public void createPortfolio(String portfolioName, Map<String, String> dcaSetting, List<List<String>> tableData) {
     if (portfolioName.trim().equals("")) {
       this.createPortfolioView.setFailureOutput("Name of the portfolio cannot be blank");
       return;
     }
-    if (this.listOfStocks.isEmpty()) {
+    if (this.listOfStocks.isEmpty() & dcaSetting.get("startDate").equals("")) {
       this.createPortfolioView.setFailureOutput("Portfolios must have at least one stock");
       return;
     }
@@ -49,8 +50,18 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
               user, portfolioName,
               this.listOfStocks);
       if (createdPortfolio.statusCode > 0) {
-        model.updateUserFile(user);
-        this.createPortfolioView.setSuccessOutput(createdPortfolio.statusMessage);
+        if (!dcaSetting.get("startDate").equals("")) {
+          try {
+            processDCACreation(createdPortfolio.returnedObject, dcaSetting, tableData);
+            model.updateUserFile(user);
+            this.createPortfolioView.setSuccessOutput(createdPortfolio.statusMessage);
+          } catch (RuntimeException e) {
+            this.createPortfolioView.setFailureOutput(e.getMessage());
+          }
+        } else {
+          model.updateUserFile(user);
+          this.createPortfolioView.setSuccessOutput(createdPortfolio.statusMessage);
+        }
       } else {
         this.createPortfolioView.setFailureOutput(createdPortfolio.statusMessage);
       }
@@ -62,6 +73,39 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
     } catch (IOException e) {
       this.createPortfolioView.setFailureOutput("User file could not be found. "
               + "Please check the config file.");
+    }
+  }
+
+  private void processDCACreation(FlexiblePortfolio portfolio, Map<String, String> dcaSetting, List<List<String>> tableData) {
+    try {
+      if (dcaSetting.get("startDate").equals("")) {
+        throw new IllegalArgumentException("Start date cannot be empty");
+      }
+      if (dcaSetting.get("endDate").equals("")) {
+        dcaSetting.put("endDate", "3000-01-01");
+      }
+      if (dcaSetting.get("startDate").equals("")) {
+        throw new IllegalArgumentException("Start date cannot be empty");
+      }
+      if (dcaSetting.get("interval").equals("") | Integer.parseInt(dcaSetting.get("interval")) < 1) {
+        throw new IllegalArgumentException("Interval has to be a positive integer");
+      }
+      if (dcaSetting.get("commission").equals("") | Double.parseDouble(dcaSetting.get("commission")) < 0) {
+        throw new IllegalArgumentException("Commission has to be greater/equal to 0");
+      }
+      if (dcaSetting.get("dollarAmount").equals("") | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
+        throw new IllegalArgumentException("Dollar amount has to be greater/equal to 0");
+      }
+      StatusObject<String> status = model.createDCAPlan(portfolio, dcaSetting.get("startDate"), dcaSetting.get("endDate"), dcaSetting.get("interval"),
+              dcaSetting.get("dollarAmount"), dcaSetting.get("commission"), tableData);
+      if (status.statusCode < 0) {
+        throw new RuntimeException(status.statusMessage);
+      }
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Entered number does not follow the correct format\n"
+              + "Interval -> Positive integer\n"
+              + "Dollar amount -> Positive number\n"
+              + "Commission -> Positive number");
     }
   }
 
@@ -131,7 +175,18 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
 
   @Override
   public void monitorTable(List<String> weightsColumn) {
-
+    double totalSum = 0;
+    for (String weight: weightsColumn) {
+      totalSum += Double.parseDouble(weight);
+    }
+    if (totalSum != 0 & totalSum != 100) {
+      this.createPortfolioView.dollarCostAveragingEnabled(true);
+      this.createPortfolioView.enableCreatePortfolioButton(false);
+      this.createPortfolioView.setLogOutput("Sum of the weights should be 100");
+    }
+    if (totalSum == 0.0 | totalSum == 100) {
+      this.createPortfolioView.enableCreatePortfolioButton(true);
+    }
   }
 
   @Override
@@ -142,5 +197,14 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
   @Override
   public void resetStockList() {
      this.listOfStocks = new ArrayList<>();
+  }
+
+  @Override
+  public void addStockForDCA(String ticker) {
+    if (model.validateTicker(ticker.trim())) {
+      this.createPortfolioView.addRowToTable(new String[]{ticker.trim().toLowerCase(), "", ""});
+    } else {
+      this.createPortfolioView.setFailureOutput("Ticker is not valid");
+    }
   }
 }

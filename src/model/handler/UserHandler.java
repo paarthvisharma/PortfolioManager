@@ -38,6 +38,7 @@ public class UserHandler extends DefaultHandler {
   private RigidPortfolioBuilder rigidPortfolioBuilder = null;
 
   private List<FlexiblePortfolio> flexiblePortfolioList = null;
+  private List<String> dcaPlans = null;
   private FlexiblePortfolioBuilder flexiblePortfolioBuilder = null;
 
   private List<Stock> stockList = null;
@@ -57,6 +58,7 @@ public class UserHandler extends DefaultHandler {
   boolean bStockName = false;
   boolean bStockQuantity = false;
   boolean bDate = false;
+  boolean bDcaPlan = false;
 
   boolean bCommission = false;
 
@@ -94,6 +96,7 @@ public class UserHandler extends DefaultHandler {
       if (flexiblePortfolioList == null) {
         flexiblePortfolioList = new ArrayList<>();
       }
+      dcaPlans = new ArrayList<>();
     } else if (qName.equalsIgnoreCase("stock")) {
       String ticker = attributes.getValue("ticker");
       stockBuilder = new StockBuilder();
@@ -101,6 +104,10 @@ public class UserHandler extends DefaultHandler {
       if (stockList == null) {
         stockList = new ArrayList<>();
       }
+    } else if (qName.equalsIgnoreCase("plans")) {
+      dcaPlans = new ArrayList<>();
+    } else if (qName.equalsIgnoreCase("dcaPlan")) {
+      bDcaPlan = true;
     } else if (qName.equalsIgnoreCase("stocks")) {
       stockList = new ArrayList<>();
     } else if (qName.equalsIgnoreCase("rigidPortfolios")) {
@@ -159,6 +166,12 @@ public class UserHandler extends DefaultHandler {
       commission = Double.parseDouble(data.toString());
       userBuilder.setCommission(commission);
       bCommission = false;
+    } else if (bDcaPlan) {
+      dcaPlans.add(data.toString());
+      bDcaPlan = false;
+    }
+    if (qName.equalsIgnoreCase("plans")) {
+      flexiblePortfolioBuilder.setDcaPlansAsString(dcaPlans);
     }
     if (qName.equalsIgnoreCase("stock")) {
       try {

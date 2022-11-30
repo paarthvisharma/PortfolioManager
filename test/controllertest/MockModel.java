@@ -11,6 +11,7 @@ import model.Portfolio;
 import model.RigidPortfolio;
 import model.Stock;
 import model.User;
+import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 
@@ -29,6 +30,11 @@ public class MockModel implements Model {
 
 
   @Override
+  public boolean validateTicker(String ticker) {
+    return false;
+  }
+
+  @Override
   public StatusObject<User> createUser(String firstName, String lastName, double commission) {
     log.append("FirstName: ").append(firstName).append(" LastName: ").append(lastName).append("||");
     return testModel.createUser(firstName, lastName, commission);
@@ -38,6 +44,11 @@ public class MockModel implements Model {
   public StatusObject<User> createUserFromXML(String xmlPath) {
     log.append(xmlPath).append("||");
     return testModel.createUserFromXML(xmlPath);
+  }
+
+  @Override
+  public StatusObject<Portfolio> createPortfolioFromXML(User user, String xmlPath) {
+    return null;
   }
 
   @Override
@@ -85,6 +96,11 @@ public class MockModel implements Model {
                                                                         int portfolioId) {
     log.append(user.toString()).append("\n").append(portfolioId).append("||");
     return testModel.getParticularFlexiblePortfolio(user, portfolioId);
+  }
+
+  @Override
+  public StatusObject<String> createDCAPlan(FlexiblePortfolio portfolio, String startDate, String endDate, String interval, String dollarAmount, String commission, List<List<String>> dcaData) {
+    return null;
   }
 
   @Override
@@ -202,6 +218,11 @@ public class MockModel implements Model {
     log.append(portfolio.toString()).append("\n");
     log.append(date).append("||");
     return testModel.viewCompositionOfFlexiblePortfolio(user, portfolio, date);
+  }
+
+  @Override
+  public StatusObject<List<List<String>>> getCompositionOfFlexiblePortfolioAsList(User user, FlexiblePortfolio portfolio, String date) {
+    return null;
   }
 
   @Override

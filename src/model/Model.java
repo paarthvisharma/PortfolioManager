@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 
@@ -14,6 +15,8 @@ import model.utils.Transaction;
  * and delegates it to the different classes like Stock, Portfolio, User and PortfolioManager.
  */
 public interface Model {
+
+  boolean validateTicker(String ticker);
 
   /**
    * Create a user in the portfolio management system.
@@ -94,6 +97,10 @@ public interface Model {
    * @return returns StatusObject containing the statusMessage, statusCode and the Portfolio Object.
    */
   StatusObject<FlexiblePortfolio> getParticularFlexiblePortfolio(User user, int portfolioId);
+
+  StatusObject<String> createDCAPlan(
+          FlexiblePortfolio portfolio, String startDate, String endDate, String interval,
+          String dollarAmount, String commission, List<List<String>> dcaData);
 
   /**
    * Processes the portfolio object and retrieves the portfolioId.

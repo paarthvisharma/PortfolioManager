@@ -8,6 +8,9 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -109,6 +112,11 @@ public class Utils {
       throw new RuntimeException(e);
     }
     return priceOfStockOnDate;
+  }
+
+  public static int compareDates(String baseDate, String comparableDate) throws ParseException {
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    return dateParser.parse(baseDate).compareTo(dateParser.parse(comparableDate));
   }
 
   /**
@@ -232,6 +240,12 @@ public class Utils {
     }
   }
 
+  public static void validateForPositiveDouble(double number) {
+    if (number < 0) {
+      throw new IllegalArgumentException("The stock quantity should be a positive number.");
+    }
+  }
+
   /**
    * Static method to verify if a ticker is supported/valid.
    * @param ticker Ticker to be validated.
@@ -252,5 +266,19 @@ public class Utils {
       }
     }
     throw new IllegalArgumentException("The stock ticker is invalid.");
+  }
+
+  public static String getPresentDate() {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDateTime now = LocalDateTime.now();
+    return dtf.format(now);
+  }
+
+  public static String incrementDate(String date, int incrementNumber) throws ParseException {
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    Calendar c = Calendar.getInstance();
+    c.setTime(dateParser.parse(date));
+    c.add(Calendar.DATE, incrementNumber);
+    return dateParser.format(c.getTime());
   }
 }

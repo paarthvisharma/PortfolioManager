@@ -105,11 +105,35 @@ public class JTransactionControllerImpl implements JTransactionController {
         return;
       }
       for (List<String> stock: portfolioDetails.returnedObject) {
-        this.transactionView.addRowToDCATable(new String[]{stock.get(0), stock.get(2), stock.get(3), "0"});
+        this.transactionView.addRowToDCATable(new String[]{stock.get(0), stock.get(1), stock.get(2), stock.get(3), "0"});
       }
       this.transactionView.setSuccessOutput("Successfully selected " + selectedPortfolio.getPortfolioId());
     } catch (NumberFormatException e) {
       this.transactionView.setFailureOutput("Portfolio ID is not an integer");
+    }
+  }
+
+  @Override
+  public void monitorTable(List<String> weightsColumn) {
+    double totalSum = 0;
+    for (String weight: weightsColumn) {
+      totalSum += Double.parseDouble(weight);
+    }
+    if (totalSum != 100) {
+      this.transactionView.enableAddPlanDCA(false);
+      this.transactionView.setLogOutput("Sum of the weights should be 100");
+    }
+    if (totalSum == 100) {
+      this.transactionView.enableAddPlanDCA(true);
+    }
+  }
+
+  @Override
+  public void addNewStockToDCATable(String ticker) {
+    if (model.validateTicker(ticker.trim())) {
+      this.transactionView.addRowToDCATable(new String[]{ticker.trim().toLowerCase(), "", "", "", "0"});
+    } else {
+      transactionView.setFailureOutput("Ticker is not valid");
     }
   }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import model.FlexiblePortfolio;
 import model.FlexiblePortfolioImpl;
 import model.Stock;
+import model.utils.DollarCostAveraging;
 
 /**
  * A builder method implementation to create FlexiblePortfolio objects.
@@ -18,6 +19,7 @@ public class FlexiblePortfolioBuilder {
   private double commission;
 
   private String portfolioPath;
+  private List<String> dcaPlansAsString;
 
   /**
    * Getter method to get the path to Transactions.csv of the portfolio.
@@ -120,11 +122,23 @@ public class FlexiblePortfolioBuilder {
    */
   public FlexiblePortfolio build() {
     if (this.portfolioName != null & this.listOfStocks != null & this.portfolioId != 0) {
-      return new FlexiblePortfolioImpl(this.portfolioName, this.portfolioId, this.listOfStocks,
+      FlexiblePortfolio portfolio = new FlexiblePortfolioImpl(this.portfolioName, this.portfolioId, this.listOfStocks,
               this.commission, this.portfolioPath);
+      for (String dcaPlanStr: dcaPlansAsString) {
+        portfolio.addDCAPlan(new DollarCostAveraging(dcaPlanStr));
+      }
+      return portfolio;
     } else {
       throw new IllegalArgumentException("One of the parameters required for"
               + " Portfolio have not been set");
     }
+  }
+
+  public List<String> getDcaPlansAsString() {
+    return dcaPlansAsString;
+  }
+
+  public void setDcaPlansAsString(List<String> dcaPlansAsString) {
+    this.dcaPlansAsString = dcaPlansAsString;
   }
 }

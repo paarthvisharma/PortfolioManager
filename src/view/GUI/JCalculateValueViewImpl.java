@@ -110,6 +110,7 @@ public class JCalculateValueViewImpl extends JFrame implements JCalculateValueVi
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
+    this.pack();
   }
 
   @Override
