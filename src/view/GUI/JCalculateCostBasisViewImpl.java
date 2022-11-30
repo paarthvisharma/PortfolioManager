@@ -110,7 +110,7 @@ public class JCalculateCostBasisViewImpl extends JFrame implements JCalculateCos
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
-
+    this.pack();
   }
 
   @Override

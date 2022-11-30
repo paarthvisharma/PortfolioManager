@@ -3,6 +3,9 @@ package view.GUI;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -228,9 +231,10 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
   public void addFeatures(JTransactionController jTransactionController) {
     buyButton.addActionListener(evt -> jTransactionController.buyStock(tickerField.getText(), quantityField.getText(), dateField.getText()));
     sellButton.addActionListener(evt -> jTransactionController.sellStock(tickerField.getText(), quantityField.getText(), dateField.getText()));
-    addPlan.addActionListener(evt -> jTransactionController.createDCAPlan(startDate.getText(),
-            endDate.getText(), interval.getText(), dollarAmount.getText(),
-            commissionAmount.getText()));
+//    addPlan.addActionListener(evt -> jTransactionController.createDCAPlan(startDate.getText(),
+//            endDate.getText(), interval.getText(), dollarAmount.getText(),
+//            commissionAmount.getText()));
+    addPlan.addActionListener(evt -> jTransactionController.createDCAPlan(this.getDCASettings(), getTableData()));
     selectBuySell.addActionListener(evt -> jTransactionController.displayBuySellView());
     selectDollarCostSaving.addActionListener((evt -> jTransactionController.displayDCAView()));
     backButton.addActionListener(evt -> jTransactionController.back());
@@ -320,6 +324,28 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
   @Override
   public void addRowToDCATable(String[] row) {
     portfolioTableModel.addRow(new String[]{row[0], row[1], row[2], "0"});
+  }
+
+  private java.util.List<java.util.List<String>> getTableData() {
+    java.util.List<java.util.List<String>> tableData = new ArrayList<>();
+    for (int i=0; i < portfolioTableModel.getRowCount(); i++) {
+      List<String> row = new ArrayList<>();
+      for (int j=0; j < portfolioTableModel.getColumnCount(); j++) {
+        row.add(String.valueOf(portfolioTableModel.getValueAt(i, j)));
+      }
+      tableData.add(row);
+    }
+    return tableData;
+  }
+
+  private Map<String, String> getDCASettings() {
+    HashMap<String, String> dcaSettings = new HashMap<>();
+    dcaSettings.put("startDate", startDate.getText());
+    dcaSettings.put("endDate", endDate.getText());
+    dcaSettings.put("interval", interval.getText());
+    dcaSettings.put("dollarAmount", dollarAmount.getText());
+    dcaSettings.put("commission", commissionAmount.getText());
+    return dcaSettings;
   }
 
   private void selectPortfolioPanel(String portfoliosText) {

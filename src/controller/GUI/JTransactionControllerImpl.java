@@ -1,6 +1,9 @@
 package controller.GUI;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import model.FlexiblePortfolio;
 import model.Model;
@@ -64,9 +67,56 @@ public class JTransactionControllerImpl implements JTransactionController {
   }
 
   @Override
-  public void createDCAPlan(String startDate, String endDate, String interval, String dollarAmount, String commission) {
-    System.out.println(startDate + " " + endDate + " " + interval + " " + dollarAmount + " " + commission);
-    this.transactionView.setLogOutput(startDate + " " + endDate + " " + interval + " " + dollarAmount + " " + commission);
+  public void createDCAPlan(Map<String, String> dcaSetting, List<List<String>> tableData) {
+    try {
+      processDCACreation(selectedPortfolio, dcaSetting, tableData);
+      model.updateUserFile(user);
+      this.transactionView.setSuccessOutput("Added DCA plan to " + selectedPortfolio.getPortfolioId());
+    } catch (RuntimeException e) {
+      this.transactionView.setFailureOutput(e.getMessage());
+    }  catch (IOException e) {
+      this.transactionView.setFailureOutput("User file could not be found. "
+              + "Please check the config file.");
+    }
+  }
+
+  private void processDCACreation(FlexiblePortfolio portfolio, Map<String, String> dcaSetting, List<List<String>> tableData) {
+    try {
+      if (dcaSetting.get("startDate").equals("")) {
+        throw new IllegalArgumentException("Start date cannot be empty");
+      }
+      if (dcaSetting.get("endDate").equals("")) {
+        dcaSetting.put("endDate", "3000-01-01");
+      }
+      if (dcaSetting.get("startDate").equals("")) {
+        throw new IllegalArgumentException("Start date cannot be empty");
+      }
+      if (dcaSetting.get("interval").equals("") | Integer.parseInt(dcaSetting.get("interval")) < 1) {
+        throw new IllegalArgumentException("Interval has to be a positive integer");
+      }
+      if (dcaSetting.get("commission").equals("") | Double.parseDouble(dcaSetting.get("commission")) < 0) {
+        throw new IllegalArgumentException("Commission has to be greater/equal to 0");
+      }
+      if (dcaSetting.get("dollarAmount").equals("") | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
+        throw new IllegalArgumentException("Dollar amount has to be greater/equal to 0");
+      }
+      List<List<String>> filteredTable = new ArrayList<>();
+      for (List<String> row: tableData) {
+        if (Double.parseDouble(row.get(3)) != 0) {
+          filteredTable.add(row);
+        }
+      }
+      StatusObject<String> status = model.createDCAPlan(portfolio, dcaSetting.get("startDate"), dcaSetting.get("endDate"), dcaSetting.get("interval"),
+              dcaSetting.get("dollarAmount"), dcaSetting.get("commission"), filteredTable);
+      if (status.statusCode < 0) {
+        throw new RuntimeException(status.statusMessage);
+      }
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException("Entered number does not follow the correct format\n"
+              + "Interval -> Positive integer\n"
+              + "Dollar amount -> Positive number\n"
+              + "Commission -> Positive number");
+    }
   }
 
   @Override

@@ -1,6 +1,7 @@
 package controller.GUI;
 
 import java.util.List;
+import java.util.Map;
 
 import model.User;
 import view.GUI.JView;
@@ -11,7 +12,7 @@ public interface JTransactionController {
 
   void buyStock(String ticker, String quantity, String date);
   void sellStock(String ticker, String quantity, String date);
-  void createDCAPlan(String startDate, String endDate, String interval, String dollarAmount, String commission);
+  void createDCAPlan(Map<String, String> dcaSetting, List<List<String>> tableData);
 
   void displayBuySellView();
   void displayDCAView();

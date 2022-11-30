@@ -96,8 +96,14 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
       if (dcaSetting.get("dollarAmount").equals("") | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
         throw new IllegalArgumentException("Dollar amount has to be greater/equal to 0");
       }
+      List<List<String>> filteredTable = new ArrayList<>();
+      for (List<String> row: tableData) {
+        if (Double.parseDouble(row.get(3)) != 0) {
+          filteredTable.add(row);
+        }
+      }
       StatusObject<String> status = model.createDCAPlan(portfolio, dcaSetting.get("startDate"), dcaSetting.get("endDate"), dcaSetting.get("interval"),
-              dcaSetting.get("dollarAmount"), dcaSetting.get("commission"), tableData);
+              dcaSetting.get("dollarAmount"), dcaSetting.get("commission"), filteredTable);
       if (status.statusCode < 0) {
         throw new RuntimeException(status.statusMessage);
       }
