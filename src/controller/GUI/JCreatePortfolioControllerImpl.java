@@ -14,6 +14,10 @@ import view.GUI.JCreatePortfolioView;
 import view.GUI.JPortfolioMenuView;
 import view.GUI.JView;
 
+/**
+ * This class implements the JCreatePortfolioController interface for Portfolio GUI which and
+ * contains the methods which help display the create portfolio menu.
+ */
 public class JCreatePortfolioControllerImpl implements JCreatePortfolioController {
 
   private Model model;
@@ -24,6 +28,11 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
 
   private List<Stock> listOfStocks;
 
+  /**
+   * A constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JCreatePortfolioControllerImpl(Model model) {
     this.model = model;
   }
@@ -97,7 +106,7 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
         throw new IllegalArgumentException("Dollar amount has to be greater/equal to 0");
       }
       List<List<String>> filteredTable = new ArrayList<>();
-      for (List<String> row: tableData) {
+      for (List<String> row : tableData) {
         if (Double.parseDouble(row.get(3)) != 0) {
           filteredTable.add(row);
         }
@@ -182,7 +191,7 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
   @Override
   public void monitorTable(List<String> weightsColumn) {
     double totalSum = 0;
-    for (String weight: weightsColumn) {
+    for (String weight : weightsColumn) {
       totalSum += Double.parseDouble(weight);
     }
     if (totalSum != 0 & totalSum != 100) {
@@ -202,7 +211,7 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
 
   @Override
   public void resetStockList() {
-     this.listOfStocks = new ArrayList<>();
+    this.listOfStocks = new ArrayList<>();
   }
 
   @Override

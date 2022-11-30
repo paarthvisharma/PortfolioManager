@@ -8,6 +8,11 @@ import view.GUI.JLoadPortfolioView;
 import view.GUI.JPortfolioMenuView;
 import view.GUI.JView;
 
+/**
+ * This class implements the JLoadPortfolioController interface for Load Portfolio GUI and contains
+ * the methods which help displays the load portfolio menu.
+ */
+
 public class JLoadPortfolioControllerImpl implements JLoadPortfolioController {
 
   private Model model;
@@ -16,6 +21,11 @@ public class JLoadPortfolioControllerImpl implements JLoadPortfolioController {
   private JLoadPortfolioView loadPortfolioView;
   private JPortfolioMenuView portfolioMenuView;
 
+  /**
+   * A constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JLoadPortfolioControllerImpl(Model model) {
     this.model = model;
   }

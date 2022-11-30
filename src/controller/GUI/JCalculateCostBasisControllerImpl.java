@@ -9,14 +9,22 @@ import view.GUI.JCalculateCostBasisView;
 import view.GUI.JPortfolioMenuView;
 import view.GUI.JView;
 
-
-public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisController{
+/**
+ * This class implements the JCalculateCostBasisController interface and contains all the methods
+ * required to display the Cost Basis Menu.
+ */
+public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisController {
   private Model model;
   private JView view;
   private User user;
   private JCalculateCostBasisView jCalculateCostBasisView;
   private JPortfolioMenuView jPortfolioMenuView;
 
+  /**
+   * A constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JCalculateCostBasisControllerImpl(Model model) {
     this.model = model;
   }

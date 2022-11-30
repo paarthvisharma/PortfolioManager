@@ -8,6 +8,10 @@ import view.GUI.JCalculateValueView;
 import view.GUI.JPortfolioMenuView;
 import view.GUI.JView;
 
+/**
+ * This class implements the JCalculateValueController interface and contains all the methods
+ * required to display the Value Calculate Menu.
+ */
 
 public class JCalculateValueControllerImpl implements JCalculateValueController {
 
@@ -17,6 +21,11 @@ public class JCalculateValueControllerImpl implements JCalculateValueController 
   private JCalculateValueView jCalculateValueView;
   private JPortfolioMenuView jPortfolioMenuView;
 
+  /**
+   * A constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JCalculateValueControllerImpl(Model model) {
     this.model = model;
   }
