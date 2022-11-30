@@ -3,7 +3,7 @@ package controller.GUI;
 import view.GUI.JView;
 
 /**
- *
+ * Interface for the main controller of the GUI for the stock program.
  */
 public interface JController {
   /**

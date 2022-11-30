@@ -15,6 +15,10 @@ import view.GUI.JViewPortfolioView;
 
 import static controller.Utils.listFlexiblePortfolios;
 
+/**
+ * This class implements the JPortfolioController interface Load Portfolio GUI and contains
+ * the methods which help displays the portfolio menu.
+ */
 public class JPortfolioControllerImpl implements JPortfolioController {
 
   private Model model;
@@ -37,6 +41,11 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JSetCommissionController commissionController;
   private User user;
 
+  /**
+   * Constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JPortfolioControllerImpl(Model model) {
     this.model = model;
     createPortfolioController = new JCreatePortfolioControllerImpl(model);
@@ -84,7 +93,8 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   @Override
   public void costBasisPortfolio() {
     calculateCostBasisController.setUser(user);
-    this.calculateCostBasisView.displayRadioButtonsForPortfolio(listFlexiblePortfolios(user, model));
+    this.calculateCostBasisView.displayRadioButtonsForPortfolio(listFlexiblePortfolios(user,
+            model));
     this.portfolioMenuView.isVisible(false);
     this.calculateCostBasisView.isVisible(true);
 

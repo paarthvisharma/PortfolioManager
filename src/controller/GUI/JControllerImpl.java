@@ -3,6 +3,10 @@ package controller.GUI;
 import model.Model;
 import view.GUI.JView;
 
+/**
+ * Class that implements the JController Interface which is the main controller of the GUI
+ * for the stock program.
+ */
 public class JControllerImpl implements JController {
 
   private Model model;
@@ -10,6 +14,11 @@ public class JControllerImpl implements JController {
   private JUserController userController;
   //  private JPortfolioController portfolioController;
 
+  /**
+   * Constructor to initialize model.
+   *
+   * @param model an object of type model.
+   */
   public JControllerImpl(Model model) {
     this.model = model;
     userController = new JUserControllerImpl(model);

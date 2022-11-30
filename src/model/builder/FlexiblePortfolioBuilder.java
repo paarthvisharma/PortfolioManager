@@ -122,9 +122,9 @@ public class FlexiblePortfolioBuilder {
    */
   public FlexiblePortfolio build() {
     if (this.portfolioName != null & this.listOfStocks != null & this.portfolioId != 0) {
-      FlexiblePortfolio portfolio = new FlexiblePortfolioImpl(this.portfolioName, this.portfolioId, this.listOfStocks,
-              this.commission, this.portfolioPath);
-      for (String dcaPlanStr: dcaPlansAsString) {
+      FlexiblePortfolio portfolio = new FlexiblePortfolioImpl(this.portfolioName,
+              this.portfolioId, this.listOfStocks, this.commission, this.portfolioPath);
+      for (String dcaPlanStr : dcaPlansAsString) {
         portfolio.addDCAPlan(new DollarCostAveraging(dcaPlanStr));
       }
       return portfolio;
@@ -134,10 +134,16 @@ public class FlexiblePortfolioBuilder {
     }
   }
 
+  /**
+   * Method to get dollar cost averaging as string.
+   */
   public List<String> getDcaPlansAsString() {
     return dcaPlansAsString;
   }
 
+  /**
+   * Method to set the dollar cost averaging as string.
+   */
   public void setDcaPlansAsString(List<String> dcaPlansAsString) {
     this.dcaPlansAsString = dcaPlansAsString;
   }

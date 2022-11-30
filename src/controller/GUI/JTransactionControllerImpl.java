@@ -15,6 +15,11 @@ import view.GUI.JView;
 
 import static controller.Utils.getPresentDate;
 
+/**
+ * This class implements the JTransactionController interface for Transaction GUI which and
+ * contains the methods which help display the create transaction menu.
+ */
+
 public class JTransactionControllerImpl implements JTransactionController {
 
   private Model model;
@@ -24,6 +29,11 @@ public class JTransactionControllerImpl implements JTransactionController {
   private JPortfolioMenuView portfolioMenuView;
   private FlexiblePortfolio selectedPortfolio;
 
+  /**
+   * Constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JTransactionControllerImpl(Model model) {
     this.model = model;
   }
@@ -71,16 +81,18 @@ public class JTransactionControllerImpl implements JTransactionController {
     try {
       processDCACreation(selectedPortfolio, dcaSetting, tableData);
       model.updateUserFile(user);
-      this.transactionView.setSuccessOutput("Added DCA plan to " + selectedPortfolio.getPortfolioId());
+      this.transactionView.setSuccessOutput("Added DCA plan to "
+              + selectedPortfolio.getPortfolioId());
     } catch (RuntimeException e) {
       this.transactionView.setFailureOutput(e.getMessage());
-    }  catch (IOException e) {
+    } catch (IOException e) {
       this.transactionView.setFailureOutput("User file could not be found. "
               + "Please check the config file.");
     }
   }
 
-  private void processDCACreation(FlexiblePortfolio portfolio, Map<String, String> dcaSetting, List<List<String>> tableData) {
+  private void processDCACreation(FlexiblePortfolio portfolio, Map<String,
+          String> dcaSetting, List<List<String>> tableData) {
     try {
       if (dcaSetting.get("startDate").equals("")) {
         throw new IllegalArgumentException("Start date cannot be empty");
@@ -91,22 +103,26 @@ public class JTransactionControllerImpl implements JTransactionController {
       if (dcaSetting.get("startDate").equals("")) {
         throw new IllegalArgumentException("Start date cannot be empty");
       }
-      if (dcaSetting.get("interval").equals("") | Integer.parseInt(dcaSetting.get("interval")) < 1) {
+      if (dcaSetting.get("interval").equals("")
+              | Integer.parseInt(dcaSetting.get("interval")) < 1) {
         throw new IllegalArgumentException("Interval has to be a positive integer");
       }
-      if (dcaSetting.get("commission").equals("") | Double.parseDouble(dcaSetting.get("commission")) < 0) {
+      if (dcaSetting.get("commission").equals("")
+              | Double.parseDouble(dcaSetting.get("commission")) < 0) {
         throw new IllegalArgumentException("Commission has to be greater/equal to 0");
       }
-      if (dcaSetting.get("dollarAmount").equals("") | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
+      if (dcaSetting.get("dollarAmount").equals("")
+              | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
         throw new IllegalArgumentException("Dollar amount has to be greater/equal to 0");
       }
       List<List<String>> filteredTable = new ArrayList<>();
-      for (List<String> row: tableData) {
+      for (List<String> row : tableData) {
         if (Double.parseDouble(row.get(3)) != 0) {
           filteredTable.add(row);
         }
       }
-      StatusObject<String> status = model.createDCAPlan(portfolio, dcaSetting.get("startDate"), dcaSetting.get("endDate"), dcaSetting.get("interval"),
+      StatusObject<String> status = model.createDCAPlan(portfolio, dcaSetting.get("startDate"),
+              dcaSetting.get("endDate"), dcaSetting.get("interval"),
               dcaSetting.get("dollarAmount"), dcaSetting.get("commission"), filteredTable);
       if (status.statusCode < 0) {
         throw new RuntimeException(status.statusMessage);
@@ -143,21 +159,25 @@ public class JTransactionControllerImpl implements JTransactionController {
     }
     try {
       int portfolioId = Integer.parseInt(portfolioIdAndName.split("\\s")[0]);
-      StatusObject<FlexiblePortfolio> status = model.getParticularFlexiblePortfolio(user, portfolioId);
+      StatusObject<FlexiblePortfolio> status =
+              model.getParticularFlexiblePortfolio(user, portfolioId);
       if (status.statusCode < 0) {
         this.transactionView.setFailureOutput(status.statusMessage);
       }
       selectedPortfolio = status.returnedObject;
       StatusObject<List<List<String>>> portfolioDetails =
-              model.getCompositionOfFlexiblePortfolioAsList(user, selectedPortfolio, getPresentDate());
+              model.getCompositionOfFlexiblePortfolioAsList(user,
+                      selectedPortfolio, getPresentDate());
       if (portfolioDetails.statusCode < 0) {
         this.transactionView.setFailureOutput(portfolioDetails.statusMessage);
         return;
       }
-      for (List<String> stock: portfolioDetails.returnedObject) {
-        this.transactionView.addRowToDCATable(new String[]{stock.get(0), stock.get(1), stock.get(2), stock.get(3), "0"});
+      for (List<String> stock : portfolioDetails.returnedObject) {
+        this.transactionView.addRowToDCATable(new String[]{stock.get(0),
+                stock.get(1), stock.get(2), stock.get(3), "0"});
       }
-      this.transactionView.setSuccessOutput("Successfully selected " + selectedPortfolio.getPortfolioId());
+      this.transactionView.setSuccessOutput("Successfully selected "
+              + selectedPortfolio.getPortfolioId());
     } catch (NumberFormatException e) {
       this.transactionView.setFailureOutput("Portfolio ID is not an integer");
     }
@@ -166,7 +186,7 @@ public class JTransactionControllerImpl implements JTransactionController {
   @Override
   public void monitorTable(List<String> weightsColumn) {
     double totalSum = 0;
-    for (String weight: weightsColumn) {
+    for (String weight : weightsColumn) {
       totalSum += Double.parseDouble(weight);
     }
     if (totalSum != 100) {
@@ -181,7 +201,8 @@ public class JTransactionControllerImpl implements JTransactionController {
   @Override
   public void addNewStockToDCATable(String ticker) {
     if (model.validateTicker(ticker.trim())) {
-      this.transactionView.addRowToDCATable(new String[]{ticker.trim().toLowerCase(), "", "", "", "0"});
+      this.transactionView.addRowToDCATable(new
+              String[]{ticker.trim().toLowerCase(), "", "", "", "0"});
     } else {
       transactionView.setFailureOutput("Ticker is not valid");
     }

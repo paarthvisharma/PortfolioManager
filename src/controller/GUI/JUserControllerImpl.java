@@ -9,16 +9,24 @@ import view.GUI.JCreateUserView;
 import view.GUI.JPortfolioMenuView;
 import view.GUI.JView;
 
+/**
+ * This class implements the JUserController interface for User GUI which and
+ * contains the methods which help display the create user menu.
+ */
 public class JUserControllerImpl implements JUserController {
 
   private Model model;
-//  private JCreateUserView view;
+
   private JView view;
   private JCreateUserView createUserView;
   private JPortfolioMenuView portfolioMenuView;
   private JPortfolioController portfolioController;
 
-
+  /**
+   * Constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JUserControllerImpl(Model model) {
     this.model = model;
     portfolioController = new JPortfolioControllerImpl(model);
@@ -27,7 +35,8 @@ public class JUserControllerImpl implements JUserController {
   @Override
   public void createUser(String firstName, String lastName) {
     if (firstName.equals("") | lastName.equals("")) {
-      this.createUserView.setFailureOutput("First Name and/or Last Name cannot be left blank. Please try again");
+      this.createUserView.setFailureOutput("First Name and/or Last Name cannot be"
+              + " left blank. Please try again");
       return;
     }
     try {

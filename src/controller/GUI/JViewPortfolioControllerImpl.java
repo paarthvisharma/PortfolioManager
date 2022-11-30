@@ -10,6 +10,10 @@ import view.GUI.JPortfolioMenuView;
 import view.GUI.JView;
 import view.GUI.JViewPortfolioView;
 
+/**
+ * This class implements the JViewPortfolioController interface for Portfolio GUI which and
+ * contains the methods which help display the portfolio menu.
+ */
 public class JViewPortfolioControllerImpl implements JViewPortfolioController {
 
   private Model model;
@@ -18,6 +22,11 @@ public class JViewPortfolioControllerImpl implements JViewPortfolioController {
   private JViewPortfolioView jViewPortfolioView;
   private JPortfolioMenuView jPortfolioMenuView;
 
+  /**
+   * Constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JViewPortfolioControllerImpl(Model model) {
     this.model = model;
   }
@@ -41,11 +50,6 @@ public class JViewPortfolioControllerImpl implements JViewPortfolioController {
     this.user = user;
   }
 
-//  @Override
-//  public void resetStockList() {
-//
-//  }
-
   @Override
   public void viewPortfolio(String date, String selectedPortfolio) {
     if (date.equals("")) {
@@ -66,13 +70,15 @@ public class JViewPortfolioControllerImpl implements JViewPortfolioController {
         return;
       }
       StatusObject<List<List<String>>> portfolioDetails =
-              model.getCompositionOfFlexiblePortfolioAsList(user, particularPortfolio.returnedObject, date);
+              model.getCompositionOfFlexiblePortfolioAsList(user,
+                      particularPortfolio.returnedObject, date);
       if (portfolioDetails.statusCode < 0) {
         this.jViewPortfolioView.setFailureOutput(portfolioDetails.statusMessage);
         return;
       }
-      for (List<String> stock: portfolioDetails.returnedObject) {
-        this.jViewPortfolioView.addRowToTable(new String[]{stock.get(0), stock.get(1), stock.get(2), stock.get(3)});
+      for (List<String> stock : portfolioDetails.returnedObject) {
+        this.jViewPortfolioView.addRowToTable(new String[]{stock.get(0), stock.get(1),
+                stock.get(2), stock.get(3)});
       }
     } catch (Exception e) {
       this.jViewPortfolioView.setFailureOutput(e.getMessage());

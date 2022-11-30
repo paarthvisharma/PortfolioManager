@@ -44,7 +44,8 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
   }
 
   @Override
-  public void createPortfolio(String portfolioName, Map<String, String> dcaSetting, List<List<String>> tableData) {
+  public void createPortfolio(String portfolioName, Map<String, String> dcaSetting,
+                              List<List<String>> tableData) {
     if (portfolioName.trim().equals("")) {
       this.createPortfolioView.setFailureOutput("Name of the portfolio cannot be blank");
       return;
@@ -85,7 +86,8 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
     }
   }
 
-  private void processDCACreation(FlexiblePortfolio portfolio, Map<String, String> dcaSetting, List<List<String>> tableData) {
+  private void processDCACreation(FlexiblePortfolio portfolio, Map<String, String> dcaSetting,
+                                  List<List<String>> tableData) {
     try {
       if (dcaSetting.get("startDate").equals("")) {
         throw new IllegalArgumentException("Start date cannot be empty");
@@ -96,13 +98,16 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
       if (dcaSetting.get("startDate").equals("")) {
         throw new IllegalArgumentException("Start date cannot be empty");
       }
-      if (dcaSetting.get("interval").equals("") | Integer.parseInt(dcaSetting.get("interval")) < 1) {
+      if (dcaSetting.get("interval").equals("")
+              | Integer.parseInt(dcaSetting.get("interval")) < 1) {
         throw new IllegalArgumentException("Interval has to be a positive integer");
       }
-      if (dcaSetting.get("commission").equals("") | Double.parseDouble(dcaSetting.get("commission")) < 0) {
+      if (dcaSetting.get("commission").equals("")
+              | Double.parseDouble(dcaSetting.get("commission")) < 0) {
         throw new IllegalArgumentException("Commission has to be greater/equal to 0");
       }
-      if (dcaSetting.get("dollarAmount").equals("") | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
+      if (dcaSetting.get("dollarAmount").equals("")
+              | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
         throw new IllegalArgumentException("Dollar amount has to be greater/equal to 0");
       }
       List<List<String>> filteredTable = new ArrayList<>();
@@ -111,7 +116,8 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
           filteredTable.add(row);
         }
       }
-      StatusObject<String> status = model.createDCAPlan(portfolio, dcaSetting.get("startDate"), dcaSetting.get("endDate"), dcaSetting.get("interval"),
+      StatusObject<String> status = model.createDCAPlan(portfolio,
+              dcaSetting.get("startDate"), dcaSetting.get("endDate"), dcaSetting.get("interval"),
               dcaSetting.get("dollarAmount"), dcaSetting.get("commission"), filteredTable);
       if (status.statusCode < 0) {
         throw new RuntimeException(status.statusMessage);
@@ -162,7 +168,8 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
       return;
     }
     try {
-      StatusObject<Stock> buyStatus = new StatusObject<Stock>("", -1, null);
+      StatusObject<Stock> buyStatus = new StatusObject<Stock>("", -1,
+              null);
       for (Stock stock : this.listOfStocks) {
         if (model.getStockTicker(stock).equalsIgnoreCase(ticker.trim())
                 & model.getStockPurchaseDate(stock).equalsIgnoreCase(date.trim())) {
@@ -170,7 +177,8 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
         }
       }
       if (buyStatus.statusCode < 0) {
-        this.listOfStocks.add(model.createStock(ticker.trim(), Integer.parseInt(quantity), date.trim()));
+        this.listOfStocks.add(model.createStock(ticker.trim(), Integer.parseInt(quantity),
+                date.trim()));
       }
       this.createPortfolioView.addRowToTable(new String[]{ticker.trim(), quantity, date.trim()});
     } catch (IllegalArgumentException e) {

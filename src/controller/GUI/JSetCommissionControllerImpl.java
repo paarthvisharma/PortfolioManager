@@ -1,7 +1,6 @@
 package controller.GUI;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 import model.Model;
 import model.User;
@@ -10,14 +9,23 @@ import view.GUI.JSetCommissionForUserView;
 import view.GUI.JView;
 
 
+/**
+ * Class which implements the JSetCommissionController Interface which helps display the commission
+ * menu.
+ */
 
-public class JSetCommissionControllerImpl implements JSetCommissionController{
+public class JSetCommissionControllerImpl implements JSetCommissionController {
   private Model model;
   private JView view;
   private User user;
   private JSetCommissionForUserView jSetCommissionForUserView;
   private JPortfolioMenuView jPortfolioMenuView;
 
+  /**
+   * Constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
 
   public JSetCommissionControllerImpl(Model model) {
     this.model = model;
@@ -43,13 +51,15 @@ public class JSetCommissionControllerImpl implements JSetCommissionController{
       }
       user.setCommission(Double.parseDouble(commission));
       model.updateUserFile(user);
-      this.jSetCommissionForUserView.setSuccessOutput("For User ID " + user.getUserId() +" " +
-              "Commission has been updated from $" + oldCommission
+      this.jSetCommissionForUserView.setSuccessOutput("For User ID " + user.getUserId() + " "
+              + "Commission has been updated from $" + oldCommission
               + " to $" + user.getCommission());
     } catch (NumberFormatException e) {
-      this.jSetCommissionForUserView.setFailureOutput("The commission should be a positive number");
+      this.jSetCommissionForUserView.setFailureOutput("The commission should"
+              + " be a positive number");
     } catch (IOException e) {
-      this.jSetCommissionForUserView.setFailureOutput("Could not update the commission rate as the User XML "
+      this.jSetCommissionForUserView.setFailureOutput("Could not update the commission "
+              + "rate as the User XML "
               + "file is missing or corrupted.");
     }
   }

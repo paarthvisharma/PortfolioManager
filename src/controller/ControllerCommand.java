@@ -10,6 +10,9 @@ import view.View;
  */
 public interface ControllerCommand {
 
-  public void runLoop(Model model, Scanner in, View view) throws InterruptedException;
+  /**
+   * Method to continue running the controller loop.
+   */
+  void runLoop(Model model, Scanner in, View view) throws InterruptedException;
 
 }

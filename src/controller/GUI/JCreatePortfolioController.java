@@ -20,7 +20,8 @@ public interface JCreatePortfolioController {
   /**
    * Method to run the loop to create a portfolio.
    */
-  void createPortfolio(String portfolioName, Map<String, String> dcaSetting, List<List<String>> tableData);
+  void createPortfolio(String portfolioName, Map<String, String> dcaSetting,
+                       List<List<String>> tableData);
 
   /**
    * Method to run the loop to add stock to a portfolio.
