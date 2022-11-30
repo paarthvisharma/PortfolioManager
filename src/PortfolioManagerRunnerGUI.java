@@ -1,9 +1,9 @@
-import controller.GUI.JController;
-import controller.GUI.JControllerImpl;
+import controller.gui.JController;
+import controller.gui.JControllerImpl;
 import model.Model;
 import model.ModelImpl;
-import view.GUI.JView;
-import view.GUI.JViewImpl;
+import view.gui.JView;
+import view.gui.JViewImpl;
 
 public class PortfolioManagerRunnerGUI {
 
