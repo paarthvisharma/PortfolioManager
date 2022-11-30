@@ -15,4 +15,6 @@ public interface JView {
   JLoadPortfolioView getLoadPortfolioView();
 
   JTransactionView getTransactionView();
+
+  JSetCommissionForUserView getCommissionView();
 }

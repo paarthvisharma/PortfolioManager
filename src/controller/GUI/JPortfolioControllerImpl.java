@@ -8,6 +8,7 @@ import view.GUI.JCreatePortfolioView;
 import view.GUI.JCreateUserView;
 import view.GUI.JLoadPortfolioView;
 import view.GUI.JPortfolioMenuView;
+import view.GUI.JSetCommissionForUserView;
 import view.GUI.JTransactionView;
 import view.GUI.JView;
 import view.GUI.JViewPortfolioView;
@@ -26,12 +27,14 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JViewPortfolioView viewPortfolioView;
   private JLoadPortfolioView loadPortfolioView;
   private JTransactionView transactionView;
+  private JSetCommissionForUserView commissionView;
   private JCreatePortfolioController createPortfolioController;
   private JCalculateValueController calculateValueController;
   private JCalculateCostBasisController calculateCostBasisController;
   private JViewPortfolioController viewPortfolioController;
   private JLoadPortfolioController loadPortfolioController;
   private JTransactionController transactionController;
+  private JSetCommissionController commissionController;
   private User user;
 
   public JPortfolioControllerImpl(Model model) {
@@ -42,6 +45,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     viewPortfolioController = new JViewPortfolioControllerImpl(model);
     loadPortfolioController = new JLoadPortfolioControllerImpl(model);
     transactionController = new JTransactionControllerImpl(model);
+    commissionController = new JSetCommissionControllerImpl(model);
 
   }
 
@@ -53,6 +57,10 @@ public class JPortfolioControllerImpl implements JPortfolioController {
 
   @Override
   public void setCommission() {
+    commissionController.setUser(user);
+    this.portfolioMenuView.isVisible(false);
+    this.commissionView.isVisible(true);
+    this.commissionView.setInitialMessage(user.getCommission());
 
   }
 
@@ -127,6 +135,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     this.loadPortfolioView = this.view.getLoadPortfolioView();
     this.viewPortfolioView = this.view.getViewPortfolioView();
     this.transactionView = this.view.getTransactionView();
+    this.commissionView = this.view.getCommissionView();
     this.portfolioMenuView.addFeatures(this);
     this.createPortfolioController.setView(view);
     this.calculateValueController.setView(view);
@@ -134,6 +143,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     this.viewPortfolioController.setView(view);
     this.loadPortfolioController.setView(view);
     this.transactionController.setView(view);
+    this.commissionController.setView(view);
   }
 
 }

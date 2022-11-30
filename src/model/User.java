@@ -12,7 +12,7 @@ public interface User {
 
   double getCommission();
 
-  void setCommission(double commission) throws InterruptedException;
+  void setCommission(double commission) throws IllegalArgumentException;
 
   /**
    * Retrieves the userId associated with a particular user.

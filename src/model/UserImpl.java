@@ -48,9 +48,9 @@ public class UserImpl implements User {
   }
 
   @Override
-  public void setCommission(double commission) throws InterruptedException {
+  public void setCommission(double commission) throws IllegalArgumentException {
     if (commission < 0) {
-      throw new InterruptedException("Commission cannot be negative");
+      throw new IllegalArgumentException("Commission cannot be negative");
     }
     this.commission = commission;
     for (FlexiblePortfolio portfolio : this.listOfFlexiblePortfolios) {

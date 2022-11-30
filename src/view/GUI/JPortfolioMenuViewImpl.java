@@ -208,6 +208,7 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     createPortfolioButton.addActionListener(evt -> jPortfolioMenu.createPortfolio());
     transactInPortfolioButton.addActionListener(evt -> jPortfolioMenu.transactInPortfolio());
     valuatePortfolioButton.addActionListener(evt -> jPortfolioMenu.valueOfPortfolio());
+    setCommissionButton.addActionListener(evt -> jPortfolioMenu.setCommission());
   }
 
   @Override
