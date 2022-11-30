@@ -12,6 +12,8 @@ public class JViewImpl implements JView {
   private JTransactionView transactionView;
   private JSetCommissionForUserView commissionView;
 
+  private JPerformanceView performanceView;
+
 
   public JViewImpl() {
     createUserView = new JCreateUserViewImpl();
@@ -23,6 +25,7 @@ public class JViewImpl implements JView {
     loadPortfolioView = new JLoadPortfolioViewImpl();
     transactionView = new JTransactionViewImpl();
     commissionView = new JSetCommissionForUserViewImpl();
+    performanceView = new JPerformanceViewImpl();
   }
 
   @Override
@@ -68,5 +71,10 @@ public class JViewImpl implements JView {
   @Override
   public JSetCommissionForUserView getCommissionView(){
     return commissionView;
+  }
+
+  @Override
+  public JPerformanceView getPerformanceView() {
+    return performanceView;
   }
 }

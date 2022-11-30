@@ -11,13 +11,10 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,8 +28,12 @@ import model.utils.StatusObject;
 import model.utils.Transaction;
 import model.utils.Utils;
 
+import static model.utils.Utils.generateDates;
+import static model.utils.Utils.getDaysMappingAscending;
 import static model.utils.Utils.getListingDateForTicker;
+import static model.utils.Utils.getNumberOfSticksAndTimeMultiple;
 import static model.utils.Utils.getParentDirPath;
+import static model.utils.Utils.getPortfolioValuationsForDates;
 import static model.utils.Utils.getValueOnDateForStock;
 import static model.utils.Utils.makeCSVChronological;
 import static model.utils.Utils.readCSVIntoQueue;
@@ -588,55 +589,14 @@ public class ModelImpl implements Model {
   public StatusObject<String> performanceOfPortfolioOverTime(User user, Portfolio portfolio,
                                                              String startDate, String endDate) {
     try {
-      validateForLegalDate(startDate);
-      validateForLegalDate(endDate);
       SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
-      long date1 = dateParser.parse(startDate).getTime();
-      long date2 = dateParser.parse(endDate).getTime();
+      Map<Double, Integer> daysMappingAscending = getDaysMappingAscending(startDate, endDate);
 
-      long timeDiff = Math.abs(date2 - date1);
-      double days = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
-      double weeks = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 7;
-      double biWeeks = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 14;
-      double months = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 30;
-      double quarter = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 90;
-      double sixMonths = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 180;
-      double years = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 365;
-
-      Map<Double, Integer> daysMappingAscending = new HashMap<>();
-      daysMappingAscending.put(days, 1);
-      daysMappingAscending.put(weeks, 7);
-      daysMappingAscending.put(biWeeks, 14);
-      daysMappingAscending.put(months, 30);
-      daysMappingAscending.put(quarter, 90);
-      daysMappingAscending.put(sixMonths, 180);
-      daysMappingAscending.put(years, 365);
-
-      Calendar c = Calendar.getInstance();
-      c.setTime(dateParser.parse(startDate));
-      double numberOfSticks = 0;
-      int timeMultiple = 0;
-      c.setTime(dateParser.parse(startDate));
-      for (double timeQuant : daysMappingAscending.keySet()) {
-        if (timeQuant > 5 & timeQuant < 30) {
-          numberOfSticks = timeQuant;
-          timeMultiple = daysMappingAscending.get(timeQuant);
-          break;
-        }
-      }
-      List<String> valuesForDates = new ArrayList<>();
-      while (numberOfSticks > 0) {
-        valuesForDates.add(dateParser.format(c.getTime()));
-        c.add(Calendar.DATE, (int) timeMultiple);
-        numberOfSticks -= 1;
-      }
-      if (numberOfSticks != 0) {
-        valuesForDates.add(endDate);
-      }
-      List<Double> valuations = new ArrayList<>();
-      for (String date : valuesForDates) {
-        valuations.add(portfolio.getValueForDate(date));
-      }
+      Map<String, Double> numberOfSticksAndTimeMultiple = getNumberOfSticksAndTimeMultiple(daysMappingAscending, startDate);
+      double numberOfSticks = numberOfSticksAndTimeMultiple.get("numberOfSticks");
+      int timeMultiple = numberOfSticksAndTimeMultiple.get("timeMultiple").intValue();
+      List<String> valuesForDates = generateDates(numberOfSticks, timeMultiple, startDate, endDate, true);
+      List<Double> valuations = getPortfolioValuationsForDates(portfolio, valuesForDates);
       double mini = Collections.min(valuations);
       double max = Collections.max(valuations);
       valuations = valuations.stream().map(i -> i - mini).collect(Collectors.toList());
@@ -659,6 +619,49 @@ public class ModelImpl implements Model {
       return new StatusObject<>("Transaction file not found for the portfolio",
               -1, null);
     } catch (IllegalArgumentException e) {
+      return new StatusObject<>(e.getMessage(),-1, null);
+    }
+  }
+
+  @Override
+  public StatusObject<List<String>> getDatesForPerformanceGraph(
+          String startDate, String endDate, boolean includeRemainderDate) {
+    try {
+      Map<Double, Integer> daysMappingAscending = getDaysMappingAscending(startDate, endDate);
+      Map<String, Double> numberOfSticksAndTimeMultiple = getNumberOfSticksAndTimeMultiple(daysMappingAscending, startDate);
+      double numberOfSticks = numberOfSticksAndTimeMultiple.get("numberOfSticks");
+      int timeMultiple = numberOfSticksAndTimeMultiple.get("timeMultiple").intValue();
+      List<String> valuesForDates = generateDates(numberOfSticks, timeMultiple, startDate, endDate, includeRemainderDate);
+      return new StatusObject<>("Dates generated successfully", 1, valuesForDates);
+    } catch (ParseException e) {
+      return new StatusObject<>("Error parsing the given dates",
+              -1, null);
+    } catch (IllegalArgumentException e) {
+      return new StatusObject<>(e.getMessage(),-1, null);
+    }
+  }
+
+  @Override
+  public List<String> getDollarAxisForGraph(List<Double> valuations, int length) {
+    List<String> toReturn =new ArrayList<>();
+    double mini = Collections.min(valuations);
+    double max = Collections.max(valuations);
+    double scale = (max - mini) / length;
+    toReturn.add(String.valueOf(Double.valueOf(mini).intValue()));
+    for (int i=1; i <= length; i++) {
+      toReturn.add(String.valueOf(Double.valueOf(mini + (i * scale)).intValue()));
+    }
+    return toReturn;
+  }
+
+  @Override
+  public StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates) {
+    try {
+      List<Double> toReturn = getPortfolioValuationsForDates(portfolio, dates);
+//      double mini = Collections.min(toReturn);
+//      toReturn = toReturn.stream().map(i -> i - mini).collect(Collectors.toList());
+      return new StatusObject<>("Fetched portfolio values", 1, toReturn);
+    } catch (FileNotFoundException | ParseException e) {
       return new StatusObject<>(e.getMessage(),-1, null);
     }
   }

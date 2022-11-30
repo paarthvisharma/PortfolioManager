@@ -1,18 +1,24 @@
 package controller.gui;
 
+import java.util.List;
+
+import model.FlexiblePortfolio;
 import model.Model;
 import model.User;
+import model.utils.StatusObject;
 import view.gui.JCalculateCostBasisView;
 import view.gui.JCalculateValueView;
 import view.gui.JCreatePortfolioView;
 import view.gui.JCreateUserView;
 import view.gui.JLoadPortfolioView;
+import view.gui.JPerformanceView;
 import view.gui.JPortfolioMenuView;
 import view.gui.JSetCommissionForUserView;
 import view.gui.JTransactionView;
 import view.gui.JView;
 import view.gui.JViewPortfolioView;
 
+import static controller.Utils.getPresentDate;
 import static controller.Utils.listFlexiblePortfolios;
 
 /**
@@ -32,6 +38,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JLoadPortfolioView loadPortfolioView;
   private JTransactionView transactionView;
   private JSetCommissionForUserView commissionView;
+  private JPerformanceView performanceView;
   private JCreatePortfolioController createPortfolioController;
   private JCalculateValueController calculateValueController;
   private JCalculateCostBasisController calculateCostBasisController;
@@ -39,6 +46,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JLoadPortfolioController loadPortfolioController;
   private JTransactionController transactionController;
   private JSetCommissionController commissionController;
+  private  JPerformanceController performanceController;
   private User user;
 
   /**
@@ -55,6 +63,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     loadPortfolioController = new JLoadPortfolioControllerImpl(model);
     transactionController = new JTransactionControllerImpl(model);
     commissionController = new JSetCommissionControllerImpl(model);
+    performanceController = new JPerformanceControllerImpl(model);
 
   }
 
@@ -118,7 +127,11 @@ public class JPortfolioControllerImpl implements JPortfolioController {
 
   @Override
   public void performanceOfPortfolio() {
-
+    performanceController.setUser(user);
+    this.performanceView.displayRadioButtonsForPortfolio(listFlexiblePortfolios(user, model));
+    this.portfolioMenuView.isVisible(false);
+    this.performanceView.clearUserInputs();
+    this.performanceView.isVisible(true);
   }
 
   @Override
@@ -146,6 +159,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     this.viewPortfolioView = this.view.getViewPortfolioView();
     this.transactionView = this.view.getTransactionView();
     this.commissionView = this.view.getCommissionView();
+    this.performanceView = this.view.getPerformanceView();
     this.portfolioMenuView.addFeatures(this);
     this.createPortfolioController.setView(view);
     this.calculateValueController.setView(view);
@@ -154,6 +168,7 @@ public class JPortfolioControllerImpl implements JPortfolioController {
     this.loadPortfolioController.setView(view);
     this.transactionController.setView(view);
     this.commissionController.setView(view);
+    this.performanceController.setView(view);
   }
 
 }

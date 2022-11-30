@@ -17,4 +17,6 @@ public interface JView {
   JTransactionView getTransactionView();
 
   JSetCommissionForUserView getCommissionView();
+
+  JPerformanceView getPerformanceView();
 }

@@ -289,4 +289,11 @@ public interface Model {
    */
   StatusObject<String> performanceOfPortfolioOverTime(User user, Portfolio portfolio,
                                                       String startDate, String endDate);
+
+  StatusObject<List<String>> getDatesForPerformanceGraph(
+          String startDate, String endDate, boolean includeRemainderDate);
+
+  List<String> getDollarAxisForGraph(List<Double> valuations, int length);
+
+  StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates);
 }

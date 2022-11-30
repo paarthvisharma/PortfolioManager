@@ -10,11 +10,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import model.AlphaVantageApi;
@@ -188,6 +192,7 @@ public class Utils {
 
   /**
    * Method to get the listing date of a ticker.
+   *
    * @param ticker ticker symbol for which listing date is needed.
    * @return The listing date in a sting format.
    * @throws IllegalArgumentException If the ticker is invalid.
@@ -212,7 +217,8 @@ public class Utils {
 
   /**
    * Validates if a date is later the listing date of a stock.
-   * @param date date of buying or selling a stock.
+   *
+   * @param date        date of buying or selling a stock.
    * @param listingDate listing date of the stock in question.
    * @throws IllegalArgumentException If the date if before the listing date this error is thrown.
    */
@@ -232,6 +238,7 @@ public class Utils {
 
   /**
    * Static method to verify if a double number is an non negative integer.
+   *
    * @param number The double number to be tested.
    */
   public static void validateForNonZeroInteger(double number) {
@@ -248,9 +255,10 @@ public class Utils {
 
   /**
    * Static method to verify if a ticker is supported/valid.
+   *
    * @param ticker Ticker to be validated.
    * @throws IllegalArgumentException When the ticker symbol is invalid.
-   * @throws FileNotFoundException When the listedStocks file is not found.
+   * @throws FileNotFoundException    When the listedStocks file is not found.
    */
   public static void validateTicker(String ticker)
           throws IllegalArgumentException, FileNotFoundException {
@@ -280,5 +288,76 @@ public class Utils {
     c.setTime(dateParser.parse(date));
     c.add(Calendar.DATE, incrementNumber);
     return dateParser.format(c.getTime());
+  }
+
+  public static Map<Double, Integer> getDaysMappingAscending(String startDate, String endDate) throws ParseException {
+    validateForLegalDate(startDate);
+    validateForLegalDate(endDate);
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    long date1 = dateParser.parse(startDate).getTime();
+    long date2 = dateParser.parse(endDate).getTime();
+    long timeDiff = Math.abs(date2 - date1);
+    double days = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
+    double weeks = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 7;
+    double biWeeks = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 14;
+    double months = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 30;
+    double quarter = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 90;
+    double sixMonths = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 180;
+    double years = (double) TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS) / 365;
+
+    Map<Double, Integer> daysMappingAscending = new HashMap<>();
+    daysMappingAscending.put(days, 1);
+    daysMappingAscending.put(weeks, 7);
+    daysMappingAscending.put(biWeeks, 14);
+    daysMappingAscending.put(months, 30);
+    daysMappingAscending.put(quarter, 90);
+    daysMappingAscending.put(sixMonths, 180);
+    daysMappingAscending.put(years, 365);
+    return daysMappingAscending;
+  }
+
+  public static Map<String, Double> getNumberOfSticksAndTimeMultiple(Map<Double, Integer> daysMappingAscending, String startDate) throws ParseException {
+    HashMap<String, Double> toReturn = new HashMap<>();
+    validateForLegalDate(startDate);
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    Calendar c = Calendar.getInstance();
+    c.setTime(dateParser.parse(startDate));
+    c.setTime(dateParser.parse(startDate));
+    for (double timeQuant : daysMappingAscending.keySet()) {
+      if (timeQuant > 5 & timeQuant < 30) {
+        toReturn.put("numberOfSticks", timeQuant);
+        toReturn.put("timeMultiple", daysMappingAscending.get(timeQuant) + 0.0);
+        break;
+      }
+    }
+    return toReturn;
+  }
+
+  public static List<String> generateDates(
+          double numberOfSticks, int timeMultiple, String startDate, String endDate,
+          boolean includeRemainderDate) throws ParseException {
+    validateForLegalDate(startDate);
+    validateForLegalDate(endDate);
+    SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    Calendar c = Calendar.getInstance();
+    c.setTime(dateParser.parse(startDate));
+    List<String> valuesForDates = new ArrayList<>();
+    while (numberOfSticks > 0) {
+      valuesForDates.add(dateParser.format(c.getTime()));
+      c.add(Calendar.DATE, (int) timeMultiple);
+      numberOfSticks -= 1;
+    }
+    if (numberOfSticks != 0 & includeRemainderDate) {
+      valuesForDates.add(endDate);
+    }
+    return valuesForDates;
+  }
+
+  public static List<Double> getPortfolioValuationsForDates(Portfolio portfolio, List<String> dates) throws FileNotFoundException, ParseException {
+    List<Double> valuations = new ArrayList<>();
+    for (String date : dates) {
+      valuations.add(portfolio.getValueForDate(date));
+    }
+    return valuations;
   }
 }
