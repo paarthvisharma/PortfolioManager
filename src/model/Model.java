@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 
@@ -16,6 +15,11 @@ import model.utils.Transaction;
  */
 public interface Model {
 
+  /**
+   * Method to validate ticker symbol.
+   *
+   * @param ticker symbol of a company.
+   */
   boolean validateTicker(String ticker);
 
   /**
@@ -32,6 +36,12 @@ public interface Model {
    */
   StatusObject<User> createUserFromXML(String xmlPath);
 
+  /**
+   * Create a portfolio from a String pointing to a XML file.
+   *
+   * @param user    an object of type user.
+   * @param xmlPath path of file.
+   */
   StatusObject<Portfolio> createPortfolioFromXML(User user, String xmlPath);
 
   /**
@@ -98,6 +108,17 @@ public interface Model {
    */
   StatusObject<FlexiblePortfolio> getParticularFlexiblePortfolio(User user, int portfolioId);
 
+  /**
+   * Method to create portfolio with dollar cost averaging.
+   *
+   * @param portfolio    an object of type FlexiblePortfolio.
+   * @param startDate    start date of DCA plan.
+   * @param endDate      end date of DCA plan.
+   * @param interval     time interval for DCA plan.
+   * @param dollarAmount total amount to be invested.
+   * @param commission   commission rate.
+   * @param dcaData      data.
+   */
   StatusObject<String> createDCAPlan(
           FlexiblePortfolio portfolio, String startDate, String endDate, String interval,
           String dollarAmount, String commission, List<List<String>> dcaData);
@@ -196,7 +217,7 @@ public interface Model {
    * @param portfolio    an object of type portfolio.
    * @param transactions transaction values.
    * @return returns StatusObject containing the statusMessage, statusCode
-   *                 and the priority queue object.
+   * and the priority queue object.
    */
   StatusObject<PriorityQueue<Transaction>> getValidatedTransactions(
           FlexiblePortfolio portfolio, PriorityQueue<Transaction> transactions);
@@ -222,7 +243,7 @@ public interface Model {
    * @param date      date string.
    * @param quantity  number of stocks.
    * @return returns StatusObject containing the statusMessage,
-   *                 statusCode and the portfolio object.
+   * statusCode and the portfolio object.
    */
   StatusObject<FlexiblePortfolio> sellStockInFlexiblePortfolio(FlexiblePortfolio portfolio,
                                                                String ticker,
@@ -234,7 +255,7 @@ public interface Model {
    * @param user      an object of type user.
    * @param portfolio an object of type portfolio.
    * @return returns StatusObject containing the statusMessage,
-   *                 statusCode and the priority queue object.
+   * statusCode and the priority queue object.
    */
 
   StatusObject<PriorityQueue<Transaction>> getFlexiblePortfoliosPastTransactions(
@@ -246,7 +267,7 @@ public interface Model {
    * @param user      an object of type user.
    * @param portfolio an object of type portfolio.
    * @return returns StatusObject containing the statusMessage,
-   *                 statusCode and the string.
+   * statusCode and the string.
    */
   StatusObject<String> updateFlexiblePortfolioCsv(User user, FlexiblePortfolio portfolio);
 
@@ -257,11 +278,19 @@ public interface Model {
    * @param portfolio an object of type portfolio.
    * @param date      date string.
    * @return returns StatusObject containing the statusMessage,
-   *                 statusCode and the string.
+   * statusCode and the string.
    */
   StatusObject<String> viewCompositionOfFlexiblePortfolio(User user,
                                                           FlexiblePortfolio portfolio, String date);
 
+  /**
+   * Method to view composition of flexible portfolio as list.
+   *
+   * @param user      an object of type user.
+   * @param portfolio an object of type portfolio.
+   * @param date      date string.
+   * @return returns StatusObject containing the statusMessage, statusCode and the string.
+   */
   StatusObject<List<List<String>>> getCompositionOfFlexiblePortfolioAsList(
           User user, FlexiblePortfolio portfolio, String date);
 
@@ -272,7 +301,7 @@ public interface Model {
    * @param portfolio an object of type portfolio.
    * @param date      date string.
    * @return returns StatusObject containing the statusMessage,
-   *                 statusCode and double.
+   * statusCode and double.
    */
   StatusObject<Double> getCostBasisOfFlexiblePortfolioForDate(
           User user, FlexiblePortfolio portfolio, String date);
@@ -285,15 +314,36 @@ public interface Model {
    * @param startDate start date string.
    * @param endDate   end date string.
    * @return returns StatusObject containing the statusMessage,
-   *                 statusCode and the string.
+   * statusCode and the string.
    */
   StatusObject<String> performanceOfPortfolioOverTime(User user, Portfolio portfolio,
                                                       String startDate, String endDate);
 
+  /**
+   * Method to get dates for graph plotting.
+   *
+   * @param startDate            start date string.
+   * @param endDate              end date string.
+   * @param includeRemainderDate remainder date flag.
+   * @return returns StatusObject containing the statusMessage, statusCode and the string.
+   */
   StatusObject<List<String>> getDatesForPerformanceGraph(
           String startDate, String endDate, boolean includeRemainderDate);
 
+  /**
+   * Method to generate dollar values for graph.
+   *
+   * @param valuations dollar amount.
+   * @param length     length of axis.
+   */
   List<String> getDollarAxisForGraph(List<Double> valuations, int length);
 
+  /**
+   * Method to get valuations on dates.
+   *
+   * @param portfolio an object of type portfolio.
+   * @param dates     list of dates.
+   * @return returns StatusObject containing the statusMessage, statusCode and the object.
+   */
   StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates);
 }

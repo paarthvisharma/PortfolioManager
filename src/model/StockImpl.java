@@ -13,7 +13,6 @@ import java.util.Scanner;
 import model.utils.XmlFormat;
 
 import static model.utils.Utils.getValueOnDateForStock;
-import static model.utils.Utils.validateForNonZeroInteger;
 import static model.utils.Utils.validateForPositiveDouble;
 
 /**

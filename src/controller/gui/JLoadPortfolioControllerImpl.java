@@ -17,7 +17,6 @@ public class JLoadPortfolioControllerImpl implements JLoadPortfolioController {
 
   private Model model;
   private User user;
-  private JView view;
   private JLoadPortfolioView loadPortfolioView;
   private JPortfolioMenuView portfolioMenuView;
 
@@ -56,9 +55,8 @@ public class JLoadPortfolioControllerImpl implements JLoadPortfolioController {
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.loadPortfolioView = this.view.getLoadPortfolioView();
-    this.portfolioMenuView = this.view.getPortfolioMenuView();
+    this.loadPortfolioView = jView.getLoadPortfolioView();
+    this.portfolioMenuView = jView.getPortfolioMenuView();
     this.loadPortfolioView.addFeatures(this);
   }
 

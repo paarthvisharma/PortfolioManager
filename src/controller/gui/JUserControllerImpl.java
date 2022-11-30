@@ -17,7 +17,6 @@ public class JUserControllerImpl implements JUserController {
 
   private Model model;
 
-  private JView view;
   private JCreateUserView createUserView;
   private JPortfolioMenuView portfolioMenuView;
   private JPortfolioController portfolioController;
@@ -96,11 +95,10 @@ public class JUserControllerImpl implements JUserController {
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.createUserView = this.view.getCreateUserView();
-    this.portfolioMenuView = this.view.getPortfolioMenuView();
+    this.createUserView = jView.getCreateUserView();
+    this.portfolioMenuView = jView.getPortfolioMenuView();
     this.createUserView.addFeatures(this);
-    portfolioController.setView(view);
+    portfolioController.setView(jView);
   }
 
 }

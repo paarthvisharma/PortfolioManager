@@ -16,7 +16,6 @@ import view.gui.JView;
 
 public class JSetCommissionControllerImpl implements JSetCommissionController {
   private Model model;
-  private JView view;
   private User user;
   private JSetCommissionForUserView jSetCommissionForUserView;
   private JPortfolioMenuView jPortfolioMenuView;
@@ -71,9 +70,8 @@ public class JSetCommissionControllerImpl implements JSetCommissionController {
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.jSetCommissionForUserView = this.view.getCommissionView();
-    this.jPortfolioMenuView = this.view.getPortfolioMenuView();
+    this.jSetCommissionForUserView = jView.getCommissionView();
+    this.jPortfolioMenuView = jView.getPortfolioMenuView();
     this.jSetCommissionForUserView.addFeatures(this);
 
   }

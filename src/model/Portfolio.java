@@ -19,6 +19,11 @@ public interface Portfolio {
    */
   String getPortfolioName();
 
+  /**
+   * Retrieves the type of portfolio.
+   *
+   * @return returns the portfolioType.
+   */
   String getType();
 
   /**

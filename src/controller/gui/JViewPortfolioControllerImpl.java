@@ -17,7 +17,6 @@ import view.gui.JViewPortfolioView;
 public class JViewPortfolioControllerImpl implements JViewPortfolioController {
 
   private Model model;
-  private JView view;
   private User user;
   private JViewPortfolioView jViewPortfolioView;
   private JPortfolioMenuView jPortfolioMenuView;
@@ -39,9 +38,8 @@ public class JViewPortfolioControllerImpl implements JViewPortfolioController {
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.jPortfolioMenuView = view.getPortfolioMenuView();
-    this.jViewPortfolioView = view.getViewPortfolioView();
+    this.jPortfolioMenuView = jView.getPortfolioMenuView();
+    this.jViewPortfolioView = jView.getViewPortfolioView();
     this.jViewPortfolioView.addFeatures(this);
   }
 

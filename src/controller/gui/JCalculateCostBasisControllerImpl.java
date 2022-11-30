@@ -15,7 +15,6 @@ import view.gui.JView;
  */
 public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisController {
   private Model model;
-  private JView view;
   private User user;
   private JCalculateCostBasisView jCalculateCostBasisView;
   private JPortfolioMenuView jPortfolioMenuView;
@@ -74,9 +73,8 @@ public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisCon
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.jCalculateCostBasisView = this.view.getCalculateCostBasisView();
-    this.jPortfolioMenuView = this.view.getPortfolioMenuView();
+    this.jCalculateCostBasisView = jView.getCalculateCostBasisView();
+    this.jPortfolioMenuView = jView.getPortfolioMenuView();
     this.jCalculateCostBasisView.addFeatures(this);
 
   }

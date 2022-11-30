@@ -23,7 +23,6 @@ import static controller.Utils.getPresentDate;
 public class JTransactionControllerImpl implements JTransactionController {
 
   private Model model;
-  private JView view;
   private User user;
   private JTransactionView transactionView;
   private JPortfolioMenuView portfolioMenuView;
@@ -40,7 +39,6 @@ public class JTransactionControllerImpl implements JTransactionController {
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
     this.transactionView = jView.getTransactionView();
     this.portfolioMenuView = jView.getPortfolioMenuView();
     this.transactionView.addFeatures(this);

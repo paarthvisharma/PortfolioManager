@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
-import model.utils.DollarCostAveraging;
+import model.utils.dollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 import model.utils.XmlFormat;
@@ -43,7 +43,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
   private final String portfolioPath;
   private double commission;
 
-  private List<DollarCostAveraging> DCAPlans = new ArrayList<>();
+  private List<dollarCostAveraging> DCAPlans = new ArrayList<>();
 
   /**
    * This is the constructor for FlexiblePortfolioImpl. An Instance of flexible portfolio
@@ -67,18 +67,18 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
   }
 
   @Override
-  public void addDCAPlan(DollarCostAveraging dca) {
+  public void addDCAPlan(dollarCostAveraging dca) {
     DCAPlans.add(dca);
     this.executeDCAPlan(dca);
   }
 
   @Override
-  public List<DollarCostAveraging> getDCAPlans() {
+  public List<dollarCostAveraging> getDCAPlans() {
     return this.DCAPlans;
   }
 
   @Override
-  public void executeDCAPlan(DollarCostAveraging dca) {
+  public void executeDCAPlan(dollarCostAveraging dca) {
     try {
       String cDate = getPresentDate();
       String eDate = dca.getEndDate();
@@ -102,7 +102,8 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
         }
         return;
       }
-      if (!dca.getLastTransaction().equals("") & compareDates(cDate, eDate) <= 0 & compareDates(cDate, dca.getLastTransaction()) != 0) {
+      if (!dca.getLastTransaction().equals("") & compareDates(cDate, eDate) <= 0
+              & compareDates(cDate, dca.getLastTransaction()) != 0) {
         String tempDate = dca.getLastTransaction();
         while (compareDates(tempDate, eDate) <= 0 & compareDates(tempDate, cDate) <= 0) {
           executeDCAPlanInstance(dca, tempDate);
@@ -118,7 +119,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
     }
   }
 
-  private void executeDCAPlanInstance(DollarCostAveraging dca, String date) throws IOException {
+  private void executeDCAPlanInstance(dollarCostAveraging dca, String date) throws IOException {
     double portfolioCommission = this.commission;
     this.commission = dca.getCommission() / dca.getDCAData().size();
     double investibleAmount = dca.getDollarAmount() - dca.getCommission();
@@ -256,7 +257,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
     toReturn.append("\t".repeat(lTabs)).append("</stocks>\n");
     toReturn.append("\t".repeat(lTabs)).append(("<plans>\n"));
     lTabs += 1;
-    for (DollarCostAveraging dcaPlan: this.DCAPlans) {
+    for (dollarCostAveraging dcaPlan: this.DCAPlans) {
       toReturn.append("\t".repeat(lTabs)).append("<dcaPlan>").append(dcaPlan.toString());
       toReturn.append("</dcaPlan>\n");
     }
@@ -269,7 +270,8 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
 
   @Override
   public String toString() {
-    return portfolioToString(this, true, true, true, true);
+    return portfolioToString(this,
+            true, true, true, true);
   }
 
   @Override

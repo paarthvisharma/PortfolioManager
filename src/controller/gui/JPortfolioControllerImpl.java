@@ -28,7 +28,6 @@ import static controller.Utils.listFlexiblePortfolios;
 public class JPortfolioControllerImpl implements JPortfolioController {
 
   private Model model;
-  private JView view;
   private JCreateUserView createUserView;
   private JPortfolioMenuView portfolioMenuView;
   private JCreatePortfolioView createPortfolioView;
@@ -149,26 +148,25 @@ public class JPortfolioControllerImpl implements JPortfolioController {
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.createUserView = this.view.getCreateUserView();
-    this.portfolioMenuView = this.view.getPortfolioMenuView();
-    this.createPortfolioView = this.view.getCreatePortfolioView();
-    this.calculateValueView = this.view.getCalculateValueView();
-    this.calculateCostBasisView = this.view.getCalculateCostBasisView();
-    this.loadPortfolioView = this.view.getLoadPortfolioView();
-    this.viewPortfolioView = this.view.getViewPortfolioView();
-    this.transactionView = this.view.getTransactionView();
-    this.commissionView = this.view.getCommissionView();
-    this.performanceView = this.view.getPerformanceView();
+    this.createUserView = jView.getCreateUserView();
+    this.portfolioMenuView = jView.getPortfolioMenuView();
+    this.createPortfolioView = jView.getCreatePortfolioView();
+    this.calculateValueView = jView.getCalculateValueView();
+    this.calculateCostBasisView = jView.getCalculateCostBasisView();
+    this.loadPortfolioView = jView.getLoadPortfolioView();
+    this.viewPortfolioView = jView.getViewPortfolioView();
+    this.transactionView = jView.getTransactionView();
+    this.commissionView = jView.getCommissionView();
+    this.performanceView = jView.getPerformanceView();
     this.portfolioMenuView.addFeatures(this);
-    this.createPortfolioController.setView(view);
-    this.calculateValueController.setView(view);
-    this.calculateCostBasisController.setView(view);
-    this.viewPortfolioController.setView(view);
-    this.loadPortfolioController.setView(view);
-    this.transactionController.setView(view);
-    this.commissionController.setView(view);
-    this.performanceController.setView(view);
+    this.createPortfolioController.setView(jView);
+    this.calculateValueController.setView(jView);
+    this.calculateCostBasisController.setView(jView);
+    this.viewPortfolioController.setView(jView);
+    this.loadPortfolioController.setView(jView);
+    this.transactionController.setView(jView);
+    this.commissionController.setView(jView);
+    this.performanceController.setView(jView);
   }
 
 }

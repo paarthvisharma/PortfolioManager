@@ -5,7 +5,7 @@ import java.util.List;
 
 import static model.utils.Utils.validateForLegalDate;
 
-public class DollarCostAveraging {
+public class dollarCostAveraging {
 
   private String startDate;
   private String endDate;
@@ -15,7 +15,7 @@ public class DollarCostAveraging {
   private double commission;
   private List<List<String>> DCAData;
 
-  public DollarCostAveraging(String startDate, String endDate, String interval,
+  public dollarCostAveraging(String startDate, String endDate, String interval,
                              String dollarAmount, String commission,
                              List<List<String>> DCAData, String lastTransaction) {
 
@@ -30,7 +30,7 @@ public class DollarCostAveraging {
     this.lastTransaction = lastTransaction;
   }
 
-  public DollarCostAveraging(String plan) {
+  public dollarCostAveraging(String plan) {
     String[] splitPlan = plan.split(",");
     validateForLegalDate(splitPlan[0]);
     this.startDate = splitPlan[0];

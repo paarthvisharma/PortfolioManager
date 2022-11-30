@@ -5,7 +5,7 @@ import java.util.List;
 import model.FlexiblePortfolio;
 import model.FlexiblePortfolioImpl;
 import model.Stock;
-import model.utils.DollarCostAveraging;
+import model.utils.dollarCostAveraging;
 
 /**
  * A builder method implementation to create FlexiblePortfolio objects.
@@ -125,7 +125,7 @@ public class FlexiblePortfolioBuilder {
       FlexiblePortfolio portfolio = new FlexiblePortfolioImpl(this.portfolioName,
               this.portfolioId, this.listOfStocks, this.commission, this.portfolioPath);
       for (String dcaPlanStr : dcaPlansAsString) {
-        portfolio.addDCAPlan(new DollarCostAveraging(dcaPlanStr));
+        portfolio.addDCAPlan(new dollarCostAveraging(dcaPlanStr));
       }
       return portfolio;
     } else {

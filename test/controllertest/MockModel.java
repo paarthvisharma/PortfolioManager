@@ -11,7 +11,6 @@ import model.Portfolio;
 import model.RigidPortfolio;
 import model.Stock;
 import model.User;
-import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 
@@ -243,5 +242,20 @@ public class MockModel implements Model {
     log.append(startDate).append("\n");
     log.append(endDate).append("\n").append("||");
     return testModel.performanceOfPortfolioOverTime(user, portfolio, startDate, endDate);
+  }
+
+  @Override
+  public StatusObject<List<String>> getDatesForPerformanceGraph(String startDate, String endDate, boolean includeRemainderDate) {
+    return null;
+  }
+
+  @Override
+  public List<String> getDollarAxisForGraph(List<Double> valuations, int length) {
+    return null;
+  }
+
+  @Override
+  public StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates) {
+    return null;
   }
 }

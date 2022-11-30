@@ -21,7 +21,6 @@ import view.gui.JView;
 public class JCreatePortfolioControllerImpl implements JCreatePortfolioController {
 
   private Model model;
-  private JView view;
   private JCreatePortfolioView createPortfolioView;
   private JPortfolioMenuView portfolioMenuView;
   private User user;
@@ -190,9 +189,8 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.portfolioMenuView = this.view.getPortfolioMenuView();
-    this.createPortfolioView = this.view.getCreatePortfolioView();
+    this.portfolioMenuView = jView.getPortfolioMenuView();
+    this.createPortfolioView = jView.getCreatePortfolioView();
     this.createPortfolioView.addFeatures(this);
   }
 

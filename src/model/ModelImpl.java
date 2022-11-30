@@ -23,7 +23,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import model.handler.PortfolioHandler;
 import model.handler.UserHandler;
-import model.utils.DollarCostAveraging;
+import model.utils.dollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 import model.utils.Utils;
@@ -138,7 +138,7 @@ public class ModelImpl implements Model {
       UserHandler handler = new UserHandler(true);
       saxParser.parse(userFile, handler);
       User createdUser = handler.getUserList().get(0);
-      if (! verifyAndLoadTransactionsForFlexiblePortfolios(createdUser, xmlPath)) {
+      if (!verifyAndLoadTransactionsForFlexiblePortfolios(createdUser, xmlPath)) {
         throw new ExceptionInInitializerError("The transaction files are not present "
                 + "or have discrepancies with the portfolio (XML file)");
       }
@@ -172,16 +172,19 @@ public class ModelImpl implements Model {
       saxParser.parse(userFile, handler);
       Map<String, Portfolio> loadedPortfolio = handler.getPortfolio();
       if (loadedPortfolio.get("rigidPortfolio") != null) {
-        RigidPortfolio loadedRigidPortfolio = (RigidPortfolio) loadedPortfolio.get("rigidPortfolio");
+        RigidPortfolio loadedRigidPortfolio =
+                (RigidPortfolio) loadedPortfolio.get("rigidPortfolio");
         user.addToListOfRigidPortfolios((RigidPortfolio) loadedPortfolio.get("rigidPortfolio"));
         this.updateUserFile(user);
         return new StatusObject<>("Successfully loaded the"
                 + " Portfolio with Portfolio ID "
                 + loadedRigidPortfolio.getPortfolioId(), 1, loadedRigidPortfolio);
       } else if (loadedPortfolio.get("flexiblePortfolio") != null) {
-        FlexiblePortfolio loadedFlexiblePortfolio = (FlexiblePortfolio) loadedPortfolio.get("flexiblePortfolio");
+        FlexiblePortfolio loadedFlexiblePortfolio =
+                (FlexiblePortfolio) loadedPortfolio.get("flexiblePortfolio");
         loadedFlexiblePortfolio.setCommission(user.getCommission());
-        if (!verifyAndLoadTransactionsForSingleFlexiblePortfolio(user, loadedFlexiblePortfolio, xmlPath)) {
+        if (!verifyAndLoadTransactionsForSingleFlexiblePortfolio(user,
+                loadedFlexiblePortfolio, xmlPath)) {
           throw new ExceptionInInitializerError("The transaction files are not present "
                   + "or have discrepancies with the portfolio (XML file)");
         }
@@ -189,7 +192,8 @@ public class ModelImpl implements Model {
         this.updateUserFile(user);
         return new StatusObject<>("Successfully loaded the"
                 + " Portfolio with Portfolio ID "
-                + loadedFlexiblePortfolio.getPortfolioId(), 1, loadedFlexiblePortfolio);
+                + loadedFlexiblePortfolio.getPortfolioId(),
+                1, loadedFlexiblePortfolio);
       }
       throw new RuntimeException("The XML file does not contain Rigid or Flexible portfolio");
     } catch (RuntimeException | ExceptionInInitializerError e) {
@@ -226,7 +230,8 @@ public class ModelImpl implements Model {
     }
   }
 
-  private boolean readAndLoadTransactionsCSV(FlexiblePortfolio portfolio, String pathToTransactions) throws IOException {
+  private boolean readAndLoadTransactionsCSV(FlexiblePortfolio portfolio,
+                                             String pathToTransactions) throws IOException {
     (new File(portfolio.getPathToPortfolioTransactions())).createNewFile();
     StatusObject<PriorityQueue<Transaction>> validatedTransactions =
             portfolio.getValidatedTransactions(
@@ -239,7 +244,8 @@ public class ModelImpl implements Model {
     return false;
   }
 
-  private boolean verifyAndLoadTransactionsForSingleFlexiblePortfolio(User user, FlexiblePortfolio portfolio, String xmlPath) {
+  private boolean verifyAndLoadTransactionsForSingleFlexiblePortfolio(
+          User user, FlexiblePortfolio portfolio, String xmlPath) {
     String parentPath = getParentDirPath(xmlPath);
     try {
       String pathToTransactions = xmlPath.replace(".xml", ".csv");
@@ -310,7 +316,7 @@ public class ModelImpl implements Model {
       for (FlexiblePortfolio portfolio : user.getListOfFlexiblePortfolios()) {
         if (portfolio.getPortfolioId() == portfolioId) {
           toReturn = portfolio;
-          for (DollarCostAveraging dca: portfolio.getDCAPlans()) {
+          for (dollarCostAveraging dca : portfolio.getDCAPlans()) {
             portfolio.executeDCAPlan(dca);
           }
           break;
@@ -336,17 +342,23 @@ public class ModelImpl implements Model {
       validateForLegalDate(startDate);
       validateForLegalDate(endDate);
       if (Integer.parseInt(interval) < 1) {
-        return new StatusObject<>("Interval should be at least 1 day", -1, null);
+        return new StatusObject<>("Interval should be at least 1 day",
+                -1, null);
       }
       if (Double.parseDouble(dollarAmount) < 0) {
-        return new StatusObject<>("Investment amount cannot be negative", -1, null);
+        return new StatusObject<>("Investment amount cannot be negative",
+                -1, null);
       }
       if (Double.parseDouble(commission) < 0) {
-        return new StatusObject<>("Commission amount cannot be negative", -1, null);
+        return new StatusObject<>("Commission amount cannot be negative",
+                -1, null);
       }
-      DollarCostAveraging toReturn = new DollarCostAveraging(startDate, endDate, interval, dollarAmount, commission, dcaData, "");
+      dollarCostAveraging toReturn =
+              new dollarCostAveraging(startDate, endDate, interval, dollarAmount,
+                      commission, dcaData, "");
       portfolio.addDCAPlan(toReturn);
-      return new StatusObject<>("Successfully created DCA", 1, null);
+      return new StatusObject<>("Successfully created DCA",
+              1, null);
     } catch (Exception e) {
       return new StatusObject<>(e.getMessage(), -1, null);
     }
@@ -473,7 +485,7 @@ public class ModelImpl implements Model {
       return new StatusObject<>("Transaction file for the portfolio does not exist.",
               -1, null);
     } catch (IllegalArgumentException e) {
-      return new StatusObject<>(e.getMessage(),-1, null);
+      return new StatusObject<>(e.getMessage(), -1, null);
     }
   }
 
@@ -492,7 +504,7 @@ public class ModelImpl implements Model {
       return new StatusObject<>("Transaction file for the portfolio does not exist "
               + "or is corrupted.", -1, null);
     } catch (IllegalArgumentException e) {
-      return new StatusObject<>(e.getMessage(),-1, null);
+      return new StatusObject<>(e.getMessage(), -1, null);
     }
   }
 
@@ -592,10 +604,12 @@ public class ModelImpl implements Model {
       SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
       Map<Double, Integer> daysMappingAscending = getDaysMappingAscending(startDate, endDate);
 
-      Map<String, Double> numberOfSticksAndTimeMultiple = getNumberOfSticksAndTimeMultiple(daysMappingAscending, startDate);
+      Map<String, Double> numberOfSticksAndTimeMultiple =
+              getNumberOfSticksAndTimeMultiple(daysMappingAscending, startDate);
       double numberOfSticks = numberOfSticksAndTimeMultiple.get("numberOfSticks");
       int timeMultiple = numberOfSticksAndTimeMultiple.get("timeMultiple").intValue();
-      List<String> valuesForDates = generateDates(numberOfSticks, timeMultiple, startDate, endDate, true);
+      List<String> valuesForDates = generateDates(numberOfSticks,
+              timeMultiple, startDate, endDate, true);
       List<Double> valuations = getPortfolioValuationsForDates(portfolio, valuesForDates);
       double mini = Collections.min(valuations);
       double max = Collections.max(valuations);
@@ -619,7 +633,7 @@ public class ModelImpl implements Model {
       return new StatusObject<>("Transaction file not found for the portfolio",
               -1, null);
     } catch (IllegalArgumentException e) {
-      return new StatusObject<>(e.getMessage(),-1, null);
+      return new StatusObject<>(e.getMessage(), -1, null);
     }
   }
 
@@ -628,27 +642,30 @@ public class ModelImpl implements Model {
           String startDate, String endDate, boolean includeRemainderDate) {
     try {
       Map<Double, Integer> daysMappingAscending = getDaysMappingAscending(startDate, endDate);
-      Map<String, Double> numberOfSticksAndTimeMultiple = getNumberOfSticksAndTimeMultiple(daysMappingAscending, startDate);
+      Map<String, Double> numberOfSticksAndTimeMultiple =
+              getNumberOfSticksAndTimeMultiple(daysMappingAscending, startDate);
       double numberOfSticks = numberOfSticksAndTimeMultiple.get("numberOfSticks");
       int timeMultiple = numberOfSticksAndTimeMultiple.get("timeMultiple").intValue();
-      List<String> valuesForDates = generateDates(numberOfSticks, timeMultiple, startDate, endDate, includeRemainderDate);
-      return new StatusObject<>("Dates generated successfully", 1, valuesForDates);
+      List<String> valuesForDates = generateDates(numberOfSticks,
+              timeMultiple, startDate, endDate, includeRemainderDate);
+      return new StatusObject<>("Dates generated successfully",
+              1, valuesForDates);
     } catch (ParseException e) {
       return new StatusObject<>("Error parsing the given dates",
               -1, null);
     } catch (IllegalArgumentException e) {
-      return new StatusObject<>(e.getMessage(),-1, null);
+      return new StatusObject<>(e.getMessage(), -1, null);
     }
   }
 
   @Override
   public List<String> getDollarAxisForGraph(List<Double> valuations, int length) {
-    List<String> toReturn =new ArrayList<>();
+    List<String> toReturn = new ArrayList<>();
     double mini = Collections.min(valuations);
     double max = Collections.max(valuations);
     double scale = (max - mini) / length;
     toReturn.add(String.valueOf(Double.valueOf(mini).intValue()));
-    for (int i=1; i <= length; i++) {
+    for (int i = 1; i <= length; i++) {
       toReturn.add(String.valueOf(Double.valueOf(mini + (i * scale)).intValue()));
     }
     return toReturn;
@@ -662,7 +679,7 @@ public class ModelImpl implements Model {
 //      toReturn = toReturn.stream().map(i -> i - mini).collect(Collectors.toList());
       return new StatusObject<>("Fetched portfolio values", 1, toReturn);
     } catch (FileNotFoundException | ParseException e) {
-      return new StatusObject<>(e.getMessage(),-1, null);
+      return new StatusObject<>(e.getMessage(), -1, null);
     }
   }
 }

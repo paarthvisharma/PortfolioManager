@@ -16,7 +16,6 @@ import view.gui.JView;
 public class JCalculateValueControllerImpl implements JCalculateValueController {
 
   private Model model;
-  private JView view;
   private User user;
   private JCalculateValueView jCalculateValueView;
   private JPortfolioMenuView jPortfolioMenuView;
@@ -74,9 +73,8 @@ public class JCalculateValueControllerImpl implements JCalculateValueController 
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.jCalculateValueView = this.view.getCalculateValueView();
-    this.jPortfolioMenuView = this.view.getPortfolioMenuView();
+    this.jCalculateValueView = jView.getCalculateValueView();
+    this.jPortfolioMenuView = jView.getPortfolioMenuView();
     this.jCalculateValueView.addFeatures(this);
   }
 }

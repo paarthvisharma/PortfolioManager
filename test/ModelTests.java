@@ -695,6 +695,16 @@ public class ModelTests {
   }
 
   @Test
+  public void ValidateSellingMoreStocks() throws IOException {
+    User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
+    StatusObject<FlexiblePortfolio> portfolio =
+            model.sellStockInFlexiblePortfolio(user1.getFlexiblePortfolio(1),
+                    "goog", "2022-09-09", 105.0);
+    assertEquals(-1, portfolio.statusCode);
+    assertEquals("You cant sell more shares than what you hold.",
+            portfolio.statusMessage);
+  }
+  @Test
   public void ValidateSellAllStocks() throws IOException {
     String portfolioString = "Portfolio Name: onePortfolio\n"
             + "Portfolio ID: 1\n"

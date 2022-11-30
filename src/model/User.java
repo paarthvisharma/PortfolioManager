@@ -10,8 +10,19 @@ import java.util.List;
 
 public interface User {
 
+  /**
+   * Method to get commission.
+   *
+   * @return the commission value.
+   */
   double getCommission();
 
+  /**
+   * Sets the commission value.
+   *
+   * @param commission amount.
+   * @throws IllegalArgumentException in case negative commission is entered.
+   */
   void setCommission(double commission) throws IllegalArgumentException;
 
   /**
@@ -27,7 +38,6 @@ public interface User {
    * @return returns the firstName.
    */
 
-
   String getFirstName();
 
   /**
@@ -36,30 +46,43 @@ public interface User {
    * @return returns the lastName.
    */
 
-
   String getLastName();
 
+  /**
+   * Method to get the portfolio ID of next flexible portfolio.
+   *
+   * @return portfolioID.
+   */
   int getNextFlexiblePortfolioId();
 
   /**
    * Processes a portfolio object and adds it to the list of portfolios.
    *
-   * @param portfolio an object of type portfolio.
+   * @param portfolio an object of type rigid portfolio.
    */
 
   void addToListOfRigidPortfolios(RigidPortfolio portfolio);
 
+  /**
+   * Processes a portfolio object and adds it to the list of portfolios.
+   *
+   * @param portfolio an object of type flexible portfolio.
+   */
   void addToListOfFlexiblePortfolios(FlexiblePortfolio portfolio);
 
   /**
-   * Retrieves the list of portfolios.
+   * Retrieves the list of rigid portfolios.
    *
-   * @return returns list of portfolios.
+   * @return returns list of rigid portfolios.
    */
 
   List<RigidPortfolio> getListOfRigidPortfolios();
 
-
+  /**
+   * Retrieves the list of flexible portfolios.
+   *
+   * @return returns list of flexible portfolios.
+   */
   List<FlexiblePortfolio> getListOfFlexiblePortfolios();
 
   /**
@@ -76,9 +99,23 @@ public interface User {
    */
   RigidPortfolio getRigidPortfolio(int portfolioId);
 
+  /**
+   * Method to create flexible portfolio.
+   *
+   * @param portfolioName name of portfolio.
+   * @param listOfStocks  stick list.
+   * @param portfolioPath path of file.
+   * @return an object of type flexible portfolio.
+   */
   FlexiblePortfolio createFlexiblePortfolio(String portfolioName, List<Stock> listOfStocks,
                                             String portfolioPath);
 
+  /**
+   * Method to retrieve a flexible portfolio.
+   *
+   * @param portfolioId portfolio ID.
+   * @return an object of type flexible portfolio.
+   */
   FlexiblePortfolio getFlexiblePortfolio(int portfolioId);
 
   /**

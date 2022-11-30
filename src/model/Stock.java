@@ -19,6 +19,7 @@ public interface Stock {
 
   /**
    * Retrieves the date on which the stock was listed.
+   *
    * @return returns date as String.
    */
   String getListingDate();
@@ -30,10 +31,25 @@ public interface Stock {
    */
   String getTicker();
 
+  /**
+   * Retrieves the name of a stock.
+   *
+   * @return returns name.
+   */
   String getStockName();
 
+  /**
+   * Retrieves the quantity of a stock.
+   *
+   * @return returns quantity.
+   */
   double getStockQuantity();
 
+  /**
+   * Sets the stock quantity.
+   *
+   * @param stockQuantity amount of shares.
+   */
   void setStockQuantity(double stockQuantity);
 
   /**

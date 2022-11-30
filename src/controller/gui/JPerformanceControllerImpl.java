@@ -21,7 +21,6 @@ public class JPerformanceControllerImpl implements JPerformanceController {
   private User user;
   private JPortfolioMenuView jPortfolioMenuView;
   private JPerformanceView jPerformanceView;
-  private JView view;
 
   private FlexiblePortfolio selectedPortfolio;
 
@@ -31,9 +30,8 @@ public class JPerformanceControllerImpl implements JPerformanceController {
 
   @Override
   public void setView(JView jView) {
-    this.view = jView;
-    this.jPerformanceView = this.view.getPerformanceView();
-    this.jPortfolioMenuView = this.view.getPortfolioMenuView();
+    this.jPerformanceView = jView.getPerformanceView();
+    this.jPortfolioMenuView = jView.getPortfolioMenuView();
     this.jPerformanceView.addFeatures(this);
   }
 
