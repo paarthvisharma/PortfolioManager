@@ -29,15 +29,15 @@ import controller.gui.JViewPortfolioController;
  */
 public class JViewPortfolioViewImpl extends JFrame implements JViewPortfolioView {
 
-  private DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
+  private final DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
     @Override
     public boolean isCellEditable(int row, int column) {
       return false;
     }
   };
 
-  private JPanel mainPanel;
-  private JPanel displayPortfoliosPanel;
+  private final JPanel mainPanel;
+  private final JPanel displayPortfoliosPanel;
   private JTextField dateOfViewing;
   private JButton backButton;
   private JButton viewPortfolioButton;

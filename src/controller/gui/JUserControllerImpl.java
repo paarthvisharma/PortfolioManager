@@ -15,11 +15,11 @@ import view.gui.JView;
  */
 public class JUserControllerImpl implements JUserController {
 
-  private Model model;
+  private final Model model;
 
   private JCreateUserView createUserView;
   private JPortfolioMenuView portfolioMenuView;
-  private JPortfolioController portfolioController;
+  private final JPortfolioController portfolioController;
 
   /**
    * Constructor to initialize the model.
@@ -59,7 +59,7 @@ public class JUserControllerImpl implements JUserController {
       return;
     }
     try {
-      User user = null;
+      User user;
       StatusObject<User> selectedUser = model.getUser(userId);
       if (selectedUser.statusCode > 0) {
         user = selectedUser.returnedObject;

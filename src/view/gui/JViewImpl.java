@@ -6,17 +6,17 @@ package view.gui;
  */
 public class JViewImpl implements JView {
 
-  private JCreateUserView createUserView;
-  private JPortfolioMenuView portfolioMenuView;
-  private JCreatePortfolioView createPortfolioView;
-  private JCalculateValueView calculateValueView;
-  private JCalculateCostBasisView calculateCostBasisView;
-  private JViewPortfolioView viewPortfolioView;
-  private JLoadPortfolioView loadPortfolioView;
-  private JTransactionView transactionView;
-  private JSetCommissionForUserView commissionView;
+  private final JCreateUserView createUserView;
+  private final JPortfolioMenuView portfolioMenuView;
+  private final JCreatePortfolioView createPortfolioView;
+  private final JCalculateValueView calculateValueView;
+  private final JCalculateCostBasisView calculateCostBasisView;
+  private final JViewPortfolioView viewPortfolioView;
+  private final JLoadPortfolioView loadPortfolioView;
+  private final JTransactionView transactionView;
+  private final JSetCommissionForUserView commissionView;
 
-  private JPerformanceView performanceView;
+  private final JPerformanceView performanceView;
 
   /**
    * Constructor for the class to set up the initial view.

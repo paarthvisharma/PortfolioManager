@@ -87,7 +87,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
       if (dca.getLastTransaction().equals("") & compareDates(cDate, sDate) < 0) {
         return;
       }
-      if (compareDates(cDate, eDate) >= 0 | compareDates(cDate, sDate) < 0) {
+      if ((compareDates(cDate, eDate) >= 0 & !dca.getLastTransaction().equals("")) | compareDates(cDate, sDate) < 0) {
         return;
       }
       if (dca.getLastTransaction().equals("") & compareDates(cDate, sDate) == 0) {
@@ -270,8 +270,10 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
 
   @Override
   public String toString() {
-    return portfolioToString(this,
-            true, true, true, true);
+    String toReturn =  portfolioToString(
+            this, true, true, true, true);
+    toReturn = toReturn + "\n" + dcaPlans.toString();
+    return toReturn;
   }
 
   @Override

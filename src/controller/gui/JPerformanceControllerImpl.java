@@ -21,7 +21,7 @@ import static controller.Utils.getPresentDate;
  * the methods which help displays the performance menu.
  */
 public class JPerformanceControllerImpl implements JPerformanceController {
-  private Model model;
+  private final Model model;
   private User user;
   private JPortfolioMenuView jPortfolioMenuView;
   private JPerformanceView jPerformanceView;

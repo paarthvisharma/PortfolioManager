@@ -26,9 +26,9 @@ import controller.gui.JPerformanceController;
  * performance menu.
  */
 public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
-  private JPanel mainPanel;
-  private JPanel displayPortfoliosPanel;
-  private JButton loadPortfolio;
+  private final JPanel mainPanel;
+  private final JPanel displayPortfoliosPanel;
+  private final JButton loadPortfolio;
   private JButton backButton;
   private JButton plotGraph;
   private JRadioButton[] radioButtons;
@@ -146,8 +146,8 @@ public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
 
   @Override
   public void clearUserInputs() {
-    //    startDate.setText("");
-    //    endDate.setText("");
+        startDate.setText("");
+        endDate.setText("");
   }
 
   @Override

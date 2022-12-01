@@ -14,7 +14,7 @@ import view.gui.JView;
  * required to display the Cost Basis Menu.
  */
 public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisController {
-  private Model model;
+  private final Model model;
   private User user;
   private JCalculateCostBasisView jCalculateCostBasisView;
   private JPortfolioMenuView jPortfolioMenuView;

@@ -342,6 +342,7 @@ public class ModelImpl implements Model {
       validateForLegalDate(startDate);
       validateForLegalDate(endDate);
       if (Integer.parseInt(interval) < 1) {
+        ArrayList<String> temp = new ArrayList<>(List.of(new String[]{"a", "a"}));
         return new StatusObject<>("Interval should be at least 1 day",
                 -1, null);
       }

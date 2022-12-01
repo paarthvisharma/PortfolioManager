@@ -35,7 +35,7 @@ import controller.gui.JCreatePortfolioController;
  */
 public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolioView {
 
-  private JPanel mainPanel;
+  private final JPanel mainPanel;
   private JTextField stockTicker;
   private JTextField stockQuantity;
   private JTextField purchaseDate;
@@ -52,7 +52,7 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
   private JButton addToDCA;
   private JLabel logs;
 
-  private DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
+  private final DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
     @Override
     public boolean isCellEditable(int row, int column) {
       return column == 3;

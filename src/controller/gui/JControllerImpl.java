@@ -9,7 +9,7 @@ import view.gui.JView;
  */
 public class JControllerImpl implements JController {
 
-  private JUserController userController;
+  private final JUserController userController;
   //  private JPortfolioController portfolioController;
 
   /**
@@ -19,16 +19,11 @@ public class JControllerImpl implements JController {
    */
   public JControllerImpl(Model model) {
     userController = new JUserControllerImpl(model);
-    //    portfolioController = new JPortfolioControllerImpl(model);
   }
 
   @Override
   public void setView(JView jView) {
     userController.setView(jView);
-    //    portfolioController.setView(view);
-    //    portfolioController.setView(view.getPortfolioMenuView());
-    //    view.getCreateUserView().addFeatures(userController);
-    //    view.getPortfolioMenuView().addFeatures(portfolioController);
   }
 
 }

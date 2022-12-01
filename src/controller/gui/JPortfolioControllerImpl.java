@@ -21,7 +21,7 @@ import static controller.Utils.listFlexiblePortfolios;
  */
 public class JPortfolioControllerImpl implements JPortfolioController {
 
-  private Model model;
+  private final Model model;
   private JCreateUserView createUserView;
   private JPortfolioMenuView portfolioMenuView;
   private JCreatePortfolioView createPortfolioView;
@@ -32,14 +32,14 @@ public class JPortfolioControllerImpl implements JPortfolioController {
   private JTransactionView transactionView;
   private JSetCommissionForUserView commissionView;
   private JPerformanceView performanceView;
-  private JCreatePortfolioController createPortfolioController;
-  private JCalculateValueController calculateValueController;
-  private JCalculateCostBasisController calculateCostBasisController;
-  private JViewPortfolioController viewPortfolioController;
-  private JLoadPortfolioController loadPortfolioController;
-  private JTransactionController transactionController;
-  private JSetCommissionController commissionController;
-  private  JPerformanceController performanceController;
+  private final JCreatePortfolioController createPortfolioController;
+  private final JCalculateValueController calculateValueController;
+  private final JCalculateCostBasisController calculateCostBasisController;
+  private final JViewPortfolioController viewPortfolioController;
+  private final JLoadPortfolioController loadPortfolioController;
+  private final JTransactionController transactionController;
+  private final JSetCommissionController commissionController;
+  private final JPerformanceController performanceController;
   private User user;
 
   /**

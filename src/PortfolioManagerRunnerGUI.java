@@ -17,9 +17,6 @@ public class PortfolioManagerRunnerGUI {
    */
   public static void main(String[] args) {
     Model model = new ModelImpl();
-    //    JUserController controller = new JUserControllerImpl(model);
-    //    JCreateUserView view = new JCreateUserViewImpl();
-    //    controller.setView(view);
     JController controller = new JControllerImpl(model);
     JView view = new JViewImpl();
     controller.setView(view);

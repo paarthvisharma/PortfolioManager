@@ -26,8 +26,8 @@ import controller.gui.JCalculateCostBasisController;
  */
 public class JCalculateCostBasisViewImpl extends JFrame implements JCalculateCostBasisView {
   private JButton backButton;
-  private JPanel mainPanel;
-  private JPanel displayPortfoliosPanel;
+  private final JPanel mainPanel;
+  private final JPanel displayPortfoliosPanel;
   private JRadioButton[] radioButtons;
   private JLabel outputLabel;
   private JButton calculateCostBasisPortfolioButton;

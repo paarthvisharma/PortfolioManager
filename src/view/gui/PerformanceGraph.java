@@ -19,16 +19,15 @@ import javax.swing.JPanel;
  */
 public class PerformanceGraph extends JPanel {
 
-  private int[] coordinates = {100, 100};
   private Graphics2D g1;
   private Graphics g;
   private int width;
   private int height;
-  private int mar = 80;
+  private final int mar = 80;
 
-  private int[] xyCoordinates;
-  private String[] dates;
-  private String[] dollarAmounts;
+  private final int[] xyCoordinates;
+  private final String[] dates;
+  private final String[] dollarAmounts;
 
   /**
    * Constructor for the class to set up the initial view.
@@ -129,17 +128,6 @@ public class PerformanceGraph extends JPanel {
       i += (width - (2 * mar)) / x;
     }
     g1.setFont(initialFont);
-  }
-
-  private int getMax() {
-    int max = -Integer.MAX_VALUE;
-    for (int i = 0; i < coordinates.length; i++) {
-      if (coordinates[i] > max) {
-        max = coordinates[i];
-      }
-
-    }
-    return max;
   }
 
   /**

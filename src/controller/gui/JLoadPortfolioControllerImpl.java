@@ -15,7 +15,7 @@ import view.gui.JView;
 
 public class JLoadPortfolioControllerImpl implements JLoadPortfolioController {
 
-  private Model model;
+  private final Model model;
   private User user;
   private JLoadPortfolioView loadPortfolioView;
   private JPortfolioMenuView portfolioMenuView;

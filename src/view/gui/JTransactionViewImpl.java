@@ -38,15 +38,15 @@ import controller.gui.JTransactionController;
  */
 public class JTransactionViewImpl extends JFrame implements JTransactionView {
 
-  private DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
+  private final DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
     @Override
     public boolean isCellEditable(int row, int column) {
       return column == 3;
     }
   };
 
-  private JPanel mainPanel;
-  private JPanel displayPortfoliosPanel;
+  private final JPanel mainPanel;
+  private final JPanel displayPortfoliosPanel;
   private JPanel buySellPanel;
   private JPanel dollarCostAveragingPanel;
   private JLabel outputLabel;
@@ -66,7 +66,7 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
   private JButton buyButton;
   private JButton sellButton;
   private JButton addPlan;
-  private JButton loadPortfolio;
+  private final JButton loadPortfolio;
   private JButton addToDCA;
 
   /**
@@ -287,10 +287,6 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
         jTransactionController.monitorTable(weightsColumn);
       }
     });
-    //    for (JRadioButton r : radioButtons) {
-    //      r.addActionListener(
-    //      evt -> jTransactionController.selectPortfolioTransaction(r.getName()));
-    //    }
   }
 
   @Override

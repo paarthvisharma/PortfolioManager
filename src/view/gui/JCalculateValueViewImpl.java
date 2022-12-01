@@ -26,8 +26,8 @@ import controller.gui.JCalculateValueController;
  */
 public class JCalculateValueViewImpl extends JFrame implements JCalculateValueView {
 
-  private JPanel mainPanel;
-  private JPanel displayPortfoliosPanel;
+  private final JPanel mainPanel;
+  private final JPanel displayPortfoliosPanel;
   private JRadioButton[] radioButtons;
 
   private JTextField dateOfValuation;

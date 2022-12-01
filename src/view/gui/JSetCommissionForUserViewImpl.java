@@ -22,7 +22,7 @@ import controller.gui.JSetCommissionController;
  */
 public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommissionForUserView {
 
-  private JPanel mainPanel;
+  private final JPanel mainPanel;
   private JButton backButton;
   private JLabel outputLabel;
   private JButton setCommissionButton;
@@ -68,15 +68,6 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
     inputCommissionPanel.add(commissionAmount);
     mainPanel.add(inputCommissionPanel);
   }
-
-  //  private void placeLogOutput(){
-  //    JPanel outputPanel = new JPanel();
-  //    outputPanel.setBorder(BorderFactory.createTitledBorder("Output of operation performed"));
-  //    outputLabel = new JLabel();
-  //    outputPanel.add(outputLabel);
-  //    mainPanel.add(outputPanel);
-  //    add(mainPanel);
-  //  }
 
   private void buttonPanel() {
 

@@ -27,7 +27,7 @@ import controller.gui.JLoadPortfolioController;
  */
 public class JLoadPortfolioViewImpl extends JFrame implements JLoadPortfolioView, ActionListener {
 
-  private JPanel mainPanel;
+  private final JPanel mainPanel;
   private JLabel filePathLabel;
   private JLabel logOutput;
   private JButton backButton;

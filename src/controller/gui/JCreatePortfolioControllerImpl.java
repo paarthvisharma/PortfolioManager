@@ -14,18 +14,20 @@ import view.gui.JCreatePortfolioView;
 import view.gui.JPortfolioMenuView;
 import view.gui.JView;
 
+import static controller.gui.GUIControllerHelper.processDCACreationHelper;
+
 /**
  * This class implements the JCreatePortfolioController interface for Portfolio GUI which and
  * contains the methods which help display the create portfolio menu.
  */
 public class JCreatePortfolioControllerImpl implements JCreatePortfolioController {
 
-  private Model model;
+  private final Model model;
   private JCreatePortfolioView createPortfolioView;
   private JPortfolioMenuView portfolioMenuView;
   private User user;
 
-  private List<Stock> listOfStocks;
+  private List<Stock> listOfStocks = new ArrayList<>();
 
   /**
    * A constructor to initialize the model.
@@ -87,70 +89,8 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
 
   private void processDCACreation(FlexiblePortfolio portfolio, Map<String, String> dcaSetting,
                                   List<List<String>> tableData) {
-    try {
-      if (dcaSetting.get("startDate").equals("")) {
-        throw new IllegalArgumentException("Start date cannot be empty");
-      }
-      if (dcaSetting.get("endDate").equals("")) {
-        dcaSetting.put("endDate", "3000-01-01");
-      }
-      if (dcaSetting.get("startDate").equals("")) {
-        throw new IllegalArgumentException("Start date cannot be empty");
-      }
-      if (dcaSetting.get("interval").equals("")
-              | Integer.parseInt(dcaSetting.get("interval")) < 1) {
-        throw new IllegalArgumentException("Interval has to be a positive integer");
-      }
-      if (dcaSetting.get("commission").equals("")
-              | Double.parseDouble(dcaSetting.get("commission")) < 0) {
-        throw new IllegalArgumentException("Commission has to be greater/equal to 0");
-      }
-      if (dcaSetting.get("dollarAmount").equals("")
-              | Double.parseDouble(dcaSetting.get("dollarAmount")) < 0) {
-        throw new IllegalArgumentException("Dollar amount has to be greater/equal to 0");
-      }
-      List<List<String>> filteredTable = new ArrayList<>();
-      for (List<String> row : tableData) {
-        if (Double.parseDouble(row.get(3)) != 0) {
-          filteredTable.add(row);
-        }
-      }
-      StatusObject<String> status = model.createDCAPlan(portfolio,
-              dcaSetting.get("startDate"), dcaSetting.get("endDate"), dcaSetting.get("interval"),
-              dcaSetting.get("dollarAmount"), dcaSetting.get("commission"), filteredTable);
-      if (status.statusCode < 0) {
-        throw new RuntimeException(status.statusMessage);
-      }
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException("Entered number does not follow the correct format\n"
-              + "Interval -> Positive integer\n"
-              + "Dollar amount -> Positive number\n"
-              + "Commission -> Positive number");
-    }
+    processDCACreationHelper(portfolio, dcaSetting, tableData, model);
   }
-
-  //  private List<Stock> createStockListFlexiblePortfolio(String[][] stockList) {
-  //    List<Stock> listOfStocks = new ArrayList<>();
-  //    String ticker;
-  //    String date;
-  //    int quantity;
-  //    for (String[] stockDetails : stockList) {
-  //      ticker = stockDetails[0];
-  //      quantity = Integer.parseInt(stockDetails[1]);
-  //      date = stockDetails[2];
-  //      StatusObject<Stock> buyStatus = new StatusObject<Stock>("", -1, null);
-  //      for (Stock stock : listOfStocks) {
-  //        if (model.getStockTicker(stock).equalsIgnoreCase(ticker)
-  //                & model.getStockPurchaseDate(stock).equalsIgnoreCase(date)) {
-  //          buyStatus = model.addStockToUninitializedPortfolio(stock, quantity);
-  //        }
-  //      }
-  //      if (buyStatus.statusCode < 0) {
-  //        listOfStocks.add(model.createStock(ticker, quantity, date));
-  //      }
-  //    }
-  //    return listOfStocks;
-  //  }
 
   @Override
   public void addStock(String ticker, String quantity, String date) {
@@ -167,7 +107,7 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
       return;
     }
     try {
-      StatusObject<Stock> buyStatus = new StatusObject<Stock>("", -1,
+      StatusObject<Stock> buyStatus = new StatusObject<>("", -1,
               null);
       for (Stock stock : this.listOfStocks) {
         if (model.getStockTicker(stock).equalsIgnoreCase(ticker.trim())

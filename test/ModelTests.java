@@ -463,7 +463,7 @@ public class ModelTests {
             + "Portfolio ID: 1\n"
             + "These are the stocks present in the portfolio and their details:\n"
             + "* goog Alphabet Inc - Class C 2020-01-01 100.0 \n"
-            + "* aapl Apple Inc 2020-01-02 101.0 \n\n";
+            + "* aapl Apple Inc 2020-01-02 101.0 \n\n\n[]";
     User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
     List<FlexiblePortfolio> onePortfolio = model.getFlexiblePortfoliosForUser(user1);
     List<Stock> p1 = new ArrayList<Stock>();
@@ -542,7 +542,7 @@ public class ModelTests {
             + "These are the stocks present in the portfolio and their details:\n"
             + "* goog Alphabet Inc - Class C 2020-01-01 100.0 \n"
             + "* aapl Apple Inc 2020-01-02 101.0 \n"
-            + "* goog Alphabet Inc - Class C 2020-09-09 10.0 \n\n";
+            + "* goog Alphabet Inc - Class C 2020-09-09 10.0 \n\n\n[]";
     User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
     StatusObject<FlexiblePortfolio> portfolio =
             model.buyStockInFlexiblePortfolio(user1.getFlexiblePortfolio(1),
@@ -617,7 +617,7 @@ public class ModelTests {
             + "These are the stocks present in the portfolio and their details:\n"
             + "* goog Alphabet Inc - Class C 2020-01-01 100.0 \n"
             + "* aapl Apple Inc 2020-01-02 101.0 \n"
-            + "* goog Alphabet Inc - Class C 2020-9-9 10.0 \n\n";
+            + "* goog Alphabet Inc - Class C 2020-9-9 10.0 \n\n\n[]";
     User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
     StatusObject<FlexiblePortfolio> portfolio =
             model.buyStockInFlexiblePortfolio(user1.getFlexiblePortfolio(1),
@@ -642,7 +642,7 @@ public class ModelTests {
             + "Portfolio ID: 1\n"
             + "These are the stocks present in the portfolio and their details:\n"
             + "* goog Alphabet Inc - Class C 2020-01-01 90.0 \n"
-            + "* aapl Apple Inc 2020-01-02 101.0 \n\n";
+            + "* aapl Apple Inc 2020-01-02 101.0 \n\n\n[]";
     User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
     StatusObject<FlexiblePortfolio> portfolio =
             model.sellStockInFlexiblePortfolio(user1.getFlexiblePortfolio(1),
@@ -711,7 +711,7 @@ public class ModelTests {
     String portfolioString = "Portfolio Name: onePortfolio\n"
             + "Portfolio ID: 1\n"
             + "These are the stocks present in the portfolio and their details:\n"
-            + "* aapl Apple Inc 2020-01-02 101.0 \n\n";
+            + "* aapl Apple Inc 2020-01-02 101.0 \n\n\n[]";
 
     User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
     StatusObject<FlexiblePortfolio> portfolio =
@@ -846,7 +846,7 @@ public class ModelTests {
             + "* aapl Apple Inc 2020-01-02 101.0 \n"
             + "* goog Alphabet Inc - Class C 2022-10-21 10.0 \n"
             + "* aapl Apple Inc 2022-10-20 10.0 \n"
-            + "* amzn Amazon.com Inc 2022-10-19 10.0 \n\n";
+            + "* amzn Amazon.com Inc 2022-10-19 10.0 \n\n\n[]";
 
     assertEquals(portfolioString, portfolio.returnedObject.toString());
 

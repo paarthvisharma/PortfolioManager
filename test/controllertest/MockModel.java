@@ -30,7 +30,8 @@ public class MockModel implements Model {
 
   @Override
   public boolean validateTicker(String ticker) {
-    return false;
+    log.append(ticker).append("||");
+    return testModel.validateTicker(ticker);
   }
 
   @Override
@@ -47,7 +48,9 @@ public class MockModel implements Model {
 
   @Override
   public StatusObject<Portfolio> createPortfolioFromXML(User user, String xmlPath) {
-    return null;
+    log.append(user.toString()).append("\n");
+    log.append(xmlPath).append("||");
+    return testModel.createPortfolioFromXML(user, xmlPath);
   }
 
   @Override
@@ -98,8 +101,18 @@ public class MockModel implements Model {
   }
 
   @Override
-  public StatusObject<String> createDCAPlan(FlexiblePortfolio portfolio, String startDate, String endDate, String interval, String dollarAmount, String commission, List<List<String>> dcaData) {
-    return null;
+  public StatusObject<String> createDCAPlan(
+          FlexiblePortfolio portfolio, String startDate, String endDate, String interval,
+          String dollarAmount, String commission, List<List<String>> dcaData) {
+    log.append(portfolio.toString()).append("\n");
+    log.append(startDate).append("\n");
+    log.append(endDate).append("\n");
+    log.append(interval).append("\n");
+    log.append(dollarAmount).append("\n");
+    log.append(commission).append("\n");
+    log.append(dcaData).append("||");
+    return testModel.createDCAPlan(portfolio, startDate, endDate, interval,
+            dollarAmount, commission, dcaData);
   }
 
   @Override
@@ -220,8 +233,12 @@ public class MockModel implements Model {
   }
 
   @Override
-  public StatusObject<List<List<String>>> getCompositionOfFlexiblePortfolioAsList(User user, FlexiblePortfolio portfolio, String date) {
-    return null;
+  public StatusObject<List<List<String>>> getCompositionOfFlexiblePortfolioAsList(
+          User user, FlexiblePortfolio portfolio, String date) {
+    log.append(user.toString()).append("\n");
+    log.append(portfolio.toString()).append("\n");
+    log.append(date).append("||");
+    return testModel.getCompositionOfFlexiblePortfolioAsList(user, portfolio, date);
   }
 
   @Override
@@ -245,17 +262,25 @@ public class MockModel implements Model {
   }
 
   @Override
-  public StatusObject<List<String>> getDatesForPerformanceGraph(String startDate, String endDate, boolean includeRemainderDate) {
-    return null;
+  public StatusObject<List<String>> getDatesForPerformanceGraph(
+          String startDate, String endDate, boolean includeRemainderDate) {
+    log.append(startDate).append("\n");
+    log.append(endDate).append("\n");
+    log.append(includeRemainderDate).append("||");
+    return testModel.getDatesForPerformanceGraph(startDate, endDate, includeRemainderDate);
   }
 
   @Override
   public List<String> getDollarAxisForGraph(List<Double> valuations, int length) {
-    return null;
+    log.append(valuations.toString()).append("\n");
+    log.append(length).append("||");
+    return testModel.getDollarAxisForGraph(valuations, length);
   }
 
   @Override
   public StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates) {
-    return null;
+    log.append(portfolio.toString()).append("\n");
+    log.append(dates).append("||");
+    return testModel.getValuationForDate(portfolio, dates);
   }
 }

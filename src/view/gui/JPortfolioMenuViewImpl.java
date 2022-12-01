@@ -18,8 +18,8 @@ import controller.gui.JPortfolioController;
  */
 public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView {
 
-  private JPanel mainPanel;
-  private JButton backButton;
+  private final JPanel mainPanel;
+  private final JButton backButton;
   private JButton viewPortfolioButton;
   private JButton performancePortfolioButton;
   private JButton loadPortfolioButton;

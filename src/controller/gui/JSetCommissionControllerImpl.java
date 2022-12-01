@@ -15,7 +15,7 @@ import view.gui.JView;
  */
 
 public class JSetCommissionControllerImpl implements JSetCommissionController {
-  private Model model;
+  private final Model model;
   private User user;
   private JSetCommissionForUserView jSetCommissionForUserView;
   private JPortfolioMenuView jPortfolioMenuView;

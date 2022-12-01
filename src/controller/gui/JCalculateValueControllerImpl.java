@@ -15,7 +15,7 @@ import view.gui.JView;
 
 public class JCalculateValueControllerImpl implements JCalculateValueController {
 
-  private Model model;
+  private final Model model;
   private User user;
   private JCalculateValueView jCalculateValueView;
   private JPortfolioMenuView jPortfolioMenuView;
