@@ -70,7 +70,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel setCommissionLabel = new JLabel();
     setCommissionLabel.setText("Set commission for user");
     JPanel setCommissionButtonPanel = new JPanel();
-    setCommissionButtonPanel.setLayout(new BoxLayout(setCommissionButtonPanel, BoxLayout.LINE_AXIS));
+    setCommissionButtonPanel.setLayout(new BoxLayout(
+            setCommissionButtonPanel, BoxLayout.LINE_AXIS));
     setCommissionButton = new JButton();
     setCommissionButton.setText("Set commission");
     setCommissionButtonPanel.add(setCommissionButton);
@@ -85,7 +86,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel performancePortfolioLabel = new JLabel();
     performancePortfolioLabel.setText("Performance of portfolio:");
     JPanel performancePortfolioButtonPanel = new JPanel();
-    performancePortfolioButtonPanel.setLayout(new BoxLayout(performancePortfolioButtonPanel, BoxLayout.LINE_AXIS));
+    performancePortfolioButtonPanel.setLayout(new BoxLayout(
+            performancePortfolioButtonPanel, BoxLayout.LINE_AXIS));
     performancePortfolioButton = new JButton();
     performancePortfolioButton.setText("Plot performance");
     performancePortfolioButtonPanel.add(performancePortfolioButton);
@@ -100,7 +102,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel viewPortfolioLabel = new JLabel();
     viewPortfolioLabel.setText("Views a portfolio:");
     JPanel viewPortfolioButtonPanel = new JPanel();
-    viewPortfolioButtonPanel.setLayout(new BoxLayout(viewPortfolioButtonPanel, BoxLayout.LINE_AXIS));
+    viewPortfolioButtonPanel.setLayout(new BoxLayout(
+            viewPortfolioButtonPanel, BoxLayout.LINE_AXIS));
     viewPortfolioButton = new JButton();
     viewPortfolioButton.setText("View Portfolio");
     viewPortfolioButtonPanel.add(viewPortfolioButton);
@@ -115,7 +118,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel loadPortfolioLabel = new JLabel();
     loadPortfolioLabel.setText("Loads a portfolio:");
     JPanel loadPortfolioButtonPanel = new JPanel();
-    loadPortfolioButtonPanel.setLayout(new BoxLayout(loadPortfolioButtonPanel, BoxLayout.LINE_AXIS));
+    loadPortfolioButtonPanel.setLayout(new BoxLayout(
+            loadPortfolioButtonPanel, BoxLayout.LINE_AXIS));
     loadPortfolioButton = new JButton();
     loadPortfolioButton.setText("Load Portfolio");
     loadPortfolioButtonPanel.add(loadPortfolioButton);
@@ -130,7 +134,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel costBasisOfPortfolioLabel = new JLabel();
     costBasisOfPortfolioLabel.setText("Cost basis of portfolio:");
     JPanel costBasisOfPortfolioButtonPanel = new JPanel();
-    costBasisOfPortfolioButtonPanel.setLayout(new BoxLayout(costBasisOfPortfolioButtonPanel, BoxLayout.LINE_AXIS));
+    costBasisOfPortfolioButtonPanel.setLayout(
+            new BoxLayout(costBasisOfPortfolioButtonPanel, BoxLayout.LINE_AXIS));
     costBasisOfPortfolioButton = new JButton();
     costBasisOfPortfolioButton.setText("Cost basis of Portfolio");
     costBasisOfPortfolioButtonPanel.add(costBasisOfPortfolioButton);
@@ -145,7 +150,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel createPortfolioLabel = new JLabel();
     createPortfolioLabel.setText("Creates a portfolio:");
     JPanel createPortfolioButtonPanel = new JPanel();
-    createPortfolioButtonPanel.setLayout(new BoxLayout(createPortfolioButtonPanel, BoxLayout.LINE_AXIS));
+    createPortfolioButtonPanel.setLayout(
+            new BoxLayout(createPortfolioButtonPanel, BoxLayout.LINE_AXIS));
     createPortfolioButton = new JButton();
     createPortfolioButton.setText("Create Portfolio");
     createPortfolioButtonPanel.add(createPortfolioButton);
@@ -160,7 +166,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel transactInPortfolioLabel = new JLabel();
     transactInPortfolioLabel.setText("Transacts in portfolio:");
     JPanel transactInPortfolioButtonPanel = new JPanel();
-    transactInPortfolioButtonPanel.setLayout(new BoxLayout(transactInPortfolioButtonPanel, BoxLayout.LINE_AXIS));
+    transactInPortfolioButtonPanel.setLayout(
+            new BoxLayout(transactInPortfolioButtonPanel, BoxLayout.LINE_AXIS));
     transactInPortfolioButton = new JButton();
     transactInPortfolioButton.setText("Buy/Sell in portfolio");
     transactInPortfolioButtonPanel.add(transactInPortfolioButton);
@@ -175,7 +182,8 @@ public class JPortfolioMenuViewImpl extends JFrame implements JPortfolioMenuView
     JLabel valuatePortfolioLabel = new JLabel();
     valuatePortfolioLabel.setText("Valuates a portfolio:");
     JPanel valuatePortfolioButtonPanel = new JPanel();
-    valuatePortfolioButtonPanel.setLayout(new BoxLayout(valuatePortfolioButtonPanel, BoxLayout.LINE_AXIS));
+    valuatePortfolioButtonPanel.setLayout(
+            new BoxLayout(valuatePortfolioButtonPanel, BoxLayout.LINE_AXIS));
     valuatePortfolioButton = new JButton();
     valuatePortfolioButton.setText("Valuate Portfolio");
     valuatePortfolioButtonPanel.add(valuatePortfolioButton);

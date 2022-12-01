@@ -1,15 +1,33 @@
 package view.gui;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import java.awt.Color;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.JTextField;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.JRadioButton;
+import javax.swing.BorderFactory;
+import javax.swing.SwingConstants;
+import javax.swing.ButtonGroup;
 import javax.swing.table.DefaultTableModel;
 
 import controller.gui.JViewPortfolioController;
 
-public class JViewPortfolioViewImpl extends JFrame implements  JViewPortfolioView{
+/**
+ * This class implements the JViewPortfolioView interface and contains the methods to help display
+ * view portfolio menu.
+ */
+public class JViewPortfolioViewImpl extends JFrame implements JViewPortfolioView {
 
   private DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
     @Override
@@ -26,6 +44,9 @@ public class JViewPortfolioViewImpl extends JFrame implements  JViewPortfolioVie
   private JRadioButton[] radioButtons;
   private JLabel outputLabel;
 
+  /**
+   * Constructor for the class to set up the initial view.
+   */
   public JViewPortfolioViewImpl() {
     super("View Portfolio");
     setSize(500, 500);
@@ -39,7 +60,8 @@ public class JViewPortfolioViewImpl extends JFrame implements  JViewPortfolioVie
     mainPanel.add(displayPortfoliosPanel);
     this.placeDateAndButtonPanel();
 
-    portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker", "Stock Name", "Quantity", "Date of purchase"});
+    portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker",
+        "Stock Name", "Quantity", "Date of purchase"});
     JTable portfolioTable = new JTable();
     portfolioTable.setModel(portfolioTableModel);
 
@@ -85,7 +107,7 @@ public class JViewPortfolioViewImpl extends JFrame implements  JViewPortfolioVie
     JPanel radioPanel = new JPanel();
     radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
     radioButtons = new JRadioButton[portfolios.size()];
-    for (int i=0; i< portfolios.size(); i++) {
+    for (int i = 0; i < portfolios.size(); i++) {
       radioButtons[i] = new JRadioButton(portfolios.get(i));
       rGroup.add(radioButtons[i]);
       radioPanel.add(radioButtons[i]);
@@ -122,7 +144,9 @@ public class JViewPortfolioViewImpl extends JFrame implements  JViewPortfolioVie
   @Override
   public void addFeatures(JViewPortfolioController jViewPortfolioController) {
     backButton.addActionListener(evt -> jViewPortfolioController.back());
-    viewPortfolioButton.addActionListener(evt -> jViewPortfolioController.viewPortfolio(dateOfViewing.getText(), this.getSelectedButton()));
+    viewPortfolioButton.addActionListener(
+            evt -> jViewPortfolioController.viewPortfolio(dateOfViewing.getText(),
+                    this.getSelectedButton()));
   }
 
   @Override

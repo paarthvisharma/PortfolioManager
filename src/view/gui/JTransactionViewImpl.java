@@ -1,19 +1,41 @@
 package view.gui;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.JRadioButton;
+import javax.swing.BorderFactory;
+import javax.swing.JTable;
+import javax.swing.ButtonGroup;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import controller.gui.JTransactionController;
 
+/**
+ * This class implements the JTransactionView interface and contains the methods to help display
+ * Transaction menu.
+ */
 public class JTransactionViewImpl extends JFrame implements JTransactionView {
 
   private DefaultTableModel portfolioTableModel = new DefaultTableModel(0, 0) {
@@ -47,6 +69,9 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
   private JButton loadPortfolio;
   private JButton addToDCA;
 
+  /**
+   * Constructor for the class to set up the initial view.
+   */
   public JTransactionViewImpl() {
     super("Transact in Portfolio");
     setSize(500, 500);
@@ -101,9 +126,11 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
   private void placeDCAPanel() {
     dollarCostAveragingPanel = new JPanel();
     dollarCostAveragingPanel.setBorder(BorderFactory.createTitledBorder("Dollar Cost Averaging"));
-    dollarCostAveragingPanel.setLayout(new BoxLayout(dollarCostAveragingPanel, BoxLayout.PAGE_AXIS));
+    dollarCostAveragingPanel.setLayout(
+            new BoxLayout(dollarCostAveragingPanel, BoxLayout.PAGE_AXIS));
 
-    portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker", "Stock Name", "Quantity", "Weight %"});
+    portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker",
+       "Stock Name", "Quantity", "Weight %"});
     JTable portfolioTable = new JTable();
     portfolioTable.setModel(portfolioTableModel);
     dollarCostAveragingPanel.add(new JScrollPane(portfolioTable));
@@ -229,30 +256,41 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
 
   @Override
   public void addFeatures(JTransactionController jTransactionController) {
-    buyButton.addActionListener(evt -> jTransactionController.buyStock(tickerField.getText(), quantityField.getText(), dateField.getText()));
-    sellButton.addActionListener(evt -> jTransactionController.sellStock(tickerField.getText(), quantityField.getText(), dateField.getText()));
-//    addPlan.addActionListener(evt -> jTransactionController.createDCAPlan(startDate.getText(),
-//            endDate.getText(), interval.getText(), dollarAmount.getText(),
-//            commissionAmount.getText()));
-    addPlan.addActionListener(evt -> jTransactionController.createDCAPlan(this.getDCASettings(), getTableData()));
-    selectBuySell.addActionListener(evt -> jTransactionController.displayBuySellView());
-    selectDollarCostSaving.addActionListener((evt -> jTransactionController.displayDCAView()));
-    backButton.addActionListener(evt -> jTransactionController.back());
-    loadPortfolio.addActionListener(evt -> jTransactionController.selectPortfolioTransaction(getSelectedButton()));
-    addToDCA.addActionListener((evt -> jTransactionController.addNewStockToDCATable(tickerFieldForDCA.getText())));
+    buyButton.addActionListener(
+        evt -> jTransactionController.buyStock(
+                    tickerField.getText(), quantityField.getText(), dateField.getText()));
+    sellButton.addActionListener(
+        evt -> jTransactionController.sellStock(
+                    tickerField.getText(), quantityField.getText(), dateField.getText()));
+    //    addPlan.addActionListener(evt -> jTransactionController.createDCAPlan(startDate.getText(),
+    //            endDate.getText(), interval.getText(), dollarAmount.getText(),
+    //            commissionAmount.getText()));
+    addPlan.addActionListener(
+        evt -> jTransactionController.createDCAPlan(this.getDCASettings(), getTableData()));
+    selectBuySell.addActionListener(
+        evt -> jTransactionController.displayBuySellView());
+    selectDollarCostSaving.addActionListener((
+        evt -> jTransactionController.displayDCAView()));
+    backButton.addActionListener(
+        evt -> jTransactionController.back());
+    loadPortfolio.addActionListener(
+        evt -> jTransactionController.selectPortfolioTransaction(getSelectedButton()));
+    addToDCA.addActionListener((
+        evt -> jTransactionController.addNewStockToDCATable(tickerFieldForDCA.getText())));
     portfolioTableModel.addTableModelListener(new TableModelListener() {
       @Override
       public void tableChanged(TableModelEvent e) {
         ArrayList<String> weightsColumn = new ArrayList<>();
-        for (int i=0; i < portfolioTableModel.getRowCount(); i++) {
+        for (int i = 0; i < portfolioTableModel.getRowCount(); i++) {
           weightsColumn.add(String.valueOf(portfolioTableModel.getValueAt(i, 3)));
         }
         jTransactionController.monitorTable(weightsColumn);
       }
     });
-//    for (JRadioButton r : radioButtons) {
-//      r.addActionListener(evt -> jTransactionController.selectPortfolioTransaction(r.getName()));
-//    }
+    //    for (JRadioButton r : radioButtons) {
+    //      r.addActionListener(
+    //      evt -> jTransactionController.selectPortfolioTransaction(r.getName()));
+    //    }
   }
 
   @Override
@@ -272,9 +310,9 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
 
   @Override
   public void clearTable() {
-//    for (int i = 0; i < portfolioTableModel.getRowCount(); i++) {
-//      portfolioTableModel.removeRow(i);
-//    }
+    //    for (int i = 0; i < portfolioTableModel.getRowCount(); i++) {
+    //      portfolioTableModel.removeRow(i);
+    //    }
     portfolioTableModel.setRowCount(0);
   }
 
@@ -328,9 +366,9 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
 
   private java.util.List<java.util.List<String>> getTableData() {
     java.util.List<java.util.List<String>> tableData = new ArrayList<>();
-    for (int i=0; i < portfolioTableModel.getRowCount(); i++) {
+    for (int i = 0; i < portfolioTableModel.getRowCount(); i++) {
       List<String> row = new ArrayList<>();
-      for (int j=0; j < portfolioTableModel.getColumnCount(); j++) {
+      for (int j = 0; j < portfolioTableModel.getColumnCount(); j++) {
         row.add(String.valueOf(portfolioTableModel.getValueAt(i, j)));
       }
       tableData.add(row);
@@ -355,7 +393,7 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
     JPanel radioPanel = new JPanel();
     radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
     radioButtons = new JRadioButton[portfolios.size()];
-    for (int i=0; i< portfolios.size(); i++) {
+    for (int i = 0; i < portfolios.size(); i++) {
       radioButtons[i] = new JRadioButton(portfolios.get(i));
       rGroup.add(radioButtons[i]);
       radioPanel.add(radioButtons[i]);

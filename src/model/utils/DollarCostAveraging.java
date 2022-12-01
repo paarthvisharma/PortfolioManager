@@ -5,7 +5,10 @@ import java.util.List;
 
 import static model.utils.Utils.validateForLegalDate;
 
-public class dollarCostAveraging {
+/**
+ * Class to incorporate the dollar cost averaging feature into the stock program.
+ */
+public class DollarCostAveraging {
 
   private String startDate;
   private String endDate;
@@ -13,11 +16,11 @@ public class dollarCostAveraging {
   private int interval;
   private double dollarAmount;
   private double commission;
-  private List<List<String>> DCAData;
+  private List<List<String>> dcaData;
 
-  public dollarCostAveraging(String startDate, String endDate, String interval,
+  public DollarCostAveraging(String startDate, String endDate, String interval,
                              String dollarAmount, String commission,
-                             List<List<String>> DCAData, String lastTransaction) {
+                             List<List<String>> dcaData, String lastTransaction) {
 
     validateForLegalDate(startDate);
     this.startDate = startDate;
@@ -26,11 +29,11 @@ public class dollarCostAveraging {
     this.interval = Integer.parseInt(interval);
     this.dollarAmount = Double.parseDouble(dollarAmount);
     this.commission = Double.parseDouble(commission);
-    this.DCAData = DCAData;
+    this.dcaData = dcaData;
     this.lastTransaction = lastTransaction;
   }
 
-  public dollarCostAveraging(String plan) {
+  public DollarCostAveraging(String plan) {
     String[] splitPlan = plan.split(",");
     validateForLegalDate(splitPlan[0]);
     this.startDate = splitPlan[0];
@@ -39,12 +42,13 @@ public class dollarCostAveraging {
     this.interval = Integer.parseInt(splitPlan[2]);
     this.dollarAmount = Double.parseDouble(splitPlan[3]);
     this.commission = Double.parseDouble(splitPlan[4]);
-    this.DCAData = new ArrayList<>();
-    for (String stockData: splitPlan[5].substring(1, splitPlan[5].length() - 1).split("\\|\\|")) {
+    this.dcaData = new ArrayList<>();
+    for (String stockData : splitPlan[5].substring(
+            1, splitPlan[5].length() - 1).split("\\|\\|")) {
       List<String> individualStock = new ArrayList<>();
       individualStock.add(stockData.split("\\|")[0]);
       individualStock.add(stockData.split("\\|")[1]);
-      this.DCAData.add(individualStock);
+      this.dcaData.add(individualStock);
     }
     this.lastTransaction = splitPlan[6];
   }
@@ -65,8 +69,8 @@ public class dollarCostAveraging {
     return dollarAmount;
   }
 
-  public List<List<String>> getDCAData() {
-    return DCAData;
+  public List<List<String>> getDcaData() {
+    return dcaData;
   }
 
   public double getCommission() {
@@ -89,7 +93,7 @@ public class dollarCostAveraging {
     toReturn.append(interval).append(",");
     toReturn.append(dollarAmount).append(",");
     toReturn.append(commission).append(",");
-    for (List<String> stockDetails: DCAData) {
+    for (List<String> stockDetails : dcaData) {
       toReturn.append("|").append(stockDetails.get(0)).append("|");
       toReturn.append(stockDetails.get(3)).append("|");
     }

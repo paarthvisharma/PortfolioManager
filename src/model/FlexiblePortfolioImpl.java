@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
-import model.utils.dollarCostAveraging;
+import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 import model.utils.XmlFormat;
@@ -43,7 +43,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
   private final String portfolioPath;
   private double commission;
 
-  private List<dollarCostAveraging> dcaPlans = new ArrayList<>();
+  private List<DollarCostAveraging> dcaPlans = new ArrayList<>();
 
   /**
    * This is the constructor for FlexiblePortfolioImpl. An Instance of flexible portfolio
@@ -67,18 +67,18 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
   }
 
   @Override
-  public void addDCAPlan(dollarCostAveraging dca) {
+  public void addDCAPlan(DollarCostAveraging dca) {
     dcaPlans.add(dca);
     this.executeDCAPlan(dca);
   }
 
   @Override
-  public List<dollarCostAveraging> getDcaPlans() {
+  public List<DollarCostAveraging> getDcaPlans() {
     return this.dcaPlans;
   }
 
   @Override
-  public void executeDCAPlan(dollarCostAveraging dca) {
+  public void executeDCAPlan(DollarCostAveraging dca) {
     try {
       String cDate = getPresentDate();
       String eDate = dca.getEndDate();
@@ -119,11 +119,11 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
     }
   }
 
-  private void executeDCAPlanInstance(dollarCostAveraging dca, String date) throws IOException {
+  private void executeDCAPlanInstance(DollarCostAveraging dca, String date) throws IOException {
     double portfolioCommission = this.commission;
-    this.commission = dca.getCommission() / dca.getDCAData().size();
+    this.commission = dca.getCommission() / dca.getDcaData().size();
     double investibleAmount = dca.getDollarAmount() - dca.getCommission();
-    for (List<String> stockData: dca.getDCAData()) {
+    for (List<String> stockData: dca.getDcaData()) {
       this.buyStock(stockData.get(0), date,
               (investibleAmount * Double.parseDouble(stockData.get(3)) / 100)
                       / getValueOnDateForStock(stockData.get(0), date));
@@ -257,7 +257,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
     toReturn.append("\t".repeat(lTabs)).append("</stocks>\n");
     toReturn.append("\t".repeat(lTabs)).append(("<plans>\n"));
     lTabs += 1;
-    for (dollarCostAveraging dcaPlan: this.dcaPlans) {
+    for (DollarCostAveraging dcaPlan: this.dcaPlans) {
       toReturn.append("\t".repeat(lTabs)).append("<dcaPlan>").append(dcaPlan.toString());
       toReturn.append("</dcaPlan>\n");
     }

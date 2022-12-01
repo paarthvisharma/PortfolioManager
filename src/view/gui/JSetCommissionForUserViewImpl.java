@@ -1,11 +1,25 @@
 package view.gui;
 
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
+
 
 import controller.gui.JSetCommissionController;
 
+/**
+ * This class implements the JSetCommissionForUserView interface and contains the methods
+ * to help display Set Commission menu.
+ */
 public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommissionForUserView {
 
   private JPanel mainPanel;
@@ -15,7 +29,10 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
 
   private JTextArea commissionAmount;
 
-  public JSetCommissionForUserViewImpl(){
+  /**
+   * Constructor for the class to set up the initial view.
+   */
+  public JSetCommissionForUserViewImpl() {
     super();
     setTitle("Set Commission");
     setSize(400, 400);
@@ -24,7 +41,7 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
     this.setTopMostPanel();
     this.inputCommissionPanel();
     this.buttonPanel();
-//    this.placeLogOutput();
+    //    this.placeLogOutput();
     this.logOutputPanel();
   }
 
@@ -42,7 +59,7 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
     mainPanel.add(topMostPanel);
   }
 
-  private void inputCommissionPanel(){
+  private void inputCommissionPanel() {
     JPanel inputCommissionPanel = new JPanel();
     inputCommissionPanel.setLayout(new GridLayout(1, 1, 2, 0));
     commissionAmount = new JTextArea(1, 20);
@@ -52,16 +69,16 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
     mainPanel.add(inputCommissionPanel);
   }
 
-//  private void placeLogOutput(){
-//    JPanel outputPanel = new JPanel();
-//    outputPanel.setBorder(BorderFactory.createTitledBorder("Output of operation performed"));
-//    outputLabel = new JLabel();
-//    outputPanel.add(outputLabel);
-//    mainPanel.add(outputPanel);
-//    add(mainPanel);
-//  }
+  //  private void placeLogOutput(){
+  //    JPanel outputPanel = new JPanel();
+  //    outputPanel.setBorder(BorderFactory.createTitledBorder("Output of operation performed"));
+  //    outputLabel = new JLabel();
+  //    outputPanel.add(outputLabel);
+  //    mainPanel.add(outputPanel);
+  //    add(mainPanel);
+  //  }
 
-  private void buttonPanel(){
+  private void buttonPanel() {
 
     JPanel buttonPanel = new JPanel();
     buttonPanel.setLayout(new GridLayout(1, 1, 2, 2));
@@ -103,7 +120,7 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
   private void logOutputPanel() {
     JPanel outputLog = new JPanel();
     outputLabel = new JLabel();
-    outputLabel.setText("The current value for commission is set to $1." );
+    outputLabel.setText("The current value for commission is set to $1.");
     outputLog.setBorder(BorderFactory.createTitledBorder("Output Logs"));
     outputLog.add(outputLabel);
     mainPanel.add(outputLog);
@@ -112,7 +129,7 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
 
   @Override
   public void setInitialMessage(double commission) {
-    setLogOutput("The current value for commission is $" + commission );
+    setLogOutput("The current value for commission is $" + commission);
   }
 
   @Override

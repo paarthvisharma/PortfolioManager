@@ -1,6 +1,7 @@
 package view.gui;
 
-import java.awt.*;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,7 +76,7 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     this.placeDollarCostAveragingPanel();
     this.placeLogsPanel();
     add(mainPanel);
-//    pack();
+    //    pack();
   }
 
   private void placePortfolioNamePanel() {
@@ -124,8 +125,8 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     JPanel stocksPanel = new JPanel();
     stocksPanel.setLayout(new BoxLayout(stocksPanel, BoxLayout.PAGE_AXIS));
     stocksPanel.add(individualStockPanel);
-    portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker", "Quantity", "Date of purchase",
-            "Weight %"});
+    portfolioTableModel.setColumnIdentifiers(
+            new String[]{"Ticker", "Quantity", "Date of purchase", "Weight %"});
     JTable portfolioTable = new JTable();
 
     portfolioTable.setModel(portfolioTableModel);
@@ -207,10 +208,15 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
 
   @Override
   public void addFeatures(JCreatePortfolioController jCreatePortfolioController) {
-    addStock.addActionListener(evt -> jCreatePortfolioController.addStock(stockTicker.getText(), stockQuantity.getText(), purchaseDate.getText()));
+    addStock.addActionListener(
+        evt -> jCreatePortfolioController.addStock(stockTicker.getText(),
+              stockQuantity.getText(), purchaseDate.getText()));
     backButton.addActionListener(evt -> jCreatePortfolioController.back());
-    createPortfolio.addActionListener(evt -> jCreatePortfolioController.createPortfolio(portfolioName.getText(), this.getDCASettings(), getTableData()));
-    addToDCA.addActionListener(evt -> jCreatePortfolioController.addStockForDCA(tickerFieldForDCA.getText()));
+    createPortfolio.addActionListener(
+        evt -> jCreatePortfolioController.createPortfolio(portfolioName.getText(),
+                    this.getDCASettings(), getTableData()));
+    addToDCA.addActionListener(
+        evt -> jCreatePortfolioController.addStockForDCA(tickerFieldForDCA.getText()));
     portfolioTableModel.addTableModelListener(new TableModelListener() {
       @Override
       public void tableChanged(TableModelEvent e) {

@@ -285,10 +285,10 @@ public class ModelTests {
     assertEquals(1, createdUser.statusCode);
     assertEquals("Created user successfully with UserId:1 with name as Paarthvi 05%",
             createdUser.statusMessage);
-    String toAssert = "First Name: Paarthvi\n" +
-            "Last Name: 05%\n" +
-            "List of Rigid Portfolios:\n" +
-            "List of Flexible Portfolios:\n";
+    String toAssert = "First Name: Paarthvi\n"
+            + "Last Name: 05%\n"
+            + "List of Rigid Portfolios:\n"
+            + "List of Flexible Portfolios:\n";
     assertEquals(toAssert, createdUser.returnedObject.toString());
   }
 

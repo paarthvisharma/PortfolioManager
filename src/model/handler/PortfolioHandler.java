@@ -22,7 +22,7 @@ import model.builder.UserBuilder;
 import utils.Utils;
 
 /**
- * A UserHandler class which is used to load the already present
+ * A PortfolioHandler class which is used to load the already present portfolio
  * XML files into the StockProgram. The user can load a portfolio directly and
  * this operation is processed by methods provided in this class.
  */
@@ -61,6 +61,11 @@ public class PortfolioHandler extends DefaultHandler {
     this.userId = userId;
   }
 
+  /**
+   * Method to get portfolio.
+   *
+   * @return returns a map.
+   */
   public Map<String, Portfolio> getPortfolio() {
     HashMap<String, Portfolio> toReturn = new HashMap<>();
     toReturn.put("rigidPortfolio", rigidPortfolio);

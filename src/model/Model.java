@@ -216,8 +216,7 @@ public interface Model {
    *
    * @param portfolio    an object of type portfolio.
    * @param transactions transaction values.
-   * @return returns StatusObject containing the statusMessage, statusCode
-   * and the priority queue object.
+   * @return returns StatusObject containing the statusMessage, statusCode and the queue object.
    */
   StatusObject<PriorityQueue<Transaction>> getValidatedTransactions(
           FlexiblePortfolio portfolio, PriorityQueue<Transaction> transactions);
@@ -309,8 +308,7 @@ public interface Model {
    * @param portfolio an object of type portfolio.
    * @param startDate start date string.
    * @param endDate   end date string.
-   * @return returns StatusObject containing the statusMessage,
-   * statusCode and the string.
+   * @return returns StatusObject containing the statusMessage, statusCode and the string.
    */
   StatusObject<String> performanceOfPortfolioOverTime(User user, Portfolio portfolio,
                                                       String startDate, String endDate);

@@ -1,13 +1,30 @@
 package view.gui;
 
-import java.awt.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.*;
+import java.awt.FlowLayout;
+import java.awt.Color;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import javax.swing.JRadioButton;
+import javax.swing.BorderFactory;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.ButtonGroup;
+import javax.swing.JScrollPane;
 
 import controller.gui.JPerformanceController;
 
+/**
+ * This class implements the JPerformanceView interface and contains the methods to help display
+ * performance menu.
+ */
 public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
   private JPanel mainPanel;
   private JPanel displayPortfoliosPanel;
@@ -19,8 +36,9 @@ public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
   private JTextField endDate;
   private JLabel outputLabel;
 
-
-
+  /**
+   * Constructor for the class to set up the initial view.
+   */
   public JPerformanceViewImpl() {
     super("Performance of portfolio");
     setSize(500, 500);
@@ -91,8 +109,10 @@ public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
   @Override
   public void addFeatures(JPerformanceController jPerformanceController) {
     backButton.addActionListener(evt -> jPerformanceController.back());
-    loadPortfolio.addActionListener(evt -> jPerformanceController.selectPortfolio(getSelectedButton()));
-    plotGraph.addActionListener(evt -> jPerformanceController.plotGraph(startDate.getText(), endDate.getText()));
+    loadPortfolio.addActionListener(
+        evt -> jPerformanceController.selectPortfolio(getSelectedButton()));
+    plotGraph.addActionListener(
+        evt -> jPerformanceController.plotGraph(startDate.getText(), endDate.getText()));
   }
 
   @Override
@@ -102,12 +122,13 @@ public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
 
   private void selectPortfolioPanel(String portfoliosText) {
     displayPortfoliosPanel.removeAll();
-    ArrayList<String> portfolios = new ArrayList<>(Arrays.asList(portfoliosText.split("\n")));
+    ArrayList<String> portfolios = new ArrayList<>(
+            Arrays.asList(portfoliosText.split("\n")));
     ButtonGroup rGroup = new ButtonGroup();
     JPanel radioPanel = new JPanel();
     radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
     radioButtons = new JRadioButton[portfolios.size()];
-    for (int i=0; i< portfolios.size(); i++) {
+    for (int i = 0; i < portfolios.size(); i++) {
       radioButtons[i] = new JRadioButton(portfolios.get(i));
       rGroup.add(radioButtons[i]);
       radioPanel.add(radioButtons[i]);
@@ -125,8 +146,8 @@ public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
 
   @Override
   public void clearUserInputs() {
-//    startDate.setText("");
-//    endDate.setText("");
+    //    startDate.setText("");
+    //    endDate.setText("");
   }
 
   @Override

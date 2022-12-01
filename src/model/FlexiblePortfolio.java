@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.PriorityQueue;
 
-import model.utils.dollarCostAveraging;
+import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 
@@ -20,21 +20,21 @@ public interface FlexiblePortfolio extends Portfolio {
    *
    * @param dca object of type dollarCostAveraging.
    */
-  void addDCAPlan(dollarCostAveraging dca);
+  void addDCAPlan(DollarCostAveraging dca);
 
   /**
    * Method to get dollar cost averaging plan.
    *
    * @return list of plans.
    */
-  List<dollarCostAveraging> getDcaPlans();
+  List<DollarCostAveraging> getDcaPlans();
 
   /**
    * Method to add dollar cost averaging plan.
    *
    * @param dca object of type dollarCostAveraging.
    */
-  void executeDCAPlan(dollarCostAveraging dca);
+  void executeDCAPlan(DollarCostAveraging dca);
 
   /**
    * Method to set commission.

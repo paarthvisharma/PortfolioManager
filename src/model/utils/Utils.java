@@ -247,6 +247,11 @@ public class Utils {
     }
   }
 
+  /**
+   * Method to validate for stock quantity.
+   *
+   * @param number of stocks provided.
+   */
   public static void validateForPositiveDouble(double number) {
     if (number < 0) {
       throw new IllegalArgumentException("The stock quantity should be a positive number.");
@@ -276,12 +281,21 @@ public class Utils {
     throw new IllegalArgumentException("The stock ticker is invalid.");
   }
 
+  /**
+   * Method to get the present date.
+   */
   public static String getPresentDate() {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDateTime now = LocalDateTime.now();
     return dtf.format(now);
   }
 
+  /**
+   * Method to increment the date by a certain number.
+   *
+   * @param date            string value.
+   * @param incrementNumber amount to be incremented.
+   */
   public static String incrementDate(String date, int incrementNumber) throws ParseException {
     SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
     Calendar c = Calendar.getInstance();
@@ -290,7 +304,14 @@ public class Utils {
     return dateParser.format(c.getTime());
   }
 
-  public static Map<Double, Integer> getDaysMappingAscending(String startDate, String endDate) throws ParseException {
+  /**
+   * Method to get the days mapping.
+   *
+   * @param startDate start date string.
+   * @param endDate   end date string.
+   */
+  public static Map<Double, Integer> getDaysMappingAscending(
+          String startDate, String endDate) throws ParseException {
     validateForLegalDate(startDate);
     validateForLegalDate(endDate);
     SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
@@ -316,7 +337,11 @@ public class Utils {
     return daysMappingAscending;
   }
 
-  public static Map<String, Double> getNumberOfSticksAndTimeMultiple(Map<Double, Integer> daysMappingAscending, String startDate) throws ParseException {
+  /**
+   * Method to generate graph sticks.
+   */
+  public static Map<String, Double> getNumberOfSticksAndTimeMultiple(
+          Map<Double, Integer> daysMappingAscending, String startDate) throws ParseException {
     HashMap<String, Double> toReturn = new HashMap<>();
     validateForLegalDate(startDate);
     SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
@@ -333,6 +358,9 @@ public class Utils {
     return toReturn;
   }
 
+  /**
+   * Method to generate dates.
+   */
   public static List<String> generateDates(
           double numberOfSticks, int timeMultiple, String startDate, String endDate,
           boolean includeRemainderDate) throws ParseException {
@@ -353,7 +381,16 @@ public class Utils {
     return valuesForDates;
   }
 
-  public static List<Double> getPortfolioValuationsForDates(Portfolio portfolio, List<String> dates) throws FileNotFoundException, ParseException {
+  /**
+   * Method to get the valuation on mentioned dates.
+   *
+   * @param portfolio an object of type Portfolio.
+   * @param dates     list of date strings.
+   * @throws FileNotFoundException in case of missing file.
+   * @throws ParseException        in case of parsing errors.
+   */
+  public static List<Double> getPortfolioValuationsForDates(
+          Portfolio portfolio, List<String> dates) throws FileNotFoundException, ParseException {
     List<Double> valuations = new ArrayList<>();
     for (String date : dates) {
       valuations.add(portfolio.getValueForDate(date));

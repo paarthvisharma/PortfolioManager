@@ -23,7 +23,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import model.handler.PortfolioHandler;
 import model.handler.UserHandler;
-import model.utils.dollarCostAveraging;
+import model.utils.DollarCostAveraging;
 import model.utils.StatusObject;
 import model.utils.Transaction;
 import model.utils.Utils;
@@ -316,7 +316,7 @@ public class ModelImpl implements Model {
       for (FlexiblePortfolio portfolio : user.getListOfFlexiblePortfolios()) {
         if (portfolio.getPortfolioId() == portfolioId) {
           toReturn = portfolio;
-          for (dollarCostAveraging dca : portfolio.getDcaPlans()) {
+          for (DollarCostAveraging dca : portfolio.getDcaPlans()) {
             portfolio.executeDCAPlan(dca);
           }
           break;
@@ -353,8 +353,8 @@ public class ModelImpl implements Model {
         return new StatusObject<>("Commission amount cannot be negative",
                 -1, null);
       }
-      dollarCostAveraging toReturn =
-              new dollarCostAveraging(startDate, endDate, interval, dollarAmount,
+      DollarCostAveraging toReturn =
+              new DollarCostAveraging(startDate, endDate, interval, dollarAmount,
                       commission, dcaData, "");
       portfolio.addDCAPlan(toReturn);
       return new StatusObject<>("Successfully created DCA",
@@ -675,8 +675,8 @@ public class ModelImpl implements Model {
   public StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates) {
     try {
       List<Double> toReturn = getPortfolioValuationsForDates(portfolio, dates);
-  //      double mini = Collections.min(toReturn);
-  //      toReturn = toReturn.stream().map(i -> i - mini).collect(Collectors.toList());
+    //      double mini = Collections.min(toReturn);
+    //      toReturn = toReturn.stream().map(i -> i - mini).collect(Collectors.toList());
       return new StatusObject<>("Fetched portfolio values", 1, toReturn);
     } catch (FileNotFoundException | ParseException e) {
       return new StatusObject<>(e.getMessage(), -1, null);

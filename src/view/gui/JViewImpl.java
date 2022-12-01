@@ -1,5 +1,9 @@
 package view.gui;
 
+/**
+ * This class implements the JView interface and contains the methods to help set up
+ * main view.
+ */
 public class JViewImpl implements JView {
 
   private JCreateUserView createUserView;
@@ -14,7 +18,9 @@ public class JViewImpl implements JView {
 
   private JPerformanceView performanceView;
 
-
+  /**
+   * Constructor for the class to set up the initial view.
+   */
   public JViewImpl() {
     createUserView = new JCreateUserViewImpl();
     portfolioMenuView = new JPortfolioMenuViewImpl();
@@ -50,7 +56,7 @@ public class JViewImpl implements JView {
 
   @Override
   public JCalculateCostBasisView getCalculateCostBasisView() {
-    return calculateCostBasisView ;
+    return calculateCostBasisView;
   }
 
   @Override
@@ -69,7 +75,7 @@ public class JViewImpl implements JView {
   }
 
   @Override
-  public JSetCommissionForUserView getCommissionView(){
+  public JSetCommissionForUserView getCommissionView() {
     return commissionView;
   }
 

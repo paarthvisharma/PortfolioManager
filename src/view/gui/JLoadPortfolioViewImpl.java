@@ -19,13 +19,12 @@ import javax.swing.JFileChooser;
 import javax.swing.BorderFactory;
 import javax.swing.SwingConstants;
 
+import controller.gui.JLoadPortfolioController;
+
 /**
  * This class implements the JLoadPortfolioView interface and contains the methods to help display
  * load portfolio menu.
  */
-
-import controller.gui.JLoadPortfolioController;
-
 public class JLoadPortfolioViewImpl extends JFrame implements JLoadPortfolioView, ActionListener {
 
   private JPanel mainPanel;
@@ -70,7 +69,7 @@ public class JLoadPortfolioViewImpl extends JFrame implements JLoadPortfolioView
     loadPortfolioPanel.setLayout(new GridLayout(2, 1, 2, 2));
 
     JPanel filePathPanel = new JPanel();
-//    filePathPanel.setLayout(new GridLayout(1, 2, 2, 2));
+    //    filePathPanel.setLayout(new GridLayout(1, 2, 2, 2));
 
     JPanel fileOpenButtonPanel = new JPanel();
     fileOpenButtonPanel.setLayout(new BoxLayout(fileOpenButtonPanel, BoxLayout.PAGE_AXIS));
@@ -100,7 +99,7 @@ public class JLoadPortfolioViewImpl extends JFrame implements JLoadPortfolioView
 
   private void logOutputPanel() {
     JPanel outputLog = new JPanel();
-//    outputLog.setLayout(new BoxLayout(outputLog, BoxLayout.PAGE_AXIS));
+    //    outputLog.setLayout(new BoxLayout(outputLog, BoxLayout.PAGE_AXIS));
     logOutput = new JLabel();
     logOutput.setText("The output of each function will be shown here");
     outputLog.setBorder(BorderFactory.createTitledBorder("Output Logs"));
