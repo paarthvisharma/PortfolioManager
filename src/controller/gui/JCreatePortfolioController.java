@@ -190,6 +190,7 @@ public class JCreatePortfolioController {
    */
   public void addStockForDCA(String ticker) {
     if (model.validateTicker(ticker.trim())) {
+      model.downLoadStockData(ticker);
       this.createPortfolioView.addRowToTable(new String[]{ticker.trim().toLowerCase(), "", ""});
     } else {
       this.createPortfolioView.setFailureOutput("Ticker is not valid");
