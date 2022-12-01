@@ -87,7 +87,8 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
       if (dca.getLastTransaction().equals("") & compareDates(cDate, sDate) < 0) {
         return;
       }
-      if ((compareDates(cDate, eDate) >= 0 & !dca.getLastTransaction().equals("")) | compareDates(cDate, sDate) < 0) {
+      if ((compareDates(cDate, eDate) >= 0 & !dca.getLastTransaction().equals(""))
+              | compareDates(cDate, sDate) < 0) {
         return;
       }
       if (dca.getLastTransaction().equals("") & compareDates(cDate, sDate) == 0) {
@@ -165,26 +166,26 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
     Map<String, Double> stockTrack = new HashMap<>();
     while (!transactions.isEmpty()) {
       Transaction t = transactions.poll();
-      if (stockTrack.containsKey(t.ticker)) {
-        if (t.type.equalsIgnoreCase("BUY")) {
-          stockTrack.put(t.ticker, t.quantity + stockTrack.get(t.ticker));
-        } else if (t.type.equalsIgnoreCase("SELL")) {
-          if (stockTrack.get(t.ticker) - t.quantity >= 0) {
-            stockTrack.put(t.ticker, stockTrack.get(t.ticker) - t.quantity);
+      if (stockTrack.containsKey(t.getTicker())) {
+        if (t.getType().equalsIgnoreCase("BUY")) {
+          stockTrack.put(t.getTicker(), t.getQuantity() + stockTrack.get(t.getTicker()));
+        } else if (t.getType().equalsIgnoreCase("SELL")) {
+          if (stockTrack.get(t.getTicker()) - t.getQuantity() >= 0) {
+            stockTrack.put(t.getTicker(), stockTrack.get(t.getTicker()) - t.getQuantity());
           } else {
             valid = false;
             break;
           }
         }
       } else {
-        if (t.type.equalsIgnoreCase("BUY")) {
-          stockTrack.put(t.ticker, t.quantity);
+        if (t.getType().equalsIgnoreCase("BUY")) {
+          stockTrack.put(t.getTicker(), t.getQuantity());
         } else {
           valid = false;
           break;
         }
       }
-      if (!t.completed) {
+      if (!t.isCompleted()) {
         validTransactions.add(t);
       }
     }

@@ -8,9 +8,19 @@ import model.FlexiblePortfolio;
 import model.Model;
 import model.utils.StatusObject;
 
+/**
+ * Class containing static methods to help with GUI's controller functionality.
+ */
 public class GUIControllerHelper {
 
-  static void processDCACreationHelper(FlexiblePortfolio portfolio, Map<String,
+  /**
+   * Creates dollar cost averaging plan in the mentioned portfolio.
+   * @param portfolio - Portfolio into which DCA plan is to be implemented.
+   * @param dcaSetting - Map containing of startDate, endDate, interval, commission, dollarAmount.
+   * @param tableData - Table data indicating the weight for stocks chosen for the DCA plan.
+   * @param model - Model instance to access other Model methods.
+   */
+  public static void processDCACreationHelper(FlexiblePortfolio portfolio, Map<String,
           String> dcaSetting, List<List<String>> tableData, Model model) {
     try {
       if (dcaSetting.get("startDate").equals("")) {

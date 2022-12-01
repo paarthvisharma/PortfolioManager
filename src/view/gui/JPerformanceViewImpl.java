@@ -146,8 +146,8 @@ public class JPerformanceViewImpl extends JFrame implements JPerformanceView {
 
   @Override
   public void clearUserInputs() {
-        startDate.setText("");
-        endDate.setText("");
+    startDate.setText("");
+    endDate.setText("");
   }
 
   @Override

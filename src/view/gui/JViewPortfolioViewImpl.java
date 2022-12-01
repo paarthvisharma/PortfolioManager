@@ -187,8 +187,6 @@ public class JViewPortfolioViewImpl extends JFrame implements JViewPortfolioView
 
   @Override
   public void clearTable() {
-    for (int i = 0; i < portfolioTableModel.getRowCount(); i++) {
-      portfolioTableModel.removeRow(i);
-    }
+    portfolioTableModel.setRowCount(0);
   }
 }

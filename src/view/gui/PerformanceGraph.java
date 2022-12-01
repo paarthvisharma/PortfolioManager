@@ -134,7 +134,7 @@ public class PerformanceGraph extends JPanel {
    * Method to plot thr graph.
    */
   public void plot() {
-    JFrame frame = new JFrame();
+    JFrame frame = new JFrame("Performance of portfolio over time");
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.add(new PerformanceGraph(xyCoordinates, dates, dollarAmounts));
     frame.setSize(800, 800);

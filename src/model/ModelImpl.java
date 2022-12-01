@@ -93,7 +93,8 @@ public class ModelImpl implements Model {
               + createdUser.getUserId()
               + " with name as "
               + createdUser.getFirstName()
-              + " " + createdUser.getLastName(), 1,
+              + " " + createdUser.getLastName() + " commission is set to "
+              + createdUser.getCommission(), 1,
               createdUser);
     } catch (Exception e) {
       return new StatusObject<>("User could not be created due to error: "
@@ -676,8 +677,6 @@ public class ModelImpl implements Model {
   public StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates) {
     try {
       List<Double> toReturn = getPortfolioValuationsForDates(portfolio, dates);
-      //      double mini = Collections.min(toReturn);
-      //      toReturn = toReturn.stream().map(i -> i - mini).collect(Collectors.toList());
       return new StatusObject<>("Fetched portfolio values", 1, toReturn);
     } catch (FileNotFoundException | ParseException e) {
       return new StatusObject<>(e.getMessage(), -1, null);

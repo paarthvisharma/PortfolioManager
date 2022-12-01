@@ -281,8 +281,8 @@ public class JCreatePortfolioViewImpl extends JFrame implements JCreatePortfolio
     stockTicker.setText("");
     stockQuantity.setText("");
     purchaseDate.setText("");
-    startDate.setText("");
-    endDate.setText("");
+    startDate.setText("YYYY-MM-DD");
+    endDate.setText("YYYY-MM-DD");
     interval.setText("");
     dollarAmount.setText("");
     portfolioName.setText("");

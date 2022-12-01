@@ -92,7 +92,7 @@ public class JSetCommissionForUserViewImpl extends JFrame implements JSetCommiss
   @Override
   public void isVisible(boolean state) {
     this.setVisible(state);
-
+    this.pack();
   }
 
   @Override
