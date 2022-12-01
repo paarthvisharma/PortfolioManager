@@ -12,3 +12,7 @@ CS5010 group project part two
 * Perform transactions like `buy stock` and `sell stock` on a `Flexible` portfolio. 
 (takes in non-chronological inputs as long as the transaction list is valid for that portfolio.)
 * Calculate and plot the Portfolio Performance of a `Rigid` or `Flexible` portfolio over a range of dates.
+* Fully functional GUI with the ability to Create `User`, `Flexible` Portfolios, `Buy stock`,`Sell stock` on a `Flexible` portfolio and query cost basis/value of a flexible portfolio.
+* Able to invest a fixed amount into an existing portfolio and apply dollar-cost averaging as a single operation.
+* Calculate and plot portfolio Performance and generate line chart over a range of dates.
+
