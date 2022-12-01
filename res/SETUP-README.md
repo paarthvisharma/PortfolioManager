@@ -13,68 +13,38 @@ present in the res folder submitted). Unzip PDPResources.zip and place it next t
       * This is an empty directory (initially) but stores User.xml files as and when they are created.
       * This also stores the transaction CSV files in format <`PortfolioID`>.csv.
       * The xml files are in the <`UserID`>.xml format and the transaction csv is in <`PortfolioID`>.csv format.
-* Running `java -jar stocksPart2.jar` does not give an error.
+* Running `java -jar stocksPart3.jar` does not give an error.
 
 ## Running the program
 * As these are a complex number of steps to follow, please follow the prompts appearing on the screen.
-* After initial check run the `jar` file using the following command `java -jar stocksPart2.jar`
-* Follow the following steps to create a User having a portfolio and purchase stocks for the portfolio
-* of 3 different companies on different dates and then query cost basis and value.
-  * Press `1\n` in the Main Menu. (Selects the Create User Option).
-  * When prompted in the User Menu, press `1\n`. (Selects the Create User Manually Option).
-  * When prompted enter the FirstName and Lastname seperated with a `Space` `FirstName LastName\n`.
-    <br> note the UserId returned by the display and then press any key to continue.
-  * Press `3\n` to go back to the Main Menu.
-  * Now you can login with the user created by entering `2\n`.(Selects Login using UserId Option).
-  * Enter userId created : `1\n` (for first user). It will display success message of Retrieved user successfully. 
-  * Press any key to continue.
-  * Press `2\n` to create a portfolio.
-  * Press `2\n` to create a flexible portfolio. (Flexible portfolios support buying and selling of stocks).
-  * Enter the name of the portfolio that you want to create. Let's enter `Education\n` for this example.
-  * Now lets enter the ticker symbol of the stock. For this example lets enter `goog`.
-  * Lets now add the quantity of stock. For this example lets enter `10`.
-  * Lets now add the date of purchase of stock. For this example lets enter `2020-01-01`.
-  * Press any key to continue.
-  * Press `2\n`. This will successfully create a portfolio with 10 stocks of goog. Press any key to continue.
-  * Press `3\n` to go back to Portfolio menu.
-  * Now let's buy stocks for your portfolio.
-  * Press `6\n` option to Buy/Sell stocks.
-  * Enter the portfolio ID. In this case it would be `1\n` as we created one flexible portfolio. Press any key to continue.
-  * Press `1\n` to buy stock.
-  * Now lets enter the ticker symbol of the stock. For this example lets enter `amzn`.
-  * Lets now add the quantity of stock. For this example lets enter `20`.
-  * Lets now add the date of purchase of stock. For this example lets enter `2022-02-02`. This should give a success message for buying 20 stocks of amzn.
-  * Press any key to continue.
-  * Again press `1\n` to buy stock.
-  * Now lets enter the ticker symbol of the stock. For this example lets enter `csco`.
-  * Lets now add the quantity of stock. For this example lets enter `30`.
-  * Lets now add the date of purchase of stock. For this example lets enter `2022-02-05`. This should give a success message for buying 30 stocks of csco.
-  * Press any key to continue.
-  * Again press `1\n` to buy the third company's stock.
-  * Now lets enter the ticker symbol of the stock. For this example lets enter `adi`.
-  * Lets now add the quantity of stock. For this example lets enter `5`.
-  * Lets now add the date of purchase of stock. For this example lets enter `2021-02-05`. This should give a success message for buying 5 stocks of adi.
-  * Press any key to continue.
-  * Press `3\n` to go back to Portfolio menu.
-  * Now let's query the cost basis of the Education portfolio we just created. Press `5\n` to get the Cost basis.
-  * Select the portfolio ID for Education portfolio so enter `1\n`.
-  * Enter the date required in the following format : `2022-10-05\n`.
-  * This should display the cost basis on the specific date entered. Now press any key to continue.
-  * Now let's query the cost basis on a different date. To do this, we will follow the same steps.
-  * Enter `5\n`, then enter the portfolio ID `1\n` and date `2021-10-05\n`.
-  * Press any key to continue.
-  * Now to calculate the Value, Press `4\n`.
-  * Press `2\n` to select the flexible portfolio type.
-  * Enter the portfolio ID, which is `1\n` in this case.
-  * Enter the date on which you want to query the value in the format `2022-03-05\n`.
-  * Press any key to continue.
-  * To view value on another date, select `2\n` for flexible portfolio type again.
-  * Again enter `1\n` to select the education portfolio and then enter date on which you want to query the value in format `2000-03-05\n`.
-  * This should display the value. Please note value for flexible portfolio would be 0 if checked on any date before purchase of stocks. 
-  * Press any key to continue.
-  * Press `3\n` to go back.
-  * Press `8\n` to go back.
-  * Press `3\n` to exit.
+* After initial check run the `jar` file using the following command `java -jar stocksPart3.jar`
+* Follow the following steps to create a User having a portfolio and purchase stocks for the portfolio with a DCA in it.
+  * Fill in the `Enter First Name` and `Enter Last Name` name in the UI and click `Create User`.
+  * This should create a user. Note the User ID from the `ouput logs` on the screen.
+  * To login enter the `User ID` in the `Enter User ID` and press `Login`. This should log you in and show the next menu.
+  * Click on `Create Portfolio` button. This will take you to a different screen.
+  * Enter the name of the protfolio in `Name of portfolio1` text field.
+  * Enter in `Ticker Symbol` "goog", `Quantity` "10", `Date` "2020-05-05" and click `Add Stock`. This will purchase the stock once.
+  * Now to add stock to DCA, enter the ticker symbol in `Ticker for DCA`. For now enter "aapl". Now click on `Add to DCA`.
+  * Enter the ticker symbol in `Ticker for DCA`. For now enter "csco". Now click on `Add to DCA`.
+  * Now lets set the weights for each aapl. Double click on the weight column for appl, set it to `50`.
+  * Now lets set the weights for each csco. Double click on the weight column for csco, set it to `50`.
+  * Click in a different box in the table to complete the weight entry.
+  * Now you should be able to enter other details.
+    * Start date `2020-01-01`, End date `2020-05-05`, Interval `30`, Dollar Amount `5000`, Commission `10`.
+    * Click on `Create Portfolio` to create the portfolio. This will take some time to create the portfolio.
+    * Press the back button.
+  * Click on `View Portfolio`.
+    * Select the created portfolio radio button.
+    * Enter a date on which the portfolio needs to be viewed. `2020-06-01`.
+    * Click on `View portfolio`. This displays the portfolio.
+    * Click on `back`.
+  * Click on `Plot performance`.
+    * Select the created portfolio radio button and click `Load Portfolio`.
+    * Select the date range for which the performance needs to be plotted.
+    * Click `Plot graph`. This should plot the graph in the new window.
+    * Close the window. click on `back`.
+    * This should take you to the `Portfolio menu`.
 
 
 Java docs are present under res/docs
@@ -112,6 +82,7 @@ Java docs are present under res/docs
           <date>2016-06-06</date>
         </stock>
       </stocks>
+      <plans></plans>
     </flexiblePortfolio>
   </flexiblePortfolios>
 </user>
