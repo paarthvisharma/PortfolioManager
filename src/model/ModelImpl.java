@@ -53,6 +53,7 @@ public class ModelImpl implements Model {
 
   private final PortfolioManager portfolioManager;
   private final Map<String, String> config;
+  private StockApi stockApi = new AlphaVantageApi();
 
   /**
    * This is the constructor for ModelImpl. An Instance of ModelImpl
@@ -681,5 +682,10 @@ public class ModelImpl implements Model {
     } catch (FileNotFoundException | ParseException e) {
       return new StatusObject<>(e.getMessage(), -1, null);
     }
+  }
+
+  @Override
+  public void downLoadStockData(String ticker) {
+    stockApi.fetchAndCreateStockData(ticker);
   }
 }

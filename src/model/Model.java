@@ -339,4 +339,11 @@ public interface Model {
    * @return returns StatusObject containing the statusMessage, statusCode and the object.
    */
   StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates);
+
+  /**
+   * Method to fetch stock data.
+   *
+   * @param ticker stock ticker.
+   */
+  void downLoadStockData(String ticker);
 }
