@@ -27,7 +27,7 @@ public interface FlexiblePortfolio extends Portfolio {
    *
    * @return list of plans.
    */
-  List<dollarCostAveraging> getDCAPlans();
+  List<dollarCostAveraging> getDcaPlans();
 
   /**
    * Method to add dollar cost averaging plan.

@@ -129,28 +129,28 @@ public class JCreatePortfolioControllerImpl implements JCreatePortfolioControlle
     }
   }
 
-//  private List<Stock> createStockListFlexiblePortfolio(String[][] stockList) {
-//    List<Stock> listOfStocks = new ArrayList<>();
-//    String ticker;
-//    String date;
-//    int quantity;
-//    for (String[] stockDetails : stockList) {
-//      ticker = stockDetails[0];
-//      quantity = Integer.parseInt(stockDetails[1]);
-//      date = stockDetails[2];
-//      StatusObject<Stock> buyStatus = new StatusObject<Stock>("", -1, null);
-//      for (Stock stock : listOfStocks) {
-//        if (model.getStockTicker(stock).equalsIgnoreCase(ticker)
-//                & model.getStockPurchaseDate(stock).equalsIgnoreCase(date)) {
-//          buyStatus = model.addStockToUninitializedPortfolio(stock, quantity);
-//        }
-//      }
-//      if (buyStatus.statusCode < 0) {
-//        listOfStocks.add(model.createStock(ticker, quantity, date));
-//      }
-//    }
-//    return listOfStocks;
-//  }
+  //  private List<Stock> createStockListFlexiblePortfolio(String[][] stockList) {
+  //    List<Stock> listOfStocks = new ArrayList<>();
+  //    String ticker;
+  //    String date;
+  //    int quantity;
+  //    for (String[] stockDetails : stockList) {
+  //      ticker = stockDetails[0];
+  //      quantity = Integer.parseInt(stockDetails[1]);
+  //      date = stockDetails[2];
+  //      StatusObject<Stock> buyStatus = new StatusObject<Stock>("", -1, null);
+  //      for (Stock stock : listOfStocks) {
+  //        if (model.getStockTicker(stock).equalsIgnoreCase(ticker)
+  //                & model.getStockPurchaseDate(stock).equalsIgnoreCase(date)) {
+  //          buyStatus = model.addStockToUninitializedPortfolio(stock, quantity);
+  //        }
+  //      }
+  //      if (buyStatus.statusCode < 0) {
+  //        listOfStocks.add(model.createStock(ticker, quantity, date));
+  //      }
+  //    }
+  //    return listOfStocks;
+  //  }
 
   @Override
   public void addStock(String ticker, String quantity, String date) {

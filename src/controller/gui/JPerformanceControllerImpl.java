@@ -16,6 +16,10 @@ import view.gui.PerformanceGraph;
 
 import static controller.Utils.getPresentDate;
 
+/**
+ * This class implements the JPerformanceController interface for performance GUI and contains
+ * the methods which help displays the performance menu.
+ */
 public class JPerformanceControllerImpl implements JPerformanceController {
   private Model model;
   private User user;
@@ -24,6 +28,11 @@ public class JPerformanceControllerImpl implements JPerformanceController {
 
   private FlexiblePortfolio selectedPortfolio;
 
+  /**
+   * A constructor to initialize the model.
+   *
+   * @param model an object of type Model.
+   */
   public JPerformanceControllerImpl(Model model) {
     this.model = model;
   }
@@ -77,29 +86,32 @@ public class JPerformanceControllerImpl implements JPerformanceController {
   @Override
   public void plotGraph(String startDate, String endDate) {
     try {
-      StatusObject<List<String>> datesList = model.getDatesForPerformanceGraph(startDate, endDate, false);
+      StatusObject<List<String>> datesList = model.getDatesForPerformanceGraph(startDate,
+              endDate, false);
       if (datesList.statusCode < 1) {
         this.jPerformanceView.setFailureOutput(datesList.statusMessage);
         return;
       }
-      StatusObject<List<Double>> valuations = model.getValuationForDate(selectedPortfolio, datesList.returnedObject);
+      StatusObject<List<Double>> valuations = model.getValuationForDate(selectedPortfolio,
+              datesList.returnedObject);
       if (valuations.statusCode < 1) {
         this.jPerformanceView.setFailureOutput(valuations.statusMessage);
         return;
       }
       double mini = Collections.min(valuations.returnedObject);
-      List<Double> filteredValuation = valuations.returnedObject.stream().map(i -> i - mini).collect(Collectors.toList());
+      List<Double> filteredValuation =
+              valuations.returnedObject.stream().map(i -> i - mini).collect(Collectors.toList());
       int[] xyCoordinates = new int[filteredValuation.size()];
-      for (int i=0; i < filteredValuation.size(); i++) {
+      for (int i = 0; i < filteredValuation.size(); i++) {
         xyCoordinates[i] = filteredValuation.get(i).intValue();
       }
       String[] dates = new String[datesList.returnedObject.size()];
-      for (int i=0; i< datesList.returnedObject.size(); i++) {
+      for (int i = 0; i < datesList.returnedObject.size(); i++) {
         dates[i] = datesList.returnedObject.get(i);
       }
       List<String> yAxisValues = model.getDollarAxisForGraph(valuations.returnedObject, 10);
       String[] dollarAmounts = new String[yAxisValues.size()];
-      for (int i=0; i< yAxisValues.size(); i++) {
+      for (int i = 0; i < yAxisValues.size(); i++) {
         dollarAmounts[i] = yAxisValues.get(i);
       }
       System.out.println(valuations.returnedObject);

@@ -1,11 +1,6 @@
 package controller.gui;
-
-import java.util.List;
-
-import model.FlexiblePortfolio;
 import model.Model;
 import model.User;
-import model.utils.StatusObject;
 import view.gui.JCalculateCostBasisView;
 import view.gui.JCalculateValueView;
 import view.gui.JCreatePortfolioView;
@@ -17,8 +12,6 @@ import view.gui.JSetCommissionForUserView;
 import view.gui.JTransactionView;
 import view.gui.JView;
 import view.gui.JViewPortfolioView;
-
-import static controller.Utils.getPresentDate;
 import static controller.Utils.listFlexiblePortfolios;
 
 /**

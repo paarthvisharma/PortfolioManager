@@ -16,7 +16,7 @@ public interface JSetCommissionController {
   /**
    * Method to run the set commission loop.
    *
-   * @param commission
+   * @param commission amount.
    */
   void setCommission(String commission);
 

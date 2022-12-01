@@ -242,8 +242,7 @@ public interface Model {
    * @param ticker    ticker symbol.
    * @param date      date string.
    * @param quantity  number of stocks.
-   * @return returns StatusObject containing the statusMessage,
-   * statusCode and the portfolio object.
+   * @return returns StatusObject containing the statusMessage, statusCode and the portfolio object.
    */
   StatusObject<FlexiblePortfolio> sellStockInFlexiblePortfolio(FlexiblePortfolio portfolio,
                                                                String ticker,
@@ -254,8 +253,7 @@ public interface Model {
    *
    * @param user      an object of type user.
    * @param portfolio an object of type portfolio.
-   * @return returns StatusObject containing the statusMessage,
-   * statusCode and the priority queue object.
+   * @return returns StatusObject containing the statusMessage,statusCode and the queue object.
    */
 
   StatusObject<PriorityQueue<Transaction>> getFlexiblePortfoliosPastTransactions(
@@ -266,8 +264,7 @@ public interface Model {
    *
    * @param user      an object of type user.
    * @param portfolio an object of type portfolio.
-   * @return returns StatusObject containing the statusMessage,
-   * statusCode and the string.
+   * @return returns StatusObject containing the statusMessage, statusCode and the string.
    */
   StatusObject<String> updateFlexiblePortfolioCsv(User user, FlexiblePortfolio portfolio);
 
@@ -277,8 +274,7 @@ public interface Model {
    * @param user      an object of type user.
    * @param portfolio an object of type portfolio.
    * @param date      date string.
-   * @return returns StatusObject containing the statusMessage,
-   * statusCode and the string.
+   * @return returns StatusObject containing the statusMessage, statusCode and the string.
    */
   StatusObject<String> viewCompositionOfFlexiblePortfolio(User user,
                                                           FlexiblePortfolio portfolio, String date);

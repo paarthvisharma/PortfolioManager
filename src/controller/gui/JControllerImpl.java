@@ -9,7 +9,6 @@ import view.gui.JView;
  */
 public class JControllerImpl implements JController {
 
-  private Model model;
   private JUserController userController;
   //  private JPortfolioController portfolioController;
 
@@ -19,7 +18,6 @@ public class JControllerImpl implements JController {
    * @param model an object of type model.
    */
   public JControllerImpl(Model model) {
-    this.model = model;
     userController = new JUserControllerImpl(model);
     //    portfolioController = new JPortfolioControllerImpl(model);
   }

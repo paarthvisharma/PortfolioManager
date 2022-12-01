@@ -38,7 +38,7 @@ public interface JCreatePortfolioController {
   /**
    * Method that monitors the portfolio table for any changes.
    *
-   * @param weightsColumn
+   * @param weightsColumn list.
    */
   void monitorTable(List<String> weightsColumn);
 

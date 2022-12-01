@@ -43,7 +43,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
   private final String portfolioPath;
   private double commission;
 
-  private List<dollarCostAveraging> DCAPlans = new ArrayList<>();
+  private List<dollarCostAveraging> dcaPlans = new ArrayList<>();
 
   /**
    * This is the constructor for FlexiblePortfolioImpl. An Instance of flexible portfolio
@@ -68,13 +68,13 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
 
   @Override
   public void addDCAPlan(dollarCostAveraging dca) {
-    DCAPlans.add(dca);
+    dcaPlans.add(dca);
     this.executeDCAPlan(dca);
   }
 
   @Override
-  public List<dollarCostAveraging> getDCAPlans() {
-    return this.DCAPlans;
+  public List<dollarCostAveraging> getDcaPlans() {
+    return this.dcaPlans;
   }
 
   @Override
@@ -257,7 +257,7 @@ public class FlexiblePortfolioImpl implements FlexiblePortfolio {
     toReturn.append("\t".repeat(lTabs)).append("</stocks>\n");
     toReturn.append("\t".repeat(lTabs)).append(("<plans>\n"));
     lTabs += 1;
-    for (dollarCostAveraging dcaPlan: this.DCAPlans) {
+    for (dollarCostAveraging dcaPlan: this.dcaPlans) {
       toReturn.append("\t".repeat(lTabs)).append("<dcaPlan>").append(dcaPlan.toString());
       toReturn.append("</dcaPlan>\n");
     }

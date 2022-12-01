@@ -113,6 +113,9 @@ public class Utils {
     }
   }
 
+  /**
+   * Method to get the present data.
+   */
   public static String getPresentDate() {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDateTime now = LocalDateTime.now();
