@@ -145,7 +145,7 @@ public class JViewPortfolioViewImpl extends JFrame implements JViewPortfolioView
   public void addFeatures(JViewPortfolioController jViewPortfolioController) {
     backButton.addActionListener(evt -> jViewPortfolioController.back());
     viewPortfolioButton.addActionListener(
-            evt -> jViewPortfolioController.viewPortfolio(dateOfViewing.getText(),
+        evt -> jViewPortfolioController.viewPortfolio(dateOfViewing.getText(),
                     this.getSelectedButton()));
   }
 

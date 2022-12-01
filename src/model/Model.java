@@ -295,8 +295,7 @@ public interface Model {
    * @param user      an object of type user.
    * @param portfolio an object of type portfolio.
    * @param date      date string.
-   * @return returns StatusObject containing the statusMessage,
-   * statusCode and double.
+   * @return returns StatusObject containing the statusMessage, statusCode and double.
    */
   StatusObject<Double> getCostBasisOfFlexiblePortfolioForDate(
           User user, FlexiblePortfolio portfolio, String date);

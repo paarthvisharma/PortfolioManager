@@ -130,7 +130,7 @@ public class JTransactionViewImpl extends JFrame implements JTransactionView {
             new BoxLayout(dollarCostAveragingPanel, BoxLayout.PAGE_AXIS));
 
     portfolioTableModel.setColumnIdentifiers(new String[]{"Ticker",
-       "Stock Name", "Quantity", "Weight %"});
+        "Stock Name", "Quantity", "Weight %"});
     JTable portfolioTable = new JTable();
     portfolioTable.setModel(portfolioTableModel);
     dollarCostAveragingPanel.add(new JScrollPane(portfolioTable));

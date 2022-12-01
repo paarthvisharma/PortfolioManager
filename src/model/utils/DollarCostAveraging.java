@@ -18,6 +18,17 @@ public class DollarCostAveraging {
   private double commission;
   private List<List<String>> dcaData;
 
+  /**
+   * Constructor that takes in the following parameters and creates an instance.
+   *
+   * @param startDate       start date string.
+   * @param endDate         end date string.
+   * @param interval        time interval.
+   * @param dollarAmount    total amount to be invested.
+   * @param commission      amount.
+   * @param dcaData         data string.
+   * @param lastTransaction last transaction string.
+   */
   public DollarCostAveraging(String startDate, String endDate, String interval,
                              String dollarAmount, String commission,
                              List<List<String>> dcaData, String lastTransaction) {
@@ -33,6 +44,11 @@ public class DollarCostAveraging {
     this.lastTransaction = lastTransaction;
   }
 
+  /**
+   * Constructor that takes in the plan and further processes it.
+   *
+   * @param plan string value.
+   */
   public DollarCostAveraging(String plan) {
     String[] splitPlan = plan.split(",");
     validateForLegalDate(splitPlan[0]);
@@ -53,38 +69,65 @@ public class DollarCostAveraging {
     this.lastTransaction = splitPlan[6];
   }
 
+  /**
+   * Method to get the start date of DCA plan.
+   */
   public String getStartDate() {
     return startDate;
   }
 
+  /**
+   * Method to get the end date of DCA plan.
+   */
   public String getEndDate() {
     return endDate;
   }
 
+  /**
+   * Method to get the interval of DCA plan.
+   */
   public int getInterval() {
     return interval;
   }
 
+  /**
+   * Method to get the dollar amount of DCA plan.
+   */
   public double getDollarAmount() {
     return dollarAmount;
   }
 
+  /**
+   * Method to get the DCA data to create the DCA plan.
+   */
   public List<List<String>> getDcaData() {
     return dcaData;
   }
 
+  /**
+   * Method to get the commission for DCA plan.
+   */
   public double getCommission() {
     return commission;
   }
 
+  /**
+   * Method to get the last transaction of DCA plan.
+   */
   public String getLastTransaction() {
     return lastTransaction;
   }
 
+  /**
+   * Method to set the last transaction of DCA plan.
+   */
   public void setLastTransaction(String lastTransaction) {
     this.lastTransaction = lastTransaction;
   }
 
+  /**
+   * Method to override the toString method.
+   */
   @Override
   public String toString() {
     StringBuilder toReturn = new StringBuilder();

@@ -390,7 +390,8 @@ public class ModelTests {
 
   @Test
   public void ValidateUpdateUserFile() throws IOException {
-    StatusObject<User> tempUser = model.createUser("Paarthvi", "Sharma", 1);
+    StatusObject<User> tempUser =
+            model.createUser("Paarthvi", "Sharma", 1);
     model.updateUserFile(tempUser.returnedObject);
     System.out.printf(tempUser.statusMessage);
     File userData = new File(config.get("userData"));
@@ -860,7 +861,7 @@ public class ModelTests {
     StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
             "2020-02-01", "2022-01-02", "30", "2000",
             "5", dcaData);
-
+    assertEquals("Successfully created DCA", dcaPlan.statusMessage);
   }
 
   @Test
@@ -1004,8 +1005,8 @@ public class ModelTests {
 
     User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
     List<List<String>> portfolioString = new ArrayList<>();
-    portfolioString.add(new ArrayList<>(List.of(new String[]{"goog", "Alphabet Inc - Class C",
-            "100.0", "2020-01-01"})));
+    portfolioString.add(new ArrayList<>(List.of(
+            new String[]{"goog", "Alphabet Inc - Class C", "100.0", "2020-01-01"})));
     portfolioString.add(new ArrayList<>(List.of(
             new String[]{"aapl", "Apple Inc", "101.0", "2020-01-02"})));
     assertEquals(portfolioString, model.getCompositionOfFlexiblePortfolioAsList(user1,

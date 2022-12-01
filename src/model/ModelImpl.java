@@ -675,8 +675,8 @@ public class ModelImpl implements Model {
   public StatusObject<List<Double>> getValuationForDate(Portfolio portfolio, List<String> dates) {
     try {
       List<Double> toReturn = getPortfolioValuationsForDates(portfolio, dates);
-    //      double mini = Collections.min(toReturn);
-    //      toReturn = toReturn.stream().map(i -> i - mini).collect(Collectors.toList());
+      //      double mini = Collections.min(toReturn);
+      //      toReturn = toReturn.stream().map(i -> i - mini).collect(Collectors.toList());
       return new StatusObject<>("Fetched portfolio values", 1, toReturn);
     } catch (FileNotFoundException | ParseException e) {
       return new StatusObject<>(e.getMessage(), -1, null);
