@@ -7,23 +7,22 @@ import java.util.HashMap;
 import java.util.List;
 
 import controller.gui.JCreatePortfolioController;
-import controller.gui.JCreatePortfolioControllerImpl;
-import controllertest.MockGUIView.MockView;
 import model.User;
 import view.gui.JView;
+import view.gui.JViewImpl;
 
 import static org.junit.Assert.assertEquals;
 
 public class CreatePortfolioControllerTest extends TestHelperGUIController {
 
   private JCreatePortfolioController jCreatePortfolioController;
-  private JView mockView = new MockView();
+  private JView mockView = new JViewImpl();
 
   @Test
   public void testAddStockForDCA() {
     try {
       User createdUser = this.createUserWith1FlexiblePortfoliosAndStocks();
-      jCreatePortfolioController = new JCreatePortfolioControllerImpl(model);
+      jCreatePortfolioController = new JCreatePortfolioController(model);
       jCreatePortfolioController.setView(mockView);
       jCreatePortfolioController.setUser(createdUser);
       jCreatePortfolioController.addStockForDCA("goog");
@@ -38,7 +37,7 @@ public class CreatePortfolioControllerTest extends TestHelperGUIController {
   public void testCreatePortfolio() {
     try {
       User createdUser = this.createUserWith1RigidPortfoliosAndStocks();
-      jCreatePortfolioController = new JCreatePortfolioControllerImpl(model);
+      jCreatePortfolioController = new JCreatePortfolioController(model);
       jCreatePortfolioController.setView(mockView);
       jCreatePortfolioController.setUser(createdUser);
       List<List<String>> tableData = new ArrayList<>();

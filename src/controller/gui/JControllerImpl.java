@@ -18,7 +18,7 @@ public class JControllerImpl implements JController {
    * @param model an object of type model.
    */
   public JControllerImpl(Model model) {
-    userController = new JUserControllerImpl(model);
+    userController = new JUserController(model);
   }
 
   @Override

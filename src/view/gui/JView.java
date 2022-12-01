@@ -28,7 +28,7 @@ public interface JView {
   /**
    * Method to get the CalculateValueView view.
    */
-  JCalculateCostBasisView getCalculateCostBasisView();
+  JCalculateCostBasisViewImpl getCalculateCostBasisView();
 
   /**
    * Method to get the ViewPortfolioView view.

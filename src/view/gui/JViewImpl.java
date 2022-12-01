@@ -10,7 +10,7 @@ public class JViewImpl implements JView {
   private final JPortfolioMenuView portfolioMenuView;
   private final JCreatePortfolioView createPortfolioView;
   private final JCalculateValueView calculateValueView;
-  private final JCalculateCostBasisView calculateCostBasisView;
+  private final JCalculateCostBasisViewImpl calculateCostBasisView;
   private final JViewPortfolioView viewPortfolioView;
   private final JLoadPortfolioView loadPortfolioView;
   private final JTransactionView transactionView;
@@ -22,16 +22,16 @@ public class JViewImpl implements JView {
    * Constructor for the class to set up the initial view.
    */
   public JViewImpl() {
-    createUserView = new JCreateUserViewImpl();
-    portfolioMenuView = new JPortfolioMenuViewImpl();
-    createPortfolioView = new JCreatePortfolioViewImpl();
-    calculateValueView = new JCalculateValueViewImpl();
+    createUserView = new JCreateUserView();
+    portfolioMenuView = new JPortfolioMenuView();
+    createPortfolioView = new JCreatePortfolioView();
+    calculateValueView = new JCalculateValueView();
     calculateCostBasisView = new JCalculateCostBasisViewImpl();
-    viewPortfolioView = new JViewPortfolioViewImpl();
-    loadPortfolioView = new JLoadPortfolioViewImpl();
-    transactionView = new JTransactionViewImpl();
-    commissionView = new JSetCommissionForUserViewImpl();
-    performanceView = new JPerformanceViewImpl();
+    viewPortfolioView = new JViewPortfolioView();
+    loadPortfolioView = new JLoadPortfolioView();
+    transactionView = new JTransactionView();
+    commissionView = new JSetCommissionForUserView();
+    performanceView = new JPerformanceView();
   }
 
   @Override
@@ -55,7 +55,7 @@ public class JViewImpl implements JView {
   }
 
   @Override
-  public JCalculateCostBasisView getCalculateCostBasisView() {
+  public JCalculateCostBasisViewImpl getCalculateCostBasisView() {
     return calculateCostBasisView;
   }
 

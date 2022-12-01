@@ -4,19 +4,20 @@ import model.FlexiblePortfolio;
 import model.Model;
 import model.User;
 import model.utils.StatusObject;
-import view.gui.JCalculateCostBasisView;
+
+import view.gui.JCalculateCostBasisViewImpl;
+import view.gui.JView;
 
 import view.gui.JPortfolioMenuView;
-import view.gui.JView;
 
 /**
  * This class implements the JCalculateCostBasisController interface and contains all the methods
  * required to display the Cost Basis Menu.
  */
-public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisController {
+public class JCalculateCostBasisControllerImpl {
   private final Model model;
   private User user;
-  private JCalculateCostBasisView jCalculateCostBasisView;
+  private JCalculateCostBasisViewImpl jCalculateCostBasisView;
   private JPortfolioMenuView jPortfolioMenuView;
 
   /**
@@ -28,13 +29,17 @@ public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisCon
     this.model = model;
   }
 
-  @Override
+  /**
+   * Method to implement back button functionality.
+   */
   public void back() {
     this.jCalculateCostBasisView.isVisible(false);
     this.jPortfolioMenuView.isVisible(true);
   }
 
-  @Override
+  /**
+   * Method to run the loop to calculate the cost basis of a portfolio.
+   */
   public void calculatePortfolioCostBasis(String date, String selectedPortfolio) {
     if (date.equals("")) {
       this.jCalculateCostBasisView.setFailureOutput("Date Cannot be empty");
@@ -65,13 +70,21 @@ public class JCalculateCostBasisControllerImpl implements JCalculateCostBasisCon
     }
   }
 
-  @Override
+  /**
+   * Method to set the user.
+   *
+   * @param user an object of type user.
+   */
   public void setUser(User user) {
     this.user = user;
 
   }
 
-  @Override
+  /**
+   * Method to set the view.
+   *
+   * @param jView an object of type JView.
+   */
   public void setView(JView jView) {
     this.jCalculateCostBasisView = jView.getCalculateCostBasisView();
     this.jPortfolioMenuView = jView.getPortfolioMenuView();

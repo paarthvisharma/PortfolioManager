@@ -1,4 +1,4 @@
-package controllertest.MockGUIView;
+package controllertest.GUITest;
 
 public class AssertConstants {
 

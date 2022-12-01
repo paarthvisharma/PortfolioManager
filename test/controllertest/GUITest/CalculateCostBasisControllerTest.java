@@ -2,19 +2,18 @@ package controllertest.GUITest;
 
 import org.junit.Test;
 
-import controller.gui.JCalculateCostBasisController;
 import controller.gui.JCalculateCostBasisControllerImpl;
-import controllertest.MockGUIView.MockView;
 import model.User;
 import view.gui.JView;
+import view.gui.JViewImpl;
 
-import static controllertest.MockGUIView.AssertConstants.CALCULATE_COST_BASIS_CONTROLLER_TEST;
+import static controllertest.GUITest.AssertConstants.CALCULATE_COST_BASIS_CONTROLLER_TEST;
 import static org.junit.Assert.assertEquals;
 
 public class CalculateCostBasisControllerTest extends TestHelperGUIController {
 
-  private JCalculateCostBasisController jCalculateCostBasisController;
-  private JView mockView = new MockView();
+  private JCalculateCostBasisControllerImpl jCalculateCostBasisController;
+  private JView mockView = new JViewImpl();
 
   @Test
   public void testMain() {

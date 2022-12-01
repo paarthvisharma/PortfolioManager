@@ -188,7 +188,7 @@ public class ModelTests {
     Stock stock = model.createStock("goog", -10, "2022-05-02");
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void ValidateStockFunctionsWithFractionalQuantity() throws IOException {
     StatusObject<User> createdUser = model.createUser("Paarthvi",
             "Sharma", 1.0);
@@ -221,7 +221,8 @@ public class ModelTests {
     StatusObject<User> createdUser = model.createUser("Paarthvi",
             "Sharma", 1.0);
     assertEquals(1, createdUser.statusCode);
-    assertEquals("Created user successfully with UserId:1 with name as Paarthvi Sharma",
+    assertEquals("Created user successfully with UserId:1 with name as Paarthvi "
+                    + "Sharma commission is set to 1.0",
             createdUser.statusMessage);
     String toCheck = "First Name: Paarthvi\n"
             + "Last Name: Sharma\n"
@@ -247,8 +248,8 @@ public class ModelTests {
     StatusObject<User> createdUser = model.createUser("Paarthvi",
             "123", 1);
     assertEquals(1, createdUser.statusCode);
-    assertEquals("Created user successfully with UserId:1 with name as Paarthvi 123",
-            createdUser.statusMessage);
+    assertEquals("Created user successfully with UserId:1 with name as Paarthvi "
+                    + "123 commission is set to 1.0", createdUser.statusMessage);
     String toCheck = "First Name: Paarthvi\n"
             + "Last Name: 123\n"
             + "List of Rigid Portfolios:\n"
@@ -260,7 +261,8 @@ public class ModelTests {
   public void ValidateCreateUserMethodWithEmptyString() {
     StatusObject<User> createdUser = model.createUser("", "Sharma", 1);
     assertEquals(1, createdUser.statusCode);
-    assertEquals("Created user successfully with UserId:1 with name as  Sharma",
+    assertEquals("Created user successfully with UserId:1 with name as  Sharma "
+                    + "commission is set to 1.0",
             createdUser.statusMessage);
     String toAssert = "First Name: \n"
             + "Last Name: Sharma\n"
@@ -283,8 +285,8 @@ public class ModelTests {
     StatusObject<User> createdUser = model.createUser("Paarthvi",
             "05%", 1);
     assertEquals(1, createdUser.statusCode);
-    assertEquals("Created user successfully with UserId:1 with name as Paarthvi 05%",
-            createdUser.statusMessage);
+    assertEquals("Created user successfully with UserId:1 with name as Paarthvi "
+            + "05% commission is set to 1.0", createdUser.statusMessage);
     String toAssert = "First Name: Paarthvi\n"
             + "Last Name: 05%\n"
             + "List of Rigid Portfolios:\n"
@@ -632,8 +634,7 @@ public class ModelTests {
             model.buyStockInFlexiblePortfolio(user1.getFlexiblePortfolio(1),
                     "goog", "1880-05-05", 10);
 
-    assertEquals("Please enter date in valid format YYYY-MM-DD that is "
-            + "later than the listing date", portfolio.statusMessage);
+    assertEquals("Can buy a stock before it was listed", portfolio.statusMessage);
   }
 
   @Test
@@ -721,7 +722,7 @@ public class ModelTests {
 
     String portfolioStringNew = "Portfolio Name: onePortfolio\n"
             + "Portfolio ID: 1\n"
-            + "These are the stocks present in the portfolio and their details:";
+            + "These are the stocks present in the portfolio and their details:\n\n\n[]";
 
     StatusObject<FlexiblePortfolio> portfolio2 =
             model.sellStockInFlexiblePortfolio(user1.getFlexiblePortfolio(1),
@@ -874,14 +875,14 @@ public class ModelTests {
             "2020-02-01", "2022-01-02", "30", "2000",
             "5", dcaData);
     assertEquals("Successfully created DCA", dcaPlan.statusMessage);
-    assertEquals("164039.35",
+    assertEquals("212039.35",
             model.getCostBasisOfFlexiblePortfolioForDate(
                     user, user.getFlexiblePortfolio(1),
                     "2022-05-10").returnedObject.toString());
     assertEquals("164039.35",
             model.getCostBasisOfFlexiblePortfolioForDate(
                     user, user.getFlexiblePortfolio(1),
-                    "2020-05-10").returnedObject.toString());
+                    "2020-01-10").returnedObject.toString());
   }
 
   @Test
@@ -894,14 +895,14 @@ public class ModelTests {
             "2020-02-01", "2022-01-02", "30", "2000",
             "5", dcaData);
     assertEquals("Successfully created DCA", dcaPlan.statusMessage);
-    assertEquals("244774.51",
+    assertEquals("304525.03343446663",
             model.getValueOfPortfolioForDate(
                     user.getFlexiblePortfolio(1),
                     "2022-05-10").returnedObject.toString());
-    assertEquals("163335.97",
+    assertEquals("174316.33",
             model.getValueOfPortfolioForDate(
                     user.getFlexiblePortfolio(1),
-                    "2020-10-10").returnedObject.toString());
+                    "2020-1-10").returnedObject.toString());
   }
 
   @Test

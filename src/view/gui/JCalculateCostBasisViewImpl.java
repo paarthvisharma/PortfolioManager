@@ -18,13 +18,13 @@ import javax.swing.ButtonGroup;
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 
-import controller.gui.JCalculateCostBasisController;
+import controller.gui.JCalculateCostBasisControllerImpl;
 
 /**
  * This class implements the JCalculateCostBasisView interface and contains the methods to display
  * Cost Basis menu.
  */
-public class JCalculateCostBasisViewImpl extends JFrame implements JCalculateCostBasisView {
+public class JCalculateCostBasisViewImpl extends JFrame {
   private JButton backButton;
   private final JPanel mainPanel;
   private final JPanel displayPortfoliosPanel;
@@ -108,8 +108,12 @@ public class JCalculateCostBasisViewImpl extends JFrame implements JCalculateCos
     add(mainPanel);
   }
 
-  @Override
-  public void addFeatures(JCalculateCostBasisController jCalculateCostBasisController) {
+  /**
+   * Method to link the view to controller.
+   *
+   * @param jCalculateCostBasisController controller for Cost Basis Menu.
+   */
+  public void addFeatures(JCalculateCostBasisControllerImpl jCalculateCostBasisController) {
     this.backButton.addActionListener(evt -> jCalculateCostBasisController.back());
     this.calculateCostBasisPortfolioButton.addActionListener(evt ->
             jCalculateCostBasisController.calculatePortfolioCostBasis(dateOfCostBasis.getText(),
@@ -125,14 +129,19 @@ public class JCalculateCostBasisViewImpl extends JFrame implements JCalculateCos
     return null;
   }
 
-
-  @Override
+  /**
+   * Method to set the visibility of a view.
+   */
   public void isVisible(boolean state) {
     this.setVisible(state);
     this.pack();
   }
 
-  @Override
+  /**
+   * Method to set the log output.
+   *
+   * @param message required message.
+   */
   public void setLogOutput(String message) {
     this.outputLabel.setForeground(Color.BLACK);
     this.outputLabel.setText(message);
@@ -140,21 +149,33 @@ public class JCalculateCostBasisViewImpl extends JFrame implements JCalculateCos
 
   }
 
-  @Override
+  /**
+   * Method to set the success output.
+   *
+   * @param message required message.
+   */
   public void setSuccessOutput(String message) {
     this.outputLabel.setForeground(new Color(0, 102, 0));
     this.outputLabel.setText(message);
 
   }
 
-  @Override
+  /**
+   * Method to set the failure output.
+   *
+   * @param message required message.
+   */
   public void setFailureOutput(String message) {
     this.outputLabel.setForeground(Color.RED);
     this.outputLabel.setText(message);
 
   }
 
-  @Override
+  /**
+   * Method to display the radio buttons.
+   *
+   * @param portfolios portfolios string.
+   */
   public void displayRadioButtonsForPortfolio(String portfolios) {
     this.selectPortfolioPanel(portfolios);
   }
