@@ -1,6 +1,8 @@
-# Design of stockPart2
+# Design of stockPart3
 
 ## Changes from the first part of the project.
+
+## Changes from stockPart1 to stockPart2:
 * The Menu flow was changed.
   * Previously the User had to type the user ID to perform any operation. But with the new layout the user ID is only asked once.
   * In the new design the user logs in and later on does not have to enter the user ID.
@@ -16,6 +18,10 @@
 * A transaction related to the `Flexible` portfolio are being stored in a CSV file to help track and validate non-chronological
 transactions.
 * The design is now integrated with the Alphavantage API to fetch data from the Alphavantage API server.
+
+## Changes from stockPart2 to stockPart3:
+* Implemented a fully functional GUI and in order to accommodate that added gui packages in controller as well as view.
+* Added functions to model to implement dollar cost averaging and stock performance line chart.
 
 ## Overview of the design.
 * The whole project is split into 4 packages.
@@ -36,7 +42,7 @@ transactions.
 * The controller takes in 3 parameters while being initialised.
   * input from `System.in` via a `Scanner` object.
   * An initialised model object
-  * An initlaised view object.
+  * An initialised view object.
 
 ## Model
 * The model takes in a single `HashMap` config file as an input.
