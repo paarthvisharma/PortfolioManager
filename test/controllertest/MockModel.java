@@ -283,4 +283,9 @@ public class MockModel implements Model {
     log.append(dates).append("||");
     return testModel.getValuationForDate(portfolio, dates);
   }
+
+  @Override
+  public void downLoadStockData(String ticker) {
+    testModel.downLoadStockData(ticker);
+  }
 }
