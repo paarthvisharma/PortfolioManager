@@ -704,6 +704,7 @@ public class ModelTests {
     assertEquals("You cant sell more shares than what you hold.",
             portfolio.statusMessage);
   }
+
   @Test
   public void ValidateSellAllStocks() throws IOException {
     String portfolioString = "Portfolio Name: onePortfolio\n"
@@ -849,5 +850,169 @@ public class ModelTests {
     assertEquals(portfolioString, portfolio.returnedObject.toString());
 
   }
+
+  @Test
+  public void ValidateCreateDCAPlan() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "2022-01-02", "30", "2000",
+            "5", dcaData);
+
+  }
+
+  @Test
+  public void validateCostBasisWithDCA() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "2022-01-02", "30", "2000",
+            "5", dcaData);
+    assertEquals("Successfully created DCA", dcaPlan.statusMessage);
+    assertEquals("164039.35",
+            model.getCostBasisOfFlexiblePortfolioForDate(
+                    user, user.getFlexiblePortfolio(1),
+                    "2022-05-10").returnedObject.toString());
+    assertEquals("164039.35",
+            model.getCostBasisOfFlexiblePortfolioForDate(
+                    user, user.getFlexiblePortfolio(1),
+                    "2020-05-10").returnedObject.toString());
+  }
+
+  @Test
+  public void ValidateCalculateValueWithDCA() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "2022-01-02", "30", "2000",
+            "5", dcaData);
+    assertEquals("Successfully created DCA", dcaPlan.statusMessage);
+    assertEquals("244774.51",
+            model.getValueOfPortfolioForDate(
+                    user.getFlexiblePortfolio(1),
+                    "2022-05-10").returnedObject.toString());
+    assertEquals("163335.97",
+            model.getValueOfPortfolioForDate(
+                    user.getFlexiblePortfolio(1),
+                    "2020-10-10").returnedObject.toString());
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithNegativeAmount() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "2022-01-02", "30", "-2000",
+            "5", dcaData);
+    assertEquals("Investment amount cannot be negative", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithInvalidInterval() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "2022-01-02", "0", "2000",
+            "5", dcaData);
+    assertEquals("Interval should be at least 1 day", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithInvalidCommission() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "2022-01-02", "30", "2000",
+            "-5", dcaData);
+    assertEquals("Commission amount cannot be negative", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithInvalidStartDate() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            " ", "2022-01-02", "30", "2000",
+            "-5", dcaData);
+    assertEquals("Date does not follow the YYYY-MM-DD format.", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithNonEndingDate() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "3000-01-01", "30", "2000",
+            "5", dcaData);
+    assertEquals("Successfully created DCA", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithPastDates() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2020-02-01", "2022-01-01", "30", "2000",
+            "5", dcaData);
+    assertEquals("Successfully created DCA", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithFutureDates() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2023-02-01", "2023-05-01", "30", "2000",
+            "5", dcaData);
+    assertEquals("Successfully created DCA", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateCreateDCAPlanWithPastAndFutureDates() throws IOException {
+    User user = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> dcaData = new ArrayList<>();
+    dcaData.add(new ArrayList<>(List.of(new String[]{"goog", " ", " ", "100"})));
+
+    StatusObject<String> dcaPlan = model.createDCAPlan(user.getFlexiblePortfolio(1),
+            "2022-01-01", "2023-05-01", "30", "2000",
+            "5", dcaData);
+    assertEquals("Successfully created DCA", dcaPlan.statusMessage);
+  }
+
+  @Test
+  public void ValidateGetCompositionOfFlexiblePortfolioAsList() throws IOException {
+
+    User user1 = this.createUserWith1FlexiblePortfoliosAndStocks();
+    List<List<String>> portfolioString = new ArrayList<>();
+    portfolioString.add(new ArrayList<>(List.of(new String[]{"goog", "Alphabet Inc - Class C",
+            "100.0", "2020-01-01"})));
+    portfolioString.add(new ArrayList<>(List.of(
+            new String[]{"aapl", "Apple Inc", "101.0", "2020-01-02"})));
+    assertEquals(portfolioString, model.getCompositionOfFlexiblePortfolioAsList(user1,
+            user1.getFlexiblePortfolio(1),
+            "2022-01-02").returnedObject);
+
+  }
+
 
 }
